@@ -16,24 +16,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class GreetingControllerTests {
+public class FlashcardSpecification {
 
     @Autowired
     private MockMvc mockMvc;
 
     @Test
-    public void noParamGreetingShouldReturnDefaultMessage() throws Exception {
+    public void getAllFlashcardsShouldReturnMockedFlashcard() throws Exception {
 
-        this.mockMvc.perform(get("/greeting")).andDo(print()).andExpect(status().isOk())
-            .andExpect(jsonPath("$.content").value("Hello, World!"));
+        this.mockMvc.perform(get("/flashcard")).andDo(print()).andExpect(status().isOk())
+            .andExpect(jsonPath("$[0].question").value("questionA"))
+            .andExpect(jsonPath("$[0].answer").value("answerA"))
+            .andExpect(jsonPath("$[1].question").value("questionB"))
+            .andExpect(jsonPath("$[1].answer").value("answerB"))
+            .andExpect(jsonPath("$[2].question").value("questionC"))
+            .andExpect(jsonPath("$[2].answer").value("answerC"))
+        ;
     }
-
-    @Test
-    public void paramGreetingShouldReturnTailoredMessage() throws Exception {
-
-        this.mockMvc.perform(get("/greeting").param("name", "Spring Community"))
-            .andDo(print()).andExpect(status().isOk())
-            .andExpect(jsonPath("$.content").value("Hello, Spring Community!"));
-    }
-
 }
