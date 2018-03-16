@@ -23,12 +23,14 @@ public class FlashcardSpecification {
 
     @Test
     public void getAllFlashcardsShouldReturnMockedFlashcard() throws Exception {
-
-        this.mockMvc.perform(get("/flashcard")).andDo(print()).andExpect(status().isOk())
+        this.mockMvc.perform(get("/flashcards")).andDo(print()).andExpect(status().isOk())
+            .andExpect(jsonPath("$[0].id").value("user1@example.com-questiona"))
             .andExpect(jsonPath("$[0].question").value("questionA"))
             .andExpect(jsonPath("$[0].answer").value("answerA"))
+            .andExpect(jsonPath("$[1].id").value("user1@example.com-questionb"))
             .andExpect(jsonPath("$[1].question").value("questionB"))
             .andExpect(jsonPath("$[1].answer").value("answerB"))
+            .andExpect(jsonPath("$[2].id").value("user1@example.com-questionc"))
             .andExpect(jsonPath("$[2].question").value("questionC"))
             .andExpect(jsonPath("$[2].answer").value("answerC"))
         ;

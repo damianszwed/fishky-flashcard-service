@@ -10,12 +10,12 @@ import static java.util.Arrays.asList;
 @RestController
 public class FlashcardController {
 
-    @RequestMapping("/flashcard")
+    @RequestMapping("/flashcards")
     public List<Flashcard> flashcards() {
         return asList(
-            Flashcard.builder().question("questionA").answer("answerA").build(),
-            Flashcard.builder().question("questionB").answer("answerB").build(),
-            Flashcard.builder().question("questionC").answer("answerC").build()
+            Flashcard.builder().id("user1@example.com-questiona").question("questionA").answer("answerA").build(),
+            Flashcard.builder().id("user1@example.com-questionb").question("questionB").answer("answerB").build(),
+            Flashcard.builder().id("user1@example.com-questionc").question("questionC").answer("answerC").build()
         );
     }
 }
