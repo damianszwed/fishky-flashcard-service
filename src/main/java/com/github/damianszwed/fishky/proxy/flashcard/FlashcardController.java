@@ -1,5 +1,6 @@
 package com.github.damianszwed.fishky.proxy.flashcard;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -8,6 +9,7 @@ import java.util.List;
 import static java.util.Arrays.asList;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 public class FlashcardController {
 
     @RequestMapping("/flashcards")
