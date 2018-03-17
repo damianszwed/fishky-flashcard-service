@@ -3,6 +3,7 @@ package com.github.damianszwed.fishky.proxy.adapter;
 import com.github.damianszwed.fishky.proxy.port.flashcard.Flashcard;
 import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardProvider;
 import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardRemover;
+import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardSaver;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;
 
@@ -13,7 +14,7 @@ import static java.util.Arrays.asList;
 
 @Slf4j
 @Scope("singleton")
-public class FlashcardStorage implements FlashcardProvider, FlashcardRemover {
+public class FlashcardStorage implements FlashcardProvider, FlashcardRemover, FlashcardSaver {
 
     private List<Flashcard> flashcards = new ArrayList<>();
 
@@ -35,5 +36,14 @@ public class FlashcardStorage implements FlashcardProvider, FlashcardRemover {
     @Override
     public void removeFlashcard(String id) {
         flashcards.removeIf(givenFlashcard -> givenFlashcard.getId().equals(id));
+    }
+
+    @Override
+    public void saveFlashcard(Flashcard flashcard) {
+        flashcards.add(Flashcard.builder()
+            .answer(flashcard.getAnswer())
+            .question(flashcard.getQuestion())
+            .id("user1@example.com-" + flashcard.getQuestion().toLowerCase())
+            .build());
     }
 }
