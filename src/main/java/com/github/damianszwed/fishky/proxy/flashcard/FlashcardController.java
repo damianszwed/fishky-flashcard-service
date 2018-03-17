@@ -1,5 +1,6 @@
 package com.github.damianszwed.fishky.proxy.flashcard;
 
+import com.github.damianszwed.fishky.proxy.port.flashcard.Flashcard;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

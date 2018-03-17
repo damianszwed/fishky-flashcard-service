@@ -1,4 +1,4 @@
-package com.github.damianszwed.fishky.proxy.flashcard;
+package com.github.damianszwed.fishky.proxy.port.flashcard;
 
 import lombok.Builder;
 import lombok.Value;

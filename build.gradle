@@ -12,18 +12,36 @@ buildscript {
     }
 }
 
+plugins {
+    id "com.github.spotbugs" version "1.6.1"
+}
+
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'com.palantir.docker'
 apply plugin: 'info.solidsoft.pitest'
+apply plugin: 'checkstyle'
 
 group = 'com.github.damianszwed'
 
 jar {
     baseName = 'fishky-proxy'
-    version =  '0.0.1'
+    version =  '0.0.2'
+}
+
+checkstyle {
+    toolVersion = "8.4"
+}
+
+spotbugs {
+    toolVersion = "3.1.1"
+    ignoreFailures = false
+    effort = "max"
+    reportLevel = "high"
+    omitVisitors = ["FindNonShortCircuit"]
+    excludeFilter = file("$rootProject.projectDir/config/spotbugs/excludeFilter.xml")
 }
 
 docker {
