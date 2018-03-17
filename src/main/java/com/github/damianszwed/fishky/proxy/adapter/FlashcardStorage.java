@@ -3,12 +3,16 @@ package com.github.damianszwed.fishky.proxy.adapter;
 import com.github.damianszwed.fishky.proxy.port.flashcard.Flashcard;
 import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardProvider;
 import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardRemover;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Scope;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Arrays.asList;
 
+@Slf4j
+@Scope("singleton")
 public class FlashcardStorage implements FlashcardProvider, FlashcardRemover {
 
     private List<Flashcard> flashcards = new ArrayList<>();
@@ -29,7 +33,7 @@ public class FlashcardStorage implements FlashcardProvider, FlashcardRemover {
     }
 
     @Override
-    public void removeFlashcard(Flashcard flashcard) {
-        flashcards.removeIf(givenFlashcard -> givenFlashcard.getId().equals(flashcard.getId()));
+    public void removeFlashcard(String id) {
+        flashcards.removeIf(givenFlashcard -> givenFlashcard.getId().equals(id));
     }
 }

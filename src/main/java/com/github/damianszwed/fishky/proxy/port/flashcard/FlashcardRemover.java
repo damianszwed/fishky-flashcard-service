@@ -1,5 +1,5 @@
 package com.github.damianszwed.fishky.proxy.port.flashcard;
 
 public interface FlashcardRemover {
-    void removeFlashcard(Flashcard flashcard);
+    void removeFlashcard(String id);
 }
