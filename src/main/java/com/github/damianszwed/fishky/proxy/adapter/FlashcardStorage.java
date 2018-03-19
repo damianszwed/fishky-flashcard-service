@@ -40,6 +40,7 @@ public class FlashcardStorage implements FlashcardProvider, FlashcardRemover, Fl
 
     @Override
     public void saveFlashcard(Flashcard flashcard) {
+        removeFlashcard("user1@example.com-" + flashcard.getQuestion().toLowerCase());
         flashcards.add(Flashcard.builder()
             .answer(flashcard.getAnswer())
             .question(flashcard.getQuestion())
