@@ -1,10 +1,16 @@
 package com.github.damianszwed.fishky.proxy.integration;
 
+import com.github.damianszwed.fishky.proxy.adapter.FlashcardDevelopmentStorage;
+import com.github.damianszwed.fishky.proxy.flashcard.FlashcardController;
+import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardProvider;
+import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardRemover;
+import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardSaver;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -15,9 +21,26 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
-@AutoConfigureMockMvc
+@WebMvcTest(FlashcardController.class)
 public class FlashcardSpecification {
+
+    @TestConfiguration
+    static class AskerTestConfiguration {
+        @Bean
+        FlashcardProvider flashcardProvider() {
+            return new FlashcardDevelopmentStorage();
+        }
+
+        @Bean
+        FlashcardRemover flashcardRemover(FlashcardDevelopmentStorage flashcardStorage) {
+            return flashcardStorage;
+        }
+
+        @Bean
+        FlashcardSaver flashcardSaver(FlashcardDevelopmentStorage    flashcardStorage) {
+            return flashcardStorage;
+        }
+    }
 
     @Autowired
     private MockMvc mockMvc;

@@ -61,6 +61,8 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'org.projectlombok:lombok'
     compile 'net.sourceforge.htmlunit:htmlunit:2.29'
+    compile("org.springframework.boot:spring-boot-starter-data-mongodb")
+//    compile 'org.springframework.data:spring-data-mongodb:2.0.5.RELEASE' //TODO maybe it will be not needed
     testCompile 'com.github.autofixture:autofixturegenerator:2.1.7'
     testCompile 'org.assertj:assertj-core:3.8.0'
     testCompile 'org.springframework.boot:spring-boot-starter-test'
