@@ -33,7 +33,7 @@ public class FlashcardController {
 
     @RequestMapping("/flashcards")
     public List<Flashcard> flashcards() {
-        return flashcardProvider.getFlashcards("anyUsername");
+        return flashcardProvider.getFlashcards("anyUsername");//TODO handle username
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/flashcard/{flashcardId:.+}")
@@ -47,6 +47,4 @@ public class FlashcardController {
     public void saveFlashcard(@RequestBody Flashcard flashcard) {
         flashcardSaver.saveFlashcard(flashcard);
     }
-
-
 }
