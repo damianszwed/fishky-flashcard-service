@@ -1,6 +1,6 @@
 package com.github.damianszwed.fishky.proxy.integration;
 
-import com.github.damianszwed.fishky.proxy.adapter.FlashcardDevelopmentStorage;
+import com.github.damianszwed.fishky.proxy.adapter.storage.development.FlashcardDevelopmentStorage;
 import com.github.damianszwed.fishky.proxy.flashcard.FlashcardController;
 import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardProvider;
 import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardRemover;
@@ -37,7 +37,7 @@ public class FlashcardSpecification {
         }
 
         @Bean
-        FlashcardSaver flashcardSaver(FlashcardDevelopmentStorage    flashcardStorage) {
+        FlashcardSaver flashcardSaver(FlashcardDevelopmentStorage flashcardStorage) {
             return flashcardStorage;
         }
     }
@@ -47,7 +47,7 @@ public class FlashcardSpecification {
 
     @Test
     public void removingOneFlashcard() throws Exception {
-        this.mockMvc.perform(delete("/flashcard/user1@example.com-questionb")).andExpect(status().isOk());
+        this.mockMvc.perform(delete("/flashcard/{id}", "user1@example.com-questionb")).andExpect(status().isOk());
 
         this.mockMvc.perform(get("/flashcards")).andDo(print()).andExpect(status().isOk())
             .andExpect(jsonPath("$[0].id").value("user1@example.com-questiona"))
