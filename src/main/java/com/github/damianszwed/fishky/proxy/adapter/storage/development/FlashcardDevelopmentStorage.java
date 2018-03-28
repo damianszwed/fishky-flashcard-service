@@ -1,4 +1,4 @@
-package com.github.damianszwed.fishky.proxy.adapter;
+package com.github.damianszwed.fishky.proxy.adapter.storage.development;
 
 import com.github.damianszwed.fishky.proxy.port.flashcard.Flashcard;
 import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardProvider;
