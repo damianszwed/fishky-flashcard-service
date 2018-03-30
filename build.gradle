@@ -74,7 +74,10 @@ targetCompatibility = 1.8
 dependencies {
     providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
     providedCompile 'com.google.appengine:appengine:+'
-    compile 'org.springframework.boot:spring-boot-starter-web'
+    providedCompile 'org.slf4j:jul-to-slf4j'
+    compile ('org.springframework.boot:spring-boot-starter-web') {
+        exclude group: "org.springframework.boot", module: "spring-boot-starter-tomcat"
+    }
     compile 'org.projectlombok:lombok'
     compile 'net.sourceforge.htmlunit:htmlunit:2.29'
     compile("org.springframework.boot:spring-boot-starter-data-mongodb")

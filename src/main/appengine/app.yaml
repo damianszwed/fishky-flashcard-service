@@ -18,7 +18,6 @@
 #
 runtime: java
 env: flex
-service: springboot
 
 runtime_config:  # Optional
   jdk: openjdk8
