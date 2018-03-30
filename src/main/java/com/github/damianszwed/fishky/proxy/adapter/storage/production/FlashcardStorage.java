@@ -24,7 +24,7 @@ public class FlashcardStorage implements FlashcardProvider, FlashcardRemover, Fl
 
     @Override
     public void removeFlashcard(String id) {
-        repository.delete(id);
+        repository.deleteById(id);
     }
 
     @Override
