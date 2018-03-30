@@ -1,7 +1,6 @@
 package com.github.damianszwed.fishky.proxy.config;
 
 import com.github.damianszwed.fishky.proxy.adapter.storage.development.FlashcardDevelopmentStorage;
-import com.github.damianszwed.fishky.proxy.adapter.storage.production.FlashcardStorage;
 import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardProvider;
 import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardRemover;
 import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardSaver;
