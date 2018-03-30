@@ -30,6 +30,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Ignore("Only with real mongodb")
 public class RealMongoDBSpecification {
 
+    private static final int FLASHCARDS_NUMBER = 3;
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -53,7 +55,7 @@ public class RealMongoDBSpecification {
             }
         });
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < FLASHCARDS_NUMBER; i++) {
             this.mockMvc.perform(post("/flashcard/")
                 .contentType(MediaType.APPLICATION_JSON).content(
                     "{\n" +
