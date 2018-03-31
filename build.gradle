@@ -9,7 +9,7 @@ buildscript {
         classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.0.0.RELEASE'
 //        classpath 'gradle.plugin.com.palantir.gradle.docker:gradle-docker:0.13.0'
         classpath 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.3.0'
-//        classpath 'com.google.cloud.tools:appengine-gradle-plugin:1.3.3'
+        classpath 'com.google.cloud.tools:appengine-gradle-plugin:1.3.3'
     }
 }
 
@@ -25,14 +25,14 @@ apply plugin: 'io.spring.dependency-management'
 //apply plugin: 'com.palantir.docker'
 apply plugin: 'info.solidsoft.pitest'
 apply plugin: 'checkstyle'
-//apply plugin: 'com.google.cloud.tools.appengine'
+apply plugin: 'com.google.cloud.tools.appengine'
 //apply plugin: 'war'
 
 group = 'com.github.damianszwed'
 
+version = '0.0.2'
 jar {
     baseName = 'fishky-proxy'
-    version = '0.0.2'
 }
 
 checkstyle {
