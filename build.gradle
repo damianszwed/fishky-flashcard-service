@@ -15,6 +15,7 @@ buildscript {
 
 plugins {
     id "com.github.spotbugs" version "1.6.1"
+    id "de.obqo.gradle.degraph" version "0.1.4.0"
 }
 
 apply plugin: 'java'
