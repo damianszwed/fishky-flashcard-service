@@ -77,14 +77,9 @@ dependencies {
 //    providedCompile 'com.google.appengine:appengine:+'
 //    providedCompile 'org.slf4j:jul-to-slf4j'
     compile('org.springframework.boot:spring-boot-starter-web')
-//        {
-//            exclude group: "org.springframework.boot", module: "spring-boot-starter-tomcat"
-//        }
     compile 'org.projectlombok:lombok'
     compile 'net.sourceforge.htmlunit:htmlunit:2.29'
     compile("org.springframework.boot:spring-boot-starter-data-mongodb")
-
-//    compile 'org.springframework.cloud:spring-cloud-gcp:1.0.0.M2'
 
     testCompile 'com.github.autofixture:autofixturegenerator:2.1.7'
     testCompile 'org.assertj:assertj-core:3.8.0'
