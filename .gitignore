@@ -2,14 +2,8 @@
 *.class
 build/
 
-# Log file
-*.log
-
-# BlueJ files
-*.ctxt
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
+/target/
+!.mvn/wrapper/maven-wrapper.jar
 
 # Package Files #
 *.jar
@@ -19,12 +13,18 @@ build/
 *.tar.gz
 *.rar
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
-
 # Gradle cache
 .gradle/
 !gradle/wrapper/gradle-wrapper.jar
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
 
 # IDEA project
 .idea/
@@ -40,3 +40,11 @@ hs_err_pid*
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/
+
+### NetBeans ###
+/nbproject/private/
+/build/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
