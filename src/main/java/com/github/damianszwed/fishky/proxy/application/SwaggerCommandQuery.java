@@ -3,7 +3,7 @@ package com.github.damianszwed.fishky.proxy.application;
 import static org.springframework.web.reactive.function.server.ServerResponse.permanentRedirect;
 import static org.springframework.web.reactive.function.server.ServerResponse.status;
 
-import com.github.damianszwed.fishky.proxy.port.CommandHandler;
+import com.github.damianszwed.fishky.proxy.port.CommandQueryHandler;
 import java.net.URI;
 import java.net.URISyntaxException;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +13,7 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
 @Slf4j
-public class SwaggerCommand implements CommandHandler {
+public class SwaggerCommandQuery implements CommandQueryHandler {
 
   @Override
   public Mono<ServerResponse> handle(ServerRequest serverRequest) {

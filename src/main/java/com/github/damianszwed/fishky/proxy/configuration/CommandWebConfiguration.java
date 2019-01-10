@@ -5,9 +5,11 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 
 import com.github.damianszwed.fishky.proxy.application.FlashcardProviderFlow;
-import com.github.damianszwed.fishky.proxy.application.GetAllCommand;
-import com.github.damianszwed.fishky.proxy.application.SwaggerCommand;
-import com.github.damianszwed.fishky.proxy.port.CommandHandler;
+import com.github.damianszwed.fishky.proxy.application.GetAllCommandQuery;
+import com.github.damianszwed.fishky.proxy.application.GetAllEvent;
+import com.github.damianszwed.fishky.proxy.application.SwaggerCommandQuery;
+import com.github.damianszwed.fishky.proxy.port.CommandQueryHandler;
+import com.github.damianszwed.fishky.proxy.port.flashcard.EventSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -35,21 +37,28 @@ public class CommandWebConfiguration {
   }
 
   @Bean
-  public CommandHandler swaggerHandler() {
-    return new SwaggerCommand();
+  public CommandQueryHandler swaggerHandler() {
+    return new SwaggerCommandQuery();
   }
 
   @Bean
-  public CommandHandler getAllCommand(
+  public CommandQueryHandler getAllCommand(
       FlashcardProviderFlow flashcardProviderFlow) {
-    return new GetAllCommand(flashcardProviderFlow);
+    return new GetAllCommandQuery(flashcardProviderFlow);
+  }
+
+  @Bean
+  public CommandQueryHandler getAllEvent(EventSource eventSource) {
+    return new GetAllEvent(eventSource);
   }
 
   @Bean
   public RouterFunction<ServerResponse> routes(
-      CommandHandler getAllCommand,
-      CommandHandler swaggerHandler) {
+      CommandQueryHandler getAllCommand,
+      CommandQueryHandler swaggerHandler,
+      CommandQueryHandler getAllEvent) {
     return route(GET("/flashcards"), getAllCommand::handle)
+        .andRoute(GET("/flashcardsEventStream"), getAllEvent::handle)
         .andRoute(GET("/"), swaggerHandler::handle)
         .and(resources("/**", new ClassPathResource("static/")));
   }
