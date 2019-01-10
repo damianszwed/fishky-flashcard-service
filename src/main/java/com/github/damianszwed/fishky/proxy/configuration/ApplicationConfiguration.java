@@ -2,6 +2,7 @@ package com.github.damianszwed.fishky.proxy.configuration;
 
 import com.github.damianszwed.fishky.proxy.adapter.storage.development.FlashcardDevelopmentStorage;
 import com.github.damianszwed.fishky.proxy.application.FlashcardProviderFlow;
+import com.github.damianszwed.fishky.proxy.port.flashcard.EventSource;
 import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardProvider;
 import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardRemover;
 import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardSaver;
@@ -12,9 +13,14 @@ import org.springframework.context.annotation.Configuration;
 public class ApplicationConfiguration {
 
   @Bean
-  FlashcardProviderFlow flashcardProviderCzyTamJakisFlow(
+  FlashcardProviderFlow flashcardProviderFlow(
       FlashcardProvider flashcardProvider) {
     return new FlashcardProviderFlow(flashcardProvider);
+  }
+
+  @Bean
+  EventSource eventSource(FlashcardProviderFlow flashcardProviderFlow) {
+    return flashcardProviderFlow;
   }
 
 
