@@ -18,7 +18,7 @@ public class GetAllCommand implements CommandHandler {
 
   @Override
   public Mono<ServerResponse> handle(ServerRequest serverRequest) {
-    flashcardProviderFlow.doSomething();
+    flashcardProviderFlow.getAll();
     return accepted().build();
   }
 }
