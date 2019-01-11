@@ -43,9 +43,7 @@ public class FlashcardDevelopmentStorage implements FlashcardProvider, Flashcard
   @Override
   public void saveFlashcard(Flashcard flashcard) {
     removeFlashcard("user1@example.com-" + flashcard.getQuestion().toLowerCase());
-    flashcards.add(Flashcard.builder()
-        .answer(flashcard.getAnswer())
-        .question(flashcard.getQuestion())
+    flashcards.add(flashcard.toBuilder()
         .id("user1@example.com-" + flashcard.getQuestion().toLowerCase())
         .build());
   }

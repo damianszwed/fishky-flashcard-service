@@ -79,15 +79,16 @@ public class FishkyProxyDriver {
     @Override
     public void savesFlashcard(String flashcard) {
       webTestClient
-          .post().uri("/flashcards").accept(MediaType.APPLICATION_JSON)
+          .post().uri("/flashcards")
+          .accept(MediaType.APPLICATION_JSON)
+          .contentType(MediaType.APPLICATION_JSON)
           .syncBody(flashcard)
           .exchange().expectStatus().isAccepted();
     }
 
     @Override
     public void receivesFlashcards(String expectedJson) {
-      response.expectBody()
-          .json(expectedJson);
+      response.expectBody().json(expectedJson);
     }
   }
 }
