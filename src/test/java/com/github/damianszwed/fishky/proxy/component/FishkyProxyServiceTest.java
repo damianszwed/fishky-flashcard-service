@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -19,6 +20,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
     CommandWebConfiguration.class
 })
 @WebFluxTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @DisplayName("Fishky proxy service")
 class FishkyProxyServiceTest {
 
@@ -26,12 +28,13 @@ class FishkyProxyServiceTest {
   private FishkyProxyDriver fishkyProxyDriver;
 
   @Test
-  @DisplayName("Service should ")
-  void shouldDoSomething() {
+  @DisplayName("Service should notify about all flashcards on demand.")
+  void shouldNotifyAboutAllFlashcardsWhenCommandsForAllFlashcards() {
     fishkyProxyDriver.with(context -> {
       context.given().student().isListeningOnFlashcards();
       context.when().student().commandsForAllFlashcards();
-      context.then().student().receivesAllFlashcards();
+      context.then().student().isNotifiedAboutAllFlashcards();
     });
   }
+
 }
