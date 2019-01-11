@@ -4,12 +4,14 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 import static org.springframework.web.reactive.function.server.RouterFunctions.resources;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 
+import com.github.damianszwed.fishky.proxy.application.EventHandler;
 import com.github.damianszwed.fishky.proxy.application.FlashcardProviderFlow;
-import com.github.damianszwed.fishky.proxy.application.GetAllCommandQuery;
-import com.github.damianszwed.fishky.proxy.application.GetAllEvent;
-import com.github.damianszwed.fishky.proxy.application.SwaggerCommandQuery;
+import com.github.damianszwed.fishky.proxy.application.GetAllCommandHandler;
+import com.github.damianszwed.fishky.proxy.application.GetAllQueryHandler;
+import com.github.damianszwed.fishky.proxy.application.SwaggerHandler;
 import com.github.damianszwed.fishky.proxy.port.CommandQueryHandler;
 import com.github.damianszwed.fishky.proxy.port.flashcard.EventSource;
+import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -37,28 +39,35 @@ public class CommandWebConfiguration {
   }
 
   @Bean
-  public CommandQueryHandler swaggerHandler() {
-    return new SwaggerCommandQuery();
+  public CommandQueryHandler getAllQueryHandler(FlashcardProvider flashcardProvider) {
+    return new GetAllQueryHandler(flashcardProvider);
   }
 
   @Bean
-  public CommandQueryHandler getAllCommand(
+  public CommandQueryHandler getAllCommandHandler(
       FlashcardProviderFlow flashcardProviderFlow) {
-    return new GetAllCommandQuery(flashcardProviderFlow);
+    return new GetAllCommandHandler(flashcardProviderFlow);
   }
 
   @Bean
-  public CommandQueryHandler getAllEvent(EventSource eventSource) {
-    return new GetAllEvent(eventSource);
+  public CommandQueryHandler eventHandler(EventSource eventSource) {
+    return new EventHandler(eventSource);
+  }
+
+  @Bean
+  public CommandQueryHandler swaggerHandler() {
+    return new SwaggerHandler();
   }
 
   @Bean
   public RouterFunction<ServerResponse> routes(
-      CommandQueryHandler getAllCommand,
-      CommandQueryHandler swaggerHandler,
-      CommandQueryHandler getAllEvent) {
-    return route(GET("/flashcards"), getAllCommand::handle)
-        .andRoute(GET("/flashcardsEventStream"), getAllEvent::handle)
+      CommandQueryHandler getAllQueryHandler,
+      CommandQueryHandler getAllCommandHandler,
+      CommandQueryHandler eventHandler,
+      CommandQueryHandler swaggerHandler) {
+    return route(GET("/flashcards"), getAllQueryHandler::handle)
+        .andRoute(GET("/getAllFlashcardsCommand"), getAllCommandHandler::handle)
+        .andRoute(GET("/flashcardsEventStream"), eventHandler::handle)
         .andRoute(GET("/"), swaggerHandler::handle)
         .and(resources("/**", new ClassPathResource("static/")));
   }

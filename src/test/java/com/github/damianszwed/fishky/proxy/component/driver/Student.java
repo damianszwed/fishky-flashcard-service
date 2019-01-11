@@ -2,9 +2,11 @@ package com.github.damianszwed.fishky.proxy.component.driver;
 
 public interface Student {
 
-  void commandsForAllFlashcards();
+  void queryForFlashcards();
 
-  void receivesAllFlashcards();
+  void receivesFlashcards(String expectedJson);
+
+  void commandsForAllFlashcards();
 
   void isListeningOnFlashcards();
 
