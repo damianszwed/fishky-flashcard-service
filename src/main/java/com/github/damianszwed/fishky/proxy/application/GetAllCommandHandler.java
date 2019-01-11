@@ -7,11 +7,14 @@ import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
-public class GetAllCommandQuery implements CommandQueryHandler {
+/**
+ * Example trigger how to command to send all flashcards.
+ */
+public class GetAllCommandHandler implements CommandQueryHandler {
 
   private FlashcardProviderFlow flashcardProviderFlow;
 
-  public GetAllCommandQuery(FlashcardProviderFlow flashcardProviderFlow) {
+  public GetAllCommandHandler(FlashcardProviderFlow flashcardProviderFlow) {
 
     this.flashcardProviderFlow = flashcardProviderFlow;
   }

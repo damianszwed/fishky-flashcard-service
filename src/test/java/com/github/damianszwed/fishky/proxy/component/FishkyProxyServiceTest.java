@@ -28,6 +28,17 @@ class FishkyProxyServiceTest {
   private FishkyProxyDriver fishkyProxyDriver;
 
   @Test
+  @DisplayName("Service should return all flashcards ")
+  void shouldReturnAllFlashcards() {
+    fishkyProxyDriver.with(context -> {
+      context.when().student().queryForFlashcards();
+      context.then().student().receivesFlashcards(
+          OutputSamples.FLASHCARDS_ARRAY
+      );
+    });
+  }
+
+  @Test
   @DisplayName("Service should notify about all flashcards on demand.")
   void shouldNotifyAboutAllFlashcardsWhenCommandsForAllFlashcards() {
     fishkyProxyDriver.with(context -> {
@@ -36,5 +47,4 @@ class FishkyProxyServiceTest {
       context.then().student().isNotifiedAboutAllFlashcards();
     });
   }
-
 }

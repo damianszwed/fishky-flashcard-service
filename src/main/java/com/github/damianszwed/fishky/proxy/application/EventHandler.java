@@ -8,11 +8,11 @@ import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
-public class GetAllEvent implements CommandQueryHandler {
+public class EventHandler implements CommandQueryHandler {
 
   private EventSource eventSource;
 
-  public GetAllEvent(EventSource eventSource) {
+  public EventHandler(EventSource eventSource) {
     this.eventSource = eventSource;
   }
 
