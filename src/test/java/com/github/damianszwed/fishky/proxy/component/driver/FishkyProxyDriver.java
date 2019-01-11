@@ -69,11 +69,19 @@ public class FishkyProxyDriver {
     }
 
     @Override
-    public void queryForFlashcards() {
+    public void queriesForFlashcards() {
       response = webTestClient
           .get().uri("/flashcards")
           .accept(MediaType.APPLICATION_JSON)
           .exchange();
+    }
+
+    @Override
+    public void savesFlashcard(String flashcard) {
+      webTestClient
+          .post().uri("/flashcards").accept(MediaType.APPLICATION_JSON)
+          .syncBody(flashcard)
+          .exchange().expectStatus().isAccepted();
     }
 
     @Override
