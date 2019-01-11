@@ -3,7 +3,7 @@ package com.github.damianszwed.fishky.proxy.component.driver;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import com.github.damianszwed.fishky.proxy.port.flashcard.EventSource;
-import com.github.damianszwed.fishky.proxy.port.flashcard.Flashcard;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.test.web.reactive.server.WebTestClient.ResponseSpec;
 import reactor.test.StepVerifier;
@@ -14,14 +14,12 @@ public class FishkyProxyDriver {
   private final WebTestClient webTestClient;
   private final EventSource eventSource;
   private final Student student;
-  private ResponseSpec response;
 
-  public FishkyProxyDriver(WebTestClient webTestClient,
+  FishkyProxyDriver(WebTestClient webTestClient,
       EventSource eventSource) {
     this.webTestClient = webTestClient;
     this.eventSource = eventSource;
     this.student = createStudent();
-
   }
 
   public void with(TestCode test) {
@@ -50,11 +48,19 @@ public class FishkyProxyDriver {
 
   private class StudentImpl implements Student {
 
-    private Step<Flashcard> flashcardStep;
+    private ResponseSpec response;
+    private Step flashcardStep;
 
     @Override
     public void isListeningOnFlashcards() {
       flashcardStep = StepVerifier.create(eventSource.getFlux()).expectNextCount(3);
+    }
+
+    @Override
+    public void commandsForAllFlashcards() {
+      webTestClient
+          .get().uri("/getAllFlashcardsCommand")
+          .exchange().expectStatus().isAccepted();
     }
 
     @Override
@@ -63,14 +69,17 @@ public class FishkyProxyDriver {
     }
 
     @Override
-    public void receivesAllFlashcards() {
+    public void queryForFlashcards() {
+      response = webTestClient
+          .get().uri("/flashcards")
+          .accept(MediaType.APPLICATION_JSON)
+          .exchange();
     }
 
     @Override
-    public void commandsForAllFlashcards() {
-      webTestClient
-          .get().uri("/flashcards")
-          .exchange().expectStatus().isAccepted();
+    public void receivesFlashcards(String expectedJson) {
+      response.expectBody()
+          .json(expectedJson);
     }
   }
 }
