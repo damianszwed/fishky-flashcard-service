@@ -4,6 +4,7 @@ import com.github.damianszwed.fishky.proxy.component.driver.FishkyProxyDriver;
 import com.github.damianszwed.fishky.proxy.component.driver.SpringTestConfiguration;
 import com.github.damianszwed.fishky.proxy.configuration.ApplicationConfiguration;
 import com.github.damianszwed.fishky.proxy.configuration.CommandWebConfiguration;
+import org.junit.Ignore;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,12 +29,25 @@ class FishkyProxyServiceTest {
   private FishkyProxyDriver fishkyProxyDriver;
 
   @Test
-  @DisplayName("Service should return all flashcards ")
+  @DisplayName("Service should return all flashcards on query.")
   void shouldReturnAllFlashcards() {
     fishkyProxyDriver.with(context -> {
-      context.when().student().queryForFlashcards();
+      context.when().student().queriesForFlashcards();
       context.then().student().receivesFlashcards(
-          OutputSamples.FLASHCARDS_ARRAY
+          OutputSamples.DEFAULT_FLASHCARDS_ARRAY
+      );
+    });
+  }
+
+  @Test
+  @DisplayName("Service should save flashcards on demand.")
+  @Ignore("To be implemented")
+  void shouldSaveFlashcard() {
+    fishkyProxyDriver.with(context -> {
+      context.when().student().savesFlashcard(InputSamples.FLASHCARD_D);
+      context.when().student().queriesForFlashcards();
+      context.then().student().receivesFlashcards(
+          OutputSamples.DEFAULT_FLASHCARDS_ARRAY
       );
     });
   }

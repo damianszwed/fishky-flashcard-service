@@ -1,8 +1,8 @@
 package com.github.damianszwed.fishky.proxy.component;
 
-public interface OutputSamples {
+interface OutputSamples {
 
-  String FLASHCARDS_ARRAY = "[\n"
+  String DEFAULT_FLASHCARDS_ARRAY = "[\n"
       + "  {\n"
       + "    \"id\": \"user1@example.com-questiona\",\n"
       + "    \"question\": \"questionA\",\n"
@@ -17,6 +17,29 @@ public interface OutputSamples {
       + "    \"id\": \"user1@example.com-questionc\",\n"
       + "    \"question\": \"questionC\",\n"
       + "    \"answer\": \"answerC\"\n"
+      + "  }\n"
+      + "]\n";
+
+  String FLASHCARDS_ARRAY_WITH_NEW_FLASHCARD = "[\n"
+      + "  {\n"
+      + "    \"id\": \"user1@example.com-questiona\",\n"
+      + "    \"question\": \"questionA\",\n"
+      + "    \"answer\": \"answerA\"\n"
+      + "  },\n"
+      + "  {\n"
+      + "    \"id\": \"user1@example.com-questionb\",\n"
+      + "    \"question\": \"questionB\",\n"
+      + "    \"answer\": \"answerB\"\n"
+      + "  },\n"
+      + "  {\n"
+      + "    \"id\": \"user1@example.com-questionc\",\n"
+      + "    \"question\": \"questionC\",\n"
+      + "    \"answer\": \"answerC\"\n"
+      + "  },\n"
+      + "  {\n"
+      + "    \"id\": \"user1@example.com-questiond\",\n"
+      + "    \"question\": \"questionD\",\n"
+      + "    \"answer\": \"answerD\"\n"
       + "  }\n"
       + "]\n";
 }
