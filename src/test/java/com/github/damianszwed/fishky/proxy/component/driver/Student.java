@@ -7,4 +7,6 @@ public interface Student {
   void receivesAllFlashcards();
 
   void isListeningOnFlashcards();
+
+  void isNotifiedAboutAllFlashcards();
 }

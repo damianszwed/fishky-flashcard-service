@@ -3,8 +3,11 @@ package com.github.damianszwed.fishky.proxy.component.driver;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import com.github.damianszwed.fishky.proxy.port.flashcard.EventSource;
+import com.github.damianszwed.fishky.proxy.port.flashcard.Flashcard;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.test.web.reactive.server.WebTestClient.ResponseSpec;
+import reactor.test.StepVerifier;
+import reactor.test.StepVerifier.Step;
 
 public class FishkyProxyDriver {
 
@@ -47,12 +50,20 @@ public class FishkyProxyDriver {
 
   private class StudentImpl implements Student {
 
+    private Step<Flashcard> flashcardStep;
+
     @Override
     public void isListeningOnFlashcards() {
-      //      flashcardFluxExchangeResult = webTestClient.get()
-      //          .uri("/flashcardsEventStream")
-      //          .accept(MediaType.TEXT_EVENT_STREAM).exchange().expectStatus().isOk()
-      //          .returnResult(Flashcard.class);
+      flashcardStep = StepVerifier.create(eventSource.getFlux()).expectNextCount(3);
+    }
+
+    @Override
+    public void isNotifiedAboutAllFlashcards() {
+      flashcardStep.thenCancel().verify();
+    }
+
+    @Override
+    public void receivesAllFlashcards() {
     }
 
     @Override
@@ -60,12 +71,6 @@ public class FishkyProxyDriver {
       webTestClient
           .get().uri("/flashcards")
           .exchange().expectStatus().isAccepted();
-    }
-
-    @Override
-    public void receivesAllFlashcards() {
-      //      response.expectHeader().contentType(MediaType.APPLICATION_OCTET_STREAM)
-      //          .expectBodyList(Flashcard.class).hasSize(3);
     }
   }
 }
