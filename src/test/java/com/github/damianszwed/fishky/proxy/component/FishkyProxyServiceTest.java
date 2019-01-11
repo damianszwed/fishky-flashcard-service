@@ -4,7 +4,7 @@ import com.github.damianszwed.fishky.proxy.component.driver.FishkyProxyDriver;
 import com.github.damianszwed.fishky.proxy.component.driver.SpringTestConfiguration;
 import com.github.damianszwed.fishky.proxy.configuration.ApplicationConfiguration;
 import com.github.damianszwed.fishky.proxy.configuration.CommandWebConfiguration;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,7 +41,7 @@ class FishkyProxyServiceTest {
 
   @Test
   @DisplayName("Service should save flashcards on demand.")
-  @Ignore("To be implemented")
+  @Disabled("To be implemented")
   void shouldSaveFlashcard() {
     fishkyProxyDriver.with(context -> {
       context.when().student().savesFlashcard(InputSamples.FLASHCARD_D);
