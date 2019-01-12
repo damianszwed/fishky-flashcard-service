@@ -7,4 +7,5 @@ interface InputSamples {
       + "  \"question\": \"questionD\",\n"
       + "  \"answer\": \"answerD\"\n"
       + "}";
+  String EXISTING_FLASHCARD_ID = "user1@example.com-questionb";
 }

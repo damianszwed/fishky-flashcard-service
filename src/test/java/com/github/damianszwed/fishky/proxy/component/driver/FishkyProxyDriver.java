@@ -87,6 +87,14 @@ public class FishkyProxyDriver {
     }
 
     @Override
+    public void deletesFlashcard(String flashcardId) {
+      webTestClient
+          .delete().uri("/flashcards/{id}", flashcardId)
+          .accept(MediaType.APPLICATION_JSON)
+          .exchange().expectStatus().isAccepted();
+    }
+
+    @Override
     public void receivesFlashcards(String expectedJson) {
       response.expectBody().json(expectedJson);
     }

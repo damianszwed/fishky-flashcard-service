@@ -42,4 +42,16 @@ interface OutputSamples {
       + "    \"answer\": \"answerD\"\n"
       + "  }\n"
       + "]\n";
+  String FLASHCARDS_ARRAY_WITHOUT_ONE_FLASHCARD = "[\n"
+      + "  {\n"
+      + "    \"id\": \"user1@example.com-questiona\",\n"
+      + "    \"question\": \"questionA\",\n"
+      + "    \"answer\": \"answerA\"\n"
+      + "  },\n"
+      + "  {\n"
+      + "    \"id\": \"user1@example.com-questionc\",\n"
+      + "    \"question\": \"questionC\",\n"
+      + "    \"answer\": \"answerC\"\n"
+      + "  }\n"
+      + "]\n";
 }
