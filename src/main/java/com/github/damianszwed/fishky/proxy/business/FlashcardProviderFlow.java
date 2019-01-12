@@ -1,4 +1,4 @@
-package com.github.damianszwed.fishky.proxy.application;
+package com.github.damianszwed.fishky.proxy.business;
 
 import com.github.damianszwed.fishky.proxy.port.flashcard.EventSource;
 import com.github.damianszwed.fishky.proxy.port.flashcard.Flashcard;
@@ -18,7 +18,7 @@ public class FlashcardProviderFlow implements EventSource {
   }
 
   void getAll() {
-    Flux.fromStream(() -> flashcardProvider.getFlashcards("any").stream())
+    Flux.fromStream(() -> flashcardProvider.get("any").stream())
         .subscribe(unicastProcessor::onNext);
   }
 

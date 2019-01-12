@@ -1,4 +1,4 @@
-package com.github.damianszwed.fishky.proxy.application;
+package com.github.damianszwed.fishky.proxy.business;
 
 import static org.springframework.web.reactive.function.server.ServerResponse.accepted;
 
