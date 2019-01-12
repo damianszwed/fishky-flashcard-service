@@ -1,4 +1,4 @@
-package com.github.damianszwed.fishky.proxy.application;
+package com.github.damianszwed.fishky.proxy.business;
 
 import static org.springframework.web.reactive.function.server.ServerResponse.accepted;
 
@@ -20,7 +20,7 @@ public class SaveCommandHandler implements CommandQueryHandler {
   @Override
   public Mono<ServerResponse> handle(ServerRequest serverRequest) {
     return serverRequest.bodyToMono(Flashcard.class)
-        .doOnNext(flashcard -> flashcardSaver.saveFlashcard(flashcard))
+        .doOnNext(flashcard -> flashcardSaver.save(flashcard))
         .flatMap(flashcard -> accepted().build());
   }
 }

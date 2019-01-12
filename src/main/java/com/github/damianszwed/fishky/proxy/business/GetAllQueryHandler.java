@@ -1,4 +1,4 @@
-package com.github.damianszwed.fishky.proxy.application;
+package com.github.damianszwed.fishky.proxy.business;
 
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 
@@ -21,7 +21,7 @@ public class GetAllQueryHandler implements CommandQueryHandler {
   @Override
   public Mono<ServerResponse> handle(ServerRequest serverRequest) {
     return ok().body(
-        Flux.fromIterable(flashcardProvider.getFlashcards("any")),
+        Flux.fromIterable(flashcardProvider.get("any")),
         Flashcard.class);
   }
 }

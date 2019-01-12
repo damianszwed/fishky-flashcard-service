@@ -31,18 +31,18 @@ public class FlashcardDevelopmentStorage implements FlashcardProvider, Flashcard
   }
 
   @Override
-  public List<Flashcard> getFlashcards(String username) {
+  public List<Flashcard> get(String username) {
     return flashcards;
   }
 
   @Override
-  public void removeFlashcard(String id) {
+  public void remove(String id) {
     flashcards.removeIf(givenFlashcard -> givenFlashcard.getId().equals(id));
   }
 
   @Override
-  public void saveFlashcard(Flashcard flashcard) {
-    removeFlashcard("user1@example.com-" + flashcard.getQuestion().toLowerCase());
+  public void save(Flashcard flashcard) {
+    remove("user1@example.com-" + flashcard.getQuestion().toLowerCase());
     flashcards.add(flashcard.toBuilder()
         .id("user1@example.com-" + flashcard.getQuestion().toLowerCase())
         .build());

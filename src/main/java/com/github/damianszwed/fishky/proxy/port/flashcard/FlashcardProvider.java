@@ -4,5 +4,5 @@ import java.util.List;
 
 public interface FlashcardProvider {
 
-  List<Flashcard> getFlashcards(String username);
+  List<Flashcard> get(String username);
 }
