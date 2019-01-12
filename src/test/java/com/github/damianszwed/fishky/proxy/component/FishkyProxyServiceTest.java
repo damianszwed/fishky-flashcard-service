@@ -3,8 +3,7 @@ package com.github.damianszwed.fishky.proxy.component;
 import com.github.damianszwed.fishky.proxy.component.driver.FishkyProxyDriver;
 import com.github.damianszwed.fishky.proxy.component.driver.SpringTestConfiguration;
 import com.github.damianszwed.fishky.proxy.configuration.ApplicationConfiguration;
-import com.github.damianszwed.fishky.proxy.configuration.CommandWebConfiguration;
-import org.junit.jupiter.api.Disabled;
+import com.github.damianszwed.fishky.proxy.configuration.CommandQueryWebConfiguration;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,7 +17,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ContextConfiguration(classes = {
     SpringTestConfiguration.class,
     ApplicationConfiguration.class,
-    CommandWebConfiguration.class
+    CommandQueryWebConfiguration.class
 })
 @WebFluxTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
@@ -53,7 +52,6 @@ class FishkyProxyServiceTest {
 
   @Test
   @DisplayName("Service should delete flashcards on demand.")
-  @Disabled("Not implemented yet")
   void shouldDeleteFlashcard() {
     fishkyProxyDriver.with(context -> {
       context.when().student().deletesFlashcard(InputSamples.EXISTING_FLASHCARD_ID);

@@ -1,4 +1,4 @@
-package com.github.damianszwed.fishky.proxy.application;
+package com.github.damianszwed.fishky.proxy.business;
 
 import com.github.damianszwed.fishky.proxy.port.CommandQueryHandler;
 import com.github.damianszwed.fishky.proxy.port.flashcard.EventSource;
