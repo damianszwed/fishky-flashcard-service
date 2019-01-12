@@ -8,6 +8,8 @@ public interface Student {
 
   void savesFlashcard(String flashcard);
 
+  void deletesFlashcard(String existingFlashcard);
+
   void commandsForAllFlashcards();
 
   void isListeningOnFlashcards();
