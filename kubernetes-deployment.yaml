@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fishky-proxy
+spec:
+  selector:
+    matchLabels:
+      app: fishky-proxy
+      tier: backend
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: fishky-proxy
+        tier: backend
+    spec:
+      containers:
+      - name: fishky-proxy
+        image: fishky-proxy:0.1.0
+        resources:
+          requests:
+            cpu: 0.1
+            memory: 300Mi
+        env:
+        - name: GET_HOSTS_FROM
+          value: dns
+        ports:
+        - containerPort: 8080
