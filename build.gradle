@@ -98,9 +98,6 @@ task updateVersion << {
     ant.replaceregexp(match:'image: fishky-proxy:(.*)', replace:"image: fishky-proxy:${version}", flags:'g', byline:true) {
         fileset(dir: '.', includes: 'kubernetes-deployment.yaml')
     }
-    ant.replaceregexp(match:'"version":(.*)', replace:"\"version\": \"${version}\",", flags:'g', byline:true) {
-        fileset(dir: '.', includes: 'src/main/resources/static/api.json')
-    }
 }
 
 task kubernetesDeployment(type:Exec) {
@@ -115,12 +112,8 @@ task tagDockerImage(type:Exec) {
     commandLine 'docker', 'tag', "fishky-proxy:${version}", "damianiero/fishky-proxy:${version}"
 }
 
-task loginToDockerHub(type:Exec) {
-    commandLine 'docker', 'version'
-}
-
 task pushDockerImage(type:Exec) {
-    dependsOn tagDockerImage, loginToDockerHub
+    dependsOn tagDockerImage
     commandLine 'docker', 'push', "damianiero/fishky-proxy:${version}"
 }
 
