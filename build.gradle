@@ -93,3 +93,55 @@ dependencies {
     compile 'org.projectlombok:lombok:1.18.2'
     apt 'org.projectlombok:lombok:1.18.2'
 }
+
+task updateVersion << {
+    ant.replaceregexp(match:'image: fishky-proxy:(.*)', replace:"image: fishky-proxy:${version}", flags:'g', byline:true) {
+        fileset(dir: '.', includes: 'kubernetes-deployment.yaml')
+    }
+    ant.replaceregexp(match:'"version":(.*)', replace:"\"version\": \"${version}\",", flags:'g', byline:true) {
+        fileset(dir: '.', includes: 'src/main/resources/static/api.json')
+    }
+}
+
+task kubernetesDeployment(type:Exec) {
+    commandLine 'kubectl', 'apply', '-f', 'kubernetes-deployment.yaml'
+}
+
+task kubernetesService(type:Exec) {
+    commandLine 'kubectl', 'apply', '-f', 'kubernetes-service.yaml'
+}
+
+task tagDockerImage(type:Exec) {
+    commandLine 'docker', 'tag', "fishky-proxy:${version}", "damianiero/fishky-proxy:${version}"
+}
+
+task loginToDockerHub(type:Exec) {
+    commandLine 'docker', 'version'
+}
+
+task pushDockerImage(type:Exec) {
+    dependsOn tagDockerImage, loginToDockerHub
+    commandLine 'docker', 'push', "damianiero/fishky-proxy:${version}"
+}
+
+task deployByKubernetes {
+    dependsOn kubernetesService, kubernetesDeployment, pushDockerImage, 'docker', build, updateVersion
+    build.mustRunAfter updateVersion
+}
+
+task deployByLocalKubernetes {
+    dependsOn kubernetesService, kubernetesDeployment, tagDockerImage, 'docker', build, updateVersion
+    build.mustRunAfter updateVersion
+}
+
+task deleteKubernetesDeployment(type:Exec) {
+    commandLine 'kubectl', 'delete', '-f', 'kubernetes-deployment.yaml'
+}
+
+task deleteKubernetesService(type:Exec) {
+    commandLine 'kubectl', 'delete', '-f', 'kubernetes-service.yaml'
+}
+
+task undeploy {
+    dependsOn deleteKubernetesDeployment, deleteKubernetesService
+}
