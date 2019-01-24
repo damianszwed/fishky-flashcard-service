@@ -7,7 +7,6 @@ import com.github.damianszwed.fishky.proxy.port.flashcard.Flashcard;
 import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardProvider;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public class GetAllQueryHandler implements CommandQueryHandler {
@@ -21,7 +20,7 @@ public class GetAllQueryHandler implements CommandQueryHandler {
   @Override
   public Mono<ServerResponse> handle(ServerRequest serverRequest) {
     return ok().body(
-        Flux.fromIterable(flashcardProvider.get("any")),
+        flashcardProvider.get("any"),
         Flashcard.class);
   }
 }

@@ -18,7 +18,7 @@ public class FlashcardProviderFlow implements EventSource {
   }
 
   void getAll() {
-    Flux.fromStream(() -> flashcardProvider.get("any").stream())
+    flashcardProvider.get("any")
         .subscribe(unicastProcessor::onNext);
   }
 
