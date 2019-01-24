@@ -24,7 +24,7 @@ public class FlashcardProductionStorage implements FlashcardProvider, FlashcardR
 
   @Override
   public void remove(String id) {
-    flashcardMongoRepository.deleteById(id);
+    flashcardMongoRepository.deleteById(id).subscribe();
   }
 
   @Override
