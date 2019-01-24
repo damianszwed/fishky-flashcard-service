@@ -32,6 +32,7 @@ public class FlashcardProductionStorage implements FlashcardProvider, FlashcardR
     flashcardMongoRepository.save(
         flashcard
             .toBuilder()
+            //TODO(damian.szwed) id generation
             .id("user1@example.com-" + flashcard.getQuestion().toLowerCase())
             .build())
         .doOnError(throwable -> log.info(throwable.getMessage(), throwable))
