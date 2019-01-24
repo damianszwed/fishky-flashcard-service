@@ -9,6 +9,7 @@ import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardSaver;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+import reactor.core.publisher.Flux;
 
 @Slf4j
 public class FlashcardDevelopmentStorage implements FlashcardProvider, FlashcardRemover,
@@ -31,8 +32,8 @@ public class FlashcardDevelopmentStorage implements FlashcardProvider, Flashcard
   }
 
   @Override
-  public List<Flashcard> get(String username) {
-    return flashcards;
+  public Flux<Flashcard> get(String username) {
+    return Flux.fromIterable(flashcards);
   }
 
   @Override
