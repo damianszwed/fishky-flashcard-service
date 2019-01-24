@@ -78,6 +78,7 @@ targetCompatibility = 1.11
 
 dependencies {
     compile 'org.springframework.boot:spring-boot-starter-webflux'
+    compile 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
     compile 'io.vavr:vavr:0.9.0'
 
     testCompile 'org.springframework.boot:spring-boot-starter-test'

@@ -1,8 +1,8 @@
 package com.github.damianszwed.fishky.proxy.port.flashcard;
 
-import java.util.List;
+import reactor.core.publisher.Flux;
 
 public interface FlashcardProvider {
 
-  List<Flashcard> get(String username);
+  Flux<Flashcard> get(String username);
 }

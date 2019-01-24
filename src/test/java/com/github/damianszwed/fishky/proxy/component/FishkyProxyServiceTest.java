@@ -2,8 +2,9 @@ package com.github.damianszwed.fishky.proxy.component;
 
 import com.github.damianszwed.fishky.proxy.component.driver.FishkyProxyDriver;
 import com.github.damianszwed.fishky.proxy.component.driver.SpringTestConfiguration;
-import com.github.damianszwed.fishky.proxy.configuration.ApplicationConfiguration;
+import com.github.damianszwed.fishky.proxy.configuration.BusinessConfiguration;
 import com.github.damianszwed.fishky.proxy.configuration.CommandQueryWebConfiguration;
+import com.github.damianszwed.fishky.proxy.configuration.DevelopmentConfiguration;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,7 +17,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {
     SpringTestConfiguration.class,
-    ApplicationConfiguration.class,
+    DevelopmentConfiguration.class,
+    BusinessConfiguration.class,
     CommandQueryWebConfiguration.class
 })
 @WebFluxTest
