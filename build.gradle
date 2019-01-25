@@ -124,7 +124,7 @@ task deployByKubernetes {
 }
 
 task deployByLocalKubernetes {
-    dependsOn kubernetesService, kubernetesDeployment, tagDockerImage, 'docker', build, updateVersion
+    dependsOn kubernetesService, kubernetesDeployment, 'docker', build, updateVersion
     build.mustRunAfter updateVersion
 }
 
