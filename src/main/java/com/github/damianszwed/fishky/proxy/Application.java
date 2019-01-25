@@ -6,8 +6,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.mongo.MongoReactiveDataAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.mongo.MongoReactiveRepositoriesAutoConfiguration;
-import org.springframework.boot.autoconfigure.data.mongo.MongoRepositoriesAutoConfiguration;
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebAutoConfiguration;
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.autoconfigure.mongo.MongoReactiveAutoConfiguration;
 
@@ -16,8 +14,6 @@ import org.springframework.boot.autoconfigure.mongo.MongoReactiveAutoConfigurati
     MongoDataAutoConfiguration.class,
     MongoReactiveDataAutoConfiguration.class,
     MongoReactiveRepositoriesAutoConfiguration.class,
-    MongoRepositoriesAutoConfiguration.class,
-    SpringDataWebAutoConfiguration.class,
     MongoAutoConfiguration.class,
     MongoReactiveAutoConfiguration.class
 })
