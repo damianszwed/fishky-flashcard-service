@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: fishky-proxy
-        image: fishky-proxy:0.1.5
+        image: fishky-proxy:0.1.6
         resources:
           requests:
             cpu: 0.1
@@ -24,5 +24,10 @@ spec:
         env:
         - name: GET_HOSTS_FROM
           value: dns
+        - name: MONGODB-URI
+          valueFrom:
+            secretKeyRef:
+              name: fishky-proxy-secret
+              key: mongodb.uri
         ports:
         - containerPort: 8080
