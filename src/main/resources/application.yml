@@ -1,6 +1,12 @@
 server:
   port: 30508
 
+logging:
+  level:
+    org.mongodb: INFO
+    org.springframework: INFO
+    ROOT: INFO
+
 spring:
   application:
     name: fishky-proxy
@@ -8,5 +14,4 @@ spring:
     active: development
   data:
     mongodb:
-      uri: mongodb+srv://fishky-db:<PASSWORD>@cluster168-h7du4.gcp.mongodb.net/test?retryWrites=true
-      database: test
+      uri: ${MONGODB-URI}
