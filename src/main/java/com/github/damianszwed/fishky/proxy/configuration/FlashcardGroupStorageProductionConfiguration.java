@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Profile;
 
 @Configuration
 @Profile("production")
-public class ProductionStorageConfiguration {
+public class FlashcardGroupStorageProductionConfiguration {
 
   @Bean
   FlashcardGroupStorage flashcardGroupStorage(

@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Profile;
 
 @Configuration
 @Profile("development")
-public class DevelopmentStorageConfiguration {
+public class FlashcardGroupStorageDevelopmentConfiguration {
 
   @Bean
   FlashcardGroupStorage flashcardGroupStorage() {
