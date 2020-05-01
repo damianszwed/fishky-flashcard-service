@@ -82,7 +82,7 @@ public class FishkyProxyDriver {
           .post().uri("/flashcards")
           .accept(MediaType.APPLICATION_JSON)
           .contentType(MediaType.APPLICATION_JSON)
-          .syncBody(flashcard)
+          .bodyValue(flashcard)
           .exchange().expectStatus().isAccepted();
     }
 
