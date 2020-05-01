@@ -5,28 +5,32 @@ import com.github.damianszwed.fishky.proxy.adapter.storage.production.FlashcardP
 import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardProvider;
 import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardRemover;
 import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardSaver;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 @Configuration
 @Profile("production")
-@EnableAutoConfiguration
 public class StorageConfiguration {
 
   @Bean
-  FlashcardProvider flashcardProvider(FlashcardMongoRepository flashcardMongoRepository) {
+  FlashcardProductionStorage flashcardProductionStorage(
+      FlashcardMongoRepository flashcardMongoRepository) {
     return new FlashcardProductionStorage(flashcardMongoRepository);
   }
 
   @Bean
-  FlashcardRemover flashcardRemover(FlashcardProductionStorage flashcardStorage) {
-    return flashcardStorage;
+  FlashcardProvider flashcardProvider(FlashcardProductionStorage flashcardProductionStorage) {
+    return flashcardProductionStorage;
   }
 
   @Bean
-  FlashcardSaver flashcardSaver(FlashcardProductionStorage flashcardStorage) {
-    return flashcardStorage;
+  FlashcardRemover flashcardRemover(FlashcardProductionStorage flashcardProductionStorage) {
+    return flashcardProductionStorage;
+  }
+
+  @Bean
+  FlashcardSaver flashcardSaver(FlashcardProductionStorage flashcardProductionStorage) {
+    return flashcardProductionStorage;
   }
 }
