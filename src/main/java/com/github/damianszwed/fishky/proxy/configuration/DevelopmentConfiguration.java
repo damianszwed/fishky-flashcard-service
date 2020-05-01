@@ -12,18 +12,22 @@ import org.springframework.context.annotation.Profile;
 @Profile("development")
 public class DevelopmentConfiguration {
 
-  @Bean
-  FlashcardProvider flashcardProvider() {
+  @Bean FlashcardDevelopmentStorage flashcardDevelopmentStorage() {
     return new FlashcardDevelopmentStorage();
   }
 
   @Bean
-  FlashcardRemover flashcardRemover(FlashcardDevelopmentStorage flashcardStorage) {
-    return flashcardStorage;
+  FlashcardProvider flashcardProvider(FlashcardDevelopmentStorage flashcardDevelopmentStorage) {
+    return flashcardDevelopmentStorage;
   }
 
   @Bean
-  FlashcardSaver flashcardSaver(FlashcardDevelopmentStorage flashcardStorage) {
-    return flashcardStorage;
+  FlashcardRemover flashcardRemover(FlashcardDevelopmentStorage flashcardDevelopmentStorage) {
+    return flashcardDevelopmentStorage;
+  }
+
+  @Bean
+  FlashcardSaver flashcardSaver(FlashcardDevelopmentStorage flashcardDevelopmentStorage) {
+    return flashcardDevelopmentStorage;
   }
 }
