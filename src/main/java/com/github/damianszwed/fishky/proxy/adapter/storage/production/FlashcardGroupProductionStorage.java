@@ -9,25 +9,31 @@ import reactor.core.publisher.Mono;
 @Slf4j
 public class FlashcardGroupProductionStorage implements FlashcardGroupStorage {
 
-  private FlashcardGroupMongoRepository flashcardMongoRepository;
+  private FlashcardGroupMongoRepository flashcardGroupMongoRepository;
 
-  public FlashcardGroupProductionStorage(FlashcardGroupMongoRepository flashcardMongoRepository) {
-    this.flashcardMongoRepository = flashcardMongoRepository;
+  public FlashcardGroupProductionStorage(
+      FlashcardGroupMongoRepository flashcardGroupMongoRepository) {
+    this.flashcardGroupMongoRepository = flashcardGroupMongoRepository;
   }
 
   @Override
   public Flux<FlashcardGroup> get(String username) {
-    return flashcardMongoRepository.findAll();
+    return flashcardGroupMongoRepository.findAll();
   }
 
   @Override
   public Mono<FlashcardGroup> get(String username, String name) {
-    return flashcardMongoRepository.findByName(name);
+    return flashcardGroupMongoRepository.findByName(name);
+  }
+
+  @Override
+  public Mono<FlashcardGroup> getById(String id) {
+    return flashcardGroupMongoRepository.findById(id);
   }
 
   @Override
   public void save(FlashcardGroup flashcardGroup) {
-    flashcardMongoRepository.save(flashcardGroup)
+    flashcardGroupMongoRepository.save(flashcardGroup)
         .doOnError(throwable -> log.info(throwable.getMessage(), throwable))
         .subscribe(newFlashcardGroup -> log
             .info("FlashcardGroup {} has been saved.", newFlashcardGroup.getId()));
@@ -35,7 +41,7 @@ public class FlashcardGroupProductionStorage implements FlashcardGroupStorage {
 
   @Override
   public void remove(String id) {
-    flashcardMongoRepository.deleteById(id)
+    flashcardGroupMongoRepository.deleteById(id)
         .doOnError(throwable -> log.info(throwable.getMessage(), throwable))
         .subscribe(o_O -> log.info("FlashcardGroup {} has been removed.", id));
   }
