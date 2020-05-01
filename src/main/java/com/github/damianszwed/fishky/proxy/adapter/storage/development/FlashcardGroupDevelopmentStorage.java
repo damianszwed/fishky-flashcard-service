@@ -7,6 +7,7 @@ import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardGroup;
 import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardGroupStorage;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -56,7 +57,7 @@ public class FlashcardGroupDevelopmentStorage implements FlashcardGroupStorage {
 
   @Override
   public void save(FlashcardGroup flashcardGroup) {
-    remove("user1@example.com-default");
+    remove(flashcardGroup.getId());
     flashcardGroups.add(flashcardGroup);
   }
 }
