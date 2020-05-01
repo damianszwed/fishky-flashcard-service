@@ -15,9 +15,7 @@ import com.github.damianszwed.fishky.proxy.business.SaveCommandHandler;
 import com.github.damianszwed.fishky.proxy.business.SwaggerHandler;
 import com.github.damianszwed.fishky.proxy.port.CommandQueryHandler;
 import com.github.damianszwed.fishky.proxy.port.flashcard.EventSource;
-import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardProvider;
-import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardRemover;
-import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardSaver;
+import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardStorage;
 import java.util.Optional;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -64,25 +62,22 @@ public class CommandQueryWebConfiguration {
   }
 
   @Bean
-  public CommandQueryHandler getAllQueryHandler(FlashcardProvider flashcardProvider) {
-    return new GetAllQueryHandler(flashcardProvider);
+  public CommandQueryHandler getAllQueryHandler(FlashcardStorage flashcardStorage) {
+    return new GetAllQueryHandler(flashcardStorage);
   }
 
   @Bean
-  public CommandQueryHandler saveCommandHandler(
-      FlashcardSaver flashcardSaver) {
-    return new SaveCommandHandler(flashcardSaver);
+  public CommandQueryHandler saveCommandHandler(FlashcardStorage flashcardStorage) {
+    return new SaveCommandHandler(flashcardStorage);
   }
 
   @Bean
-  public CommandQueryHandler deleteCommandHandler(
-      FlashcardRemover flashcardRemover) {
-    return new DeleteCommandHandler(flashcardRemover);
+  public CommandQueryHandler deleteCommandHandler(FlashcardStorage flashcardStorage) {
+    return new DeleteCommandHandler(flashcardStorage);
   }
 
   @Bean
-  public CommandQueryHandler getAllCommandHandler(
-      FlashcardProviderFlow flashcardProviderFlow) {
+  public CommandQueryHandler getAllCommandHandler(FlashcardProviderFlow flashcardProviderFlow) {
     return new GetAllCommandHandler(flashcardProviderFlow);
   }
 

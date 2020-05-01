@@ -3,9 +3,7 @@ package com.github.damianszwed.fishky.proxy.adapter.storage;
 import com.github.damianszwed.fishky.proxy.port.flashcard.Flashcard;
 import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardGroup;
 import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardGroupStorage;
-import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardProvider;
-import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardRemover;
-import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardSaver;
+import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardStorage;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
@@ -13,12 +11,11 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Slf4j
-public class FlashcardStorage implements FlashcardProvider, FlashcardRemover,
-    FlashcardSaver {
+public class FlashcardStorageAdapter implements FlashcardStorage {
 
   private FlashcardGroupStorage flashcardGroupStorage;
 
-  public FlashcardStorage(FlashcardGroupStorage flashcardGroupStorage) {
+  public FlashcardStorageAdapter(FlashcardGroupStorage flashcardGroupStorage) {
     this.flashcardGroupStorage = flashcardGroupStorage;
   }
 
@@ -60,6 +57,7 @@ public class FlashcardStorage implements FlashcardProvider, FlashcardRemover,
 
   /**
    * Creates first default flashcard group if user doesn't have any groups.
+   *
    * @return first Default flashcard group
    */
   private Mono<FlashcardGroup> createFirstDefaultFlashcardGroup() {
