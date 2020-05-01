@@ -22,11 +22,11 @@ public class FlashcardGroupSaveCommandHandler implements CommandQueryHandler {
   @Override
   public Mono<ServerResponse> handle(ServerRequest serverRequest) {
     return serverRequest.bodyToMono(FlashcardGroup.class)
-        .doOnNext(flashcardGroup -> flashcardGroupStorage.save(abc(flashcardGroup)))
+        .doOnNext(flashcardGroup -> flashcardGroupStorage.save(withIdAndOwner(flashcardGroup)))
         .flatMap(flashcard -> accepted().build());
   }
 
-  private FlashcardGroup abc(FlashcardGroup flashcardGroup) {
+  private FlashcardGroup withIdAndOwner(FlashcardGroup flashcardGroup) {
     return flashcardGroup.toBuilder()
         .id(Optional.ofNullable(flashcardGroup.getId())
             .orElse("user1@example.com-" + flashcardGroup.getName()))
