@@ -42,7 +42,6 @@ public class FlashcardStorageAdapter implements FlashcardStorage {
           //TODO(Damian.Szwed) flashcard id generation
           //TODO(Damian.Szwed) move it to handler
           String id = "user1@example.com-" + flashcardToSave.getQuestion().toLowerCase();
-          //TODO(Damian.Szwed) stary, to nie powinien być HashMap jednak?
           List<Flashcard> flashcardsWithOneRemoved = flashcardGroup.getFlashcards().stream()
               .filter(flashcard -> !flashcard.getId().equals(id)).collect(Collectors.toList());
           flashcardsWithOneRemoved.add(flashcardToSave
