@@ -18,9 +18,9 @@ plugins {
 }
 
 ext {
-    junitPlatformVersion = '1.2.0'
-    junitJupiterVersion = '5.2.0'
-    mockitoVersion = '2.21.0'
+    junitPlatformVersion = '1.6.2'
+    junitJupiterVersion = '5.6.2'
+    mockitoVersion = '3.3.3'
     sleuthVersion = '2.0.1.RELEASE'
     zipkinVersion = '2.0.1.RELEASE'
 }
@@ -87,25 +87,27 @@ dependencies {
     apt 'org.projectlombok:lombok:1.18.2'
 }
 
-task updateVersion << {
-    ant.replaceregexp(match:'image: fishky-proxy:(.*)', replace:"image: fishky-proxy:${version}", flags:'g', byline:true) {
-        fileset(dir: '.', includes: 'kubernetes-deployment.yaml')
+task updateVersion {
+    doLast {
+        ant.replaceregexp(match: 'image: fishky-proxy:(.*)', replace: "image: fishky-proxy:${version}", flags: 'g', byline: true) {
+            fileset(dir: '.', includes: 'kubernetes-deployment.yaml')
+        }
     }
 }
 
-task kubernetesDeployment(type:Exec) {
+task kubernetesDeployment(type: Exec) {
     commandLine 'kubectl', 'apply', '-f', 'kubernetes-deployment.yaml'
 }
 
-task kubernetesService(type:Exec) {
+task kubernetesService(type: Exec) {
     commandLine 'kubectl', 'apply', '-f', 'kubernetes-service.yaml'
 }
 
-task tagDockerImage(type:Exec) {
+task tagDockerImage(type: Exec) {
     commandLine 'docker', 'tag', "fishky-proxy:${version}", "damianiero/fishky-proxy:${version}"
 }
 
-task pushDockerImage(type:Exec) {
+task pushDockerImage(type: Exec) {
     dependsOn tagDockerImage
     commandLine 'docker', 'push', "damianiero/fishky-proxy:${version}"
 }
@@ -120,11 +122,11 @@ task deployByLocalKubernetes {
     build.mustRunAfter updateVersion
 }
 
-task deleteKubernetesDeployment(type:Exec) {
+task deleteKubernetesDeployment(type: Exec) {
     commandLine 'kubectl', 'delete', '-f', 'kubernetes-deployment.yaml'
 }
 
-task deleteKubernetesService(type:Exec) {
+task deleteKubernetesService(type: Exec) {
     commandLine 'kubectl', 'delete', '-f', 'kubernetes-service.yaml'
 }
 
