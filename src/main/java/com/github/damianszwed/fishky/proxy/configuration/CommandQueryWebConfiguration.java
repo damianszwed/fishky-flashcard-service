@@ -10,6 +10,7 @@ import com.github.damianszwed.fishky.proxy.business.FlashcardDeleteCommandHandle
 import com.github.damianszwed.fishky.proxy.business.FlashcardGetAllCommandHandler;
 import com.github.damianszwed.fishky.proxy.business.FlashcardGetAllQueryHandler;
 import com.github.damianszwed.fishky.proxy.business.FlashcardGroupDeleteCommandHandler;
+import com.github.damianszwed.fishky.proxy.business.FlashcardGroupGetAllFlashcardsQueryHandler;
 import com.github.damianszwed.fishky.proxy.business.FlashcardGroupGetAllQueryHandler;
 import com.github.damianszwed.fishky.proxy.business.FlashcardGroupSaveCommandHandler;
 import com.github.damianszwed.fishky.proxy.business.FlashcardProviderFlow;
@@ -75,6 +76,14 @@ public class CommandQueryWebConfiguration {
   }
 
   @Bean
+  public CommandQueryHandler flashcardGroupGetAllFlashcardsQueryHandler(
+      FlashcardGroupStorage flashcardGroupStorage) {
+    return new FlashcardGroupGetAllFlashcardsQueryHandler(flashcardGroupStorage);
+  }
+
+
+
+  @Bean
   public CommandQueryHandler swaggerHandler() {
     return new SwaggerHandler();
   }
@@ -93,10 +102,13 @@ public class CommandQueryWebConfiguration {
   public RouterFunction<ServerResponse> flashcardGroupRoutes(
       CommandQueryHandler flashcardGroupGetAllQueryHandler,
       CommandQueryHandler flashcardGroupSaveCommandHandler,
-      CommandQueryHandler flashcardGroupDeleteCommandHandler) {
+      CommandQueryHandler flashcardGroupDeleteCommandHandler,
+      CommandQueryHandler flashcardGroupGetAllFlashcardsQueryHandler) {
     return route(GET("/flashcardGroups"), flashcardGroupGetAllQueryHandler::handle)
         .andRoute(POST("/flashcardGroups"), flashcardGroupSaveCommandHandler::handle)
-        .andRoute(DELETE("/flashcardGroups/{id}"), flashcardGroupDeleteCommandHandler::handle);
+        .andRoute(DELETE("/flashcardGroups/{id}"), flashcardGroupDeleteCommandHandler::handle)
+        .andRoute(GET("/flashcardGroups/{id}/flashcards"),
+            flashcardGroupGetAllFlashcardsQueryHandler::handle);
   }
 
   @Bean

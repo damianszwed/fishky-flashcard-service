@@ -9,6 +9,8 @@ public interface FlashcardGroupStorage {
 
   Mono<FlashcardGroup> get(String username, String name);
 
+  Mono<FlashcardGroup> getById(String id);
+
   void save(FlashcardGroup flashcardGroup);
 
   void remove(String id);
