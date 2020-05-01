@@ -96,6 +96,9 @@ public class CommandQueryWebConfiguration {
     return new SwaggerHandler();
   }
 
+  /**
+   * TODO(Damian.Szwed) is there possibility to split routes?
+   */
   @Bean
   public RouterFunction<ServerResponse> routes(
       CommandQueryHandler getAllQueryHandler,
