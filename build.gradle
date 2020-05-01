@@ -10,7 +10,7 @@ plugins {
     id 'eclipse'
     id 'checkstyle'
     id 'net.ltgt.apt' version '0.10'
-    id 'com.github.spotbugs' version '1.6.5'
+    id 'com.github.spotbugs' version '4.0.8'
     id 'io.spring.dependency-management' version '1.0.8.RELEASE'
     id 'org.springframework.boot' version '2.2.6.RELEASE'
     id 'info.solidsoft.pitest' version '1.4.0'
@@ -40,19 +40,12 @@ test {
 }
 
 spotbugs {
-    toolVersion = "3.1.8"
+    toolVersion = '4.0.2'
     ignoreFailures = false
     effort = "max"
     reportLevel = "high"
     omitVisitors = ["FindNonShortCircuit"]
     excludeFilter = file("$rootProject.projectDir/config/spotbugs/excludeFilter.xml")
-}
-
-tasks.withType(com.github.spotbugs.SpotBugsTask) {
-    reports {
-        xml.enabled = false
-        html.enabled = true
-    }
 }
 
 docker {
@@ -72,6 +65,8 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-webflux'
     compile 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
     compile 'io.vavr:vavr:0.9.0'
+    compileOnly 'org.projectlombok:lombok:1.18.12'
+    annotationProcessor 'org.projectlombok:lombok:1.18.12'
 
     testCompile 'org.springframework.boot:spring-boot-starter-test'
     testCompile 'io.projectreactor:reactor-test'
@@ -83,8 +78,8 @@ dependencies {
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitJupiterVersion}"
     testCompile "org.mockito:mockito-core:${mockitoVersion}"
     testCompile "org.mockito:mockito-junit-jupiter:${mockitoVersion}"
-    compile 'org.projectlombok:lombok:1.18.2'
-    apt 'org.projectlombok:lombok:1.18.2'
+    testCompileOnly 'org.projectlombok:lombok:1.18.12'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
 }
 
 task updateVersion {
