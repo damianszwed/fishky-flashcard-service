@@ -6,12 +6,12 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 import static org.springframework.web.reactive.function.server.RouterFunctions.resources;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 
-import com.github.damianszwed.fishky.proxy.business.DeleteCommandHandler;
-import com.github.damianszwed.fishky.proxy.business.EventHandler;
+import com.github.damianszwed.fishky.proxy.business.FlashcardDeleteCommandHandler;
+import com.github.damianszwed.fishky.proxy.business.FlashcardServerSentEventHandler;
 import com.github.damianszwed.fishky.proxy.business.FlashcardProviderFlow;
-import com.github.damianszwed.fishky.proxy.business.GetAllCommandHandler;
-import com.github.damianszwed.fishky.proxy.business.GetAllQueryHandler;
-import com.github.damianszwed.fishky.proxy.business.SaveCommandHandler;
+import com.github.damianszwed.fishky.proxy.business.FlashcardGetAllCommandHandler;
+import com.github.damianszwed.fishky.proxy.business.FlashcardGetAllQueryHandler;
+import com.github.damianszwed.fishky.proxy.business.FlashcardSaveCommandHandler;
 import com.github.damianszwed.fishky.proxy.business.SwaggerHandler;
 import com.github.damianszwed.fishky.proxy.port.CommandQueryHandler;
 import com.github.damianszwed.fishky.proxy.port.flashcard.EventSource;
@@ -63,27 +63,27 @@ public class CommandQueryWebConfiguration {
 
   @Bean
   public CommandQueryHandler getAllQueryHandler(FlashcardStorage flashcardStorage) {
-    return new GetAllQueryHandler(flashcardStorage);
+    return new FlashcardGetAllQueryHandler(flashcardStorage);
   }
 
   @Bean
   public CommandQueryHandler saveCommandHandler(FlashcardStorage flashcardStorage) {
-    return new SaveCommandHandler(flashcardStorage);
+    return new FlashcardSaveCommandHandler(flashcardStorage);
   }
 
   @Bean
   public CommandQueryHandler deleteCommandHandler(FlashcardStorage flashcardStorage) {
-    return new DeleteCommandHandler(flashcardStorage);
+    return new FlashcardDeleteCommandHandler(flashcardStorage);
   }
 
   @Bean
   public CommandQueryHandler getAllCommandHandler(FlashcardProviderFlow flashcardProviderFlow) {
-    return new GetAllCommandHandler(flashcardProviderFlow);
+    return new FlashcardGetAllCommandHandler(flashcardProviderFlow);
   }
 
   @Bean
   public CommandQueryHandler eventHandler(EventSource eventSource) {
-    return new EventHandler(eventSource);
+    return new FlashcardServerSentEventHandler(eventSource);
   }
 
   @Bean
@@ -95,7 +95,7 @@ public class CommandQueryWebConfiguration {
    * TODO(Damian.Szwed) is there possibility to split routes?
    */
   @Bean
-  public RouterFunction<ServerResponse> routes(
+  public RouterFunction<ServerResponse> flashcardRoutes(
       CommandQueryHandler getAllQueryHandler,
       CommandQueryHandler saveCommandHandler,
       CommandQueryHandler deleteCommandHandler,

@@ -9,11 +9,11 @@ import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
-public class SaveCommandHandler implements CommandQueryHandler {
+public class FlashcardSaveCommandHandler implements CommandQueryHandler {
 
   private FlashcardStorage flashcardStorage;
 
-  public SaveCommandHandler(FlashcardStorage flashcardStorage) {
+  public FlashcardSaveCommandHandler(FlashcardStorage flashcardStorage) {
     this.flashcardStorage = flashcardStorage;
   }
 

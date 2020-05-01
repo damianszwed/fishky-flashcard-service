@@ -10,12 +10,11 @@ import reactor.core.publisher.Mono;
 /**
  * Example trigger how to command to send all flashcards.
  */
-public class GetAllCommandHandler implements CommandQueryHandler {
+public class FlashcardGetAllCommandHandler implements CommandQueryHandler {
 
   private FlashcardProviderFlow flashcardProviderFlow;
 
-  public GetAllCommandHandler(FlashcardProviderFlow flashcardProviderFlow) {
-
+  public FlashcardGetAllCommandHandler(FlashcardProviderFlow flashcardProviderFlow) {
     this.flashcardProviderFlow = flashcardProviderFlow;
   }
 
