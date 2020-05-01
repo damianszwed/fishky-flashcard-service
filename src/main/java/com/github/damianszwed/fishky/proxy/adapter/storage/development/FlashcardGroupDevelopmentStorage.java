@@ -7,7 +7,6 @@ import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardGroup;
 import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardGroupStorage;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -47,7 +46,17 @@ public class FlashcardGroupDevelopmentStorage implements FlashcardGroupStorage {
 
   @Override
   public Mono<FlashcardGroup> get(String username, String name) {
-    return Mono.justOrEmpty(flashcardGroups.stream().findFirst());
+    return Mono.justOrEmpty(flashcardGroups.stream()
+        .filter(flashcardGroup -> flashcardGroup.getName().equals(name))
+        .findFirst());
+  }
+
+  @Override
+  public Mono<FlashcardGroup> getById(String id) {
+    return Mono
+        .justOrEmpty(
+            flashcardGroups.stream().filter(flashcardGroup -> flashcardGroup.getId().equals(id))
+                .findFirst());
   }
 
   @Override
