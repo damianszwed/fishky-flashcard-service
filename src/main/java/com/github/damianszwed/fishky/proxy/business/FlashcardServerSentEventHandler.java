@@ -8,11 +8,11 @@ import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
-public class EventHandler implements CommandQueryHandler {
+public class FlashcardServerSentEventHandler implements CommandQueryHandler {
 
   private EventSource eventSource;
 
-  public EventHandler(EventSource eventSource) {
+  public FlashcardServerSentEventHandler(EventSource eventSource) {
     this.eventSource = eventSource;
   }
 

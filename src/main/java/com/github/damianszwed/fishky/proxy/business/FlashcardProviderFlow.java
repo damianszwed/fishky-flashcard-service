@@ -12,7 +12,6 @@ public class FlashcardProviderFlow implements EventSource {
   private final TopicProcessor<Flashcard> unicastProcessor;
 
   public FlashcardProviderFlow(FlashcardStorage flashcardStorage) {
-
     this.flashcardStorage = flashcardStorage;
     unicastProcessor = TopicProcessor.create();
   }
