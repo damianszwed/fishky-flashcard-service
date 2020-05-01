@@ -3,7 +3,6 @@ server:
 
 logging:
   level:
-    org.mongodb: INFO
     org.springframework: INFO
     ROOT: INFO
 
@@ -12,6 +11,3 @@ spring:
     name: fishky-proxy
   profiles:
     active: development
-  data:
-    mongodb:
-      uri: ${MONGODB-URI}

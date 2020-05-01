@@ -1,0 +1,8 @@
+logging:
+  level:
+    org.mongodb: INFO
+
+spring:
+  data:
+    mongodb:
+      uri: ${MONGODB-URI}
