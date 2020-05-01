@@ -12,6 +12,11 @@ import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
+
+/**
+ * TODO(Damian.Szwed) swagger for WebFlux
+ *
+ */
 @Slf4j
 public class SwaggerHandler implements CommandQueryHandler {
 
