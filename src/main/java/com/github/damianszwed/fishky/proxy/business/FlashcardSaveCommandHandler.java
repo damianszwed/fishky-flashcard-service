@@ -3,6 +3,7 @@ package com.github.damianszwed.fishky.proxy.business;
 import static org.springframework.web.reactive.function.server.ServerResponse.accepted;
 
 import com.github.damianszwed.fishky.proxy.port.CommandQueryHandler;
+import com.github.damianszwed.fishky.proxy.port.IdEncoderDecoder;
 import com.github.damianszwed.fishky.proxy.port.flashcard.Flashcard;
 import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardGroup;
 import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardGroupStorage;
@@ -14,10 +15,14 @@ import reactor.core.publisher.Mono;
 
 public class FlashcardSaveCommandHandler implements CommandQueryHandler {
 
-  private FlashcardGroupStorage flashcardGroupStorage;
+  private final FlashcardGroupStorage flashcardGroupStorage;
+  private final IdEncoderDecoder idEncoderDecoder;
 
-  public FlashcardSaveCommandHandler(FlashcardGroupStorage flashcardGroupStorage) {
+  public FlashcardSaveCommandHandler(
+      FlashcardGroupStorage flashcardGroupStorage,
+      IdEncoderDecoder idEncoderDecoder) {
     this.flashcardGroupStorage = flashcardGroupStorage;
+    this.idEncoderDecoder = idEncoderDecoder;
   }
 
   @Override
@@ -28,12 +33,10 @@ public class FlashcardSaveCommandHandler implements CommandQueryHandler {
   }
 
   private void saveFlashcardToDefaultGroup(Flashcard flashcardToSave) {
-    flashcardGroupStorage.get("any", "default")
+    flashcardGroupStorage.get("user1@example.com", "default")
         .switchIfEmpty(createFirstDefaultFlashcardGroup())
         .subscribe(flashcardGroup -> {
-          //TODO(Damian.Szwed) flashcard id generation
-          //TODO(Damian.Szwed) move it to handler
-          String id = "user1@example.com-" + flashcardToSave.getQuestion().toLowerCase();
+          String id = idEncoderDecoder.encodeId("user1@example.com", flashcardToSave.getQuestion());
           List<Flashcard> flashcardsWithOneRemoved = flashcardGroup.getFlashcards().stream()
               .filter(flashcard -> !flashcard.getId().equals(id)).collect(Collectors.toList());
           flashcardsWithOneRemoved.add(flashcardToSave
@@ -54,7 +57,7 @@ public class FlashcardSaveCommandHandler implements CommandQueryHandler {
    */
   private Mono<FlashcardGroup> createFirstDefaultFlashcardGroup() {
     return Mono.just(FlashcardGroup.builder()
-        .id("user1@example.com-default")
+        .id("dXNlcjFAZXhhbXBsZS5jb20tZGVmYXVsdA==")//user1@example.com-default
         .owner("user1@example.com")
         .name("default")
         .build());
