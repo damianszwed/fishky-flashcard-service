@@ -22,7 +22,6 @@ import com.github.damianszwed.fishky.proxy.business.SwaggerHandler;
 import com.github.damianszwed.fishky.proxy.port.CommandQueryHandler;
 import com.github.damianszwed.fishky.proxy.port.flashcard.EventSource;
 import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardGroupStorage;
-import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardStorage;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -34,18 +33,21 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 public class CommandQueryWebConfiguration {
 
   @Bean
-  public CommandQueryHandler flashcardGetAllQueryHandler(FlashcardStorage flashcardStorage) {
-    return new FlashcardGetAllQueryHandler(flashcardStorage);
+  public CommandQueryHandler flashcardGetAllQueryHandler(
+      FlashcardGroupStorage flashcardGroupStorage) {
+    return new FlashcardGetAllQueryHandler(flashcardGroupStorage);
   }
 
   @Bean
-  public CommandQueryHandler flashcardSaveCommandHandler(FlashcardStorage flashcardStorage) {
-    return new FlashcardSaveCommandHandler(flashcardStorage);
+  public CommandQueryHandler flashcardSaveCommandHandler(
+      FlashcardGroupStorage flashcardGroupStorage) {
+    return new FlashcardSaveCommandHandler(flashcardGroupStorage);
   }
 
   @Bean
-  public CommandQueryHandler flashcardDeleteCommandHandler(FlashcardStorage flashcardStorage) {
-    return new FlashcardDeleteCommandHandler(flashcardStorage);
+  public CommandQueryHandler flashcardDeleteCommandHandler(
+      FlashcardGroupStorage flashcardGroupStorage) {
+    return new FlashcardDeleteCommandHandler(flashcardGroupStorage);
   }
 
   @Bean

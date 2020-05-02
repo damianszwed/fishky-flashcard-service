@@ -2,7 +2,7 @@ package com.github.damianszwed.fishky.proxy.configuration;
 
 import com.github.damianszwed.fishky.proxy.business.FlashcardProviderFlow;
 import com.github.damianszwed.fishky.proxy.port.flashcard.EventSource;
-import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardStorage;
+import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardGroupStorage;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,8 +11,8 @@ public class BusinessConfiguration {
 
   @Bean
   FlashcardProviderFlow flashcardProviderFlow(
-      FlashcardStorage flashcardStorage) {
-    return new FlashcardProviderFlow(flashcardStorage);
+      FlashcardGroupStorage flashcardGroupStorage) {
+    return new FlashcardProviderFlow(flashcardGroupStorage);
   }
 
   @Bean

@@ -40,12 +40,12 @@ public class FlashcardGroupDevelopmentStorage implements FlashcardGroupStorage {
   }
 
   @Override
-  public Flux<FlashcardGroup> get(String username) {
+  public Flux<FlashcardGroup> get(String owner) {
     return Flux.fromIterable(flashcardGroups);
   }
 
   @Override
-  public Mono<FlashcardGroup> get(String username, String name) {
+  public Mono<FlashcardGroup> get(String owner, String name) {
     return Mono.justOrEmpty(flashcardGroups.stream()
         .filter(flashcardGroup -> flashcardGroup.getName().equals(name))
         .findFirst());

@@ -2,22 +2,24 @@ package com.github.damianszwed.fishky.proxy.business;
 
 import com.github.damianszwed.fishky.proxy.port.flashcard.EventSource;
 import com.github.damianszwed.fishky.proxy.port.flashcard.Flashcard;
-import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardStorage;
+import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardGroup;
+import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardGroupStorage;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.TopicProcessor;
 
 public class FlashcardProviderFlow implements EventSource {
 
-  private FlashcardStorage flashcardStorage;
+  private FlashcardGroupStorage flashcardGroupStorage;
   private final TopicProcessor<Flashcard> unicastProcessor;
 
-  public FlashcardProviderFlow(FlashcardStorage flashcardStorage) {
-    this.flashcardStorage = flashcardStorage;
+  public FlashcardProviderFlow(FlashcardGroupStorage flashcardGroupStorage) {
+    this.flashcardGroupStorage = flashcardGroupStorage;
     unicastProcessor = TopicProcessor.create();
   }
 
   void getAll() {
-    flashcardStorage.get("any")
+    flashcardGroupStorage.get("any", "default")
+        .flatMapIterable(FlashcardGroup::getFlashcards)
         .subscribe(unicastProcessor::onNext);
   }
 
