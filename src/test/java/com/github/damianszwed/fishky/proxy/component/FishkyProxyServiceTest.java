@@ -5,7 +5,6 @@ import com.github.damianszwed.fishky.proxy.component.driver.SpringTestConfigurat
 import com.github.damianszwed.fishky.proxy.configuration.BusinessConfiguration;
 import com.github.damianszwed.fishky.proxy.configuration.CommandQueryWebConfiguration;
 import com.github.damianszwed.fishky.proxy.configuration.FlashcardGroupStorageDevelopmentConfiguration;
-import com.github.damianszwed.fishky.proxy.configuration.FlashcardStorageStorageConfiguration;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +18,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ContextConfiguration(classes = {
     SpringTestConfiguration.class,
     FlashcardGroupStorageDevelopmentConfiguration.class,
-    FlashcardStorageStorageConfiguration.class,
     BusinessConfiguration.class,
     CommandQueryWebConfiguration.class
 })

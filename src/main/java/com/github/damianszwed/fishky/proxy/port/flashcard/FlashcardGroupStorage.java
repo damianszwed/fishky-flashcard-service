@@ -5,9 +5,9 @@ import reactor.core.publisher.Mono;
 
 public interface FlashcardGroupStorage {
 
-  Flux<FlashcardGroup> get(String username);
+  Flux<FlashcardGroup> get(String owner);
 
-  Mono<FlashcardGroup> get(String username, String name);
+  Mono<FlashcardGroup> get(String owner, String name);
 
   Mono<FlashcardGroup> getById(String id);
 

@@ -17,12 +17,12 @@ public class FlashcardGroupProductionStorage implements FlashcardGroupStorage {
   }
 
   @Override
-  public Flux<FlashcardGroup> get(String username) {
+  public Flux<FlashcardGroup> get(String owner) {
     return flashcardGroupMongoRepository.findAll();
   }
 
   @Override
-  public Mono<FlashcardGroup> get(String username, String name) {
+  public Mono<FlashcardGroup> get(String owner, String name) {
     return flashcardGroupMongoRepository.findByName(name);
   }
 
