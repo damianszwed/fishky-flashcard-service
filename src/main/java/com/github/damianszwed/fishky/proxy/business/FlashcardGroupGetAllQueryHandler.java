@@ -20,7 +20,7 @@ public class FlashcardGroupGetAllQueryHandler implements CommandQueryHandler {
   @Override
   public Mono<ServerResponse> handle(ServerRequest serverRequest) {
     return ok().body(
-        flashcardGroupStorage.get("any"),
+        flashcardGroupStorage.get("user1@example.com"),
         FlashcardGroup.class);
   }
 }

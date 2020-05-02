@@ -7,11 +7,11 @@ public interface FlashcardGroupStorage {
 
   Flux<FlashcardGroup> get(String owner);
 
-  Mono<FlashcardGroup> get(String owner, String name);
+  Mono<FlashcardGroup> get(String owner, String name);//TODO(Damian.Szwed) rename name to groupName
 
-  Mono<FlashcardGroup> getById(String id);
+  Mono<FlashcardGroup> getById(String id);//TODO(Damian.Szwed) rename to groupId
 
   void save(FlashcardGroup flashcardGroup);
 
-  void remove(String id);
+  void remove(String id);//TODO(Damian.Szwed) rename to groupId
 }

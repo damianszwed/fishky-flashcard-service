@@ -3,6 +3,7 @@ package com.github.damianszwed.fishky.proxy.business;
 import static org.springframework.web.reactive.function.server.ServerResponse.accepted;
 
 import com.github.damianszwed.fishky.proxy.port.CommandQueryHandler;
+import com.github.damianszwed.fishky.proxy.port.IdEncoderDecoder;
 import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardGroup;
 import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardGroupStorage;
 import java.util.Collections;
@@ -13,10 +14,14 @@ import reactor.core.publisher.Mono;
 
 public class FlashcardGroupSaveCommandHandler implements CommandQueryHandler {
 
-  private FlashcardGroupStorage flashcardGroupStorage;
+  private final FlashcardGroupStorage flashcardGroupStorage;
+  private final IdEncoderDecoder idEncoderDecoder;
 
-  public FlashcardGroupSaveCommandHandler(FlashcardGroupStorage flashcardGroupStorage) {
+  public FlashcardGroupSaveCommandHandler(
+      FlashcardGroupStorage flashcardGroupStorage,
+      IdEncoderDecoder idEncoderDecoder) {
     this.flashcardGroupStorage = flashcardGroupStorage;
+    this.idEncoderDecoder = idEncoderDecoder;
   }
 
   @Override
@@ -29,7 +34,7 @@ public class FlashcardGroupSaveCommandHandler implements CommandQueryHandler {
   private FlashcardGroup withIdAndOwner(FlashcardGroup flashcardGroup) {
     return flashcardGroup.toBuilder()
         .id(Optional.ofNullable(flashcardGroup.getId())
-            .orElse("user1@example.com-" + flashcardGroup.getName()))
+            .orElse(idEncoderDecoder.encodeId("user1@example.com", flashcardGroup.getName())))
         .owner("user1@example.com")
         .flashcards(
             Optional.ofNullable(flashcardGroup.getFlashcards()).orElse(Collections.emptyList()))
