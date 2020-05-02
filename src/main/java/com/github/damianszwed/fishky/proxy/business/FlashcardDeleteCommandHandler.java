@@ -25,7 +25,7 @@ public class FlashcardDeleteCommandHandler implements CommandQueryHandler {
   }
 
   private void removeFlashcardFromDefaultGroup(String id) {
-    flashcardGroupStorage.get("any", "default").subscribe(flashcardGroup ->
+    flashcardGroupStorage.get("user1@example.com", "default").subscribe(flashcardGroup ->
         flashcardGroupStorage.save(flashcardGroup.toBuilder()
             .flashcards(flashcardGroup.getFlashcards().stream()
                 .filter(flashcard -> !flashcard.getId().equals(id))

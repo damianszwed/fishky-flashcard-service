@@ -18,7 +18,7 @@ public class FlashcardProviderFlow implements EventSource {
   }
 
   void getAll() {
-    flashcardGroupStorage.get("any", "default")
+    flashcardGroupStorage.get("user1@example.com", "default")
         .flatMapIterable(FlashcardGroup::getFlashcards)
         .subscribe(unicastProcessor::onNext);
   }

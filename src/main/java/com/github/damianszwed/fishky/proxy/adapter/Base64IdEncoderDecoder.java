@@ -7,6 +7,11 @@ import java.util.Base64;
 public class Base64IdEncoderDecoder implements IdEncoderDecoder {
 
   @Override
+  public String encodeId(String owner, String entityName) {
+    return encode(owner + "-" + entityName.toLowerCase());
+  }
+
+  @Override
   public String encode(String toEncode) {
     return Base64.getEncoder().encodeToString(toEncode.getBytes(StandardCharsets.UTF_8));
   }

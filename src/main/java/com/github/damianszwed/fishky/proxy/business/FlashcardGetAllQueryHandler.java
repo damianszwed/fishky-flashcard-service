@@ -21,7 +21,7 @@ public class FlashcardGetAllQueryHandler implements CommandQueryHandler {
   @Override
   public Mono<ServerResponse> handle(ServerRequest serverRequest) {
     return ok().body(
-        flashcardGroupStorage.get("any", "default")
+        flashcardGroupStorage.get("user1@example.com", "default")
             .flatMapIterable(FlashcardGroup::getFlashcards),
         Flashcard.class);
   }

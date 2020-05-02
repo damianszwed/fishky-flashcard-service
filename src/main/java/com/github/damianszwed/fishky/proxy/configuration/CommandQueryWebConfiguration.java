@@ -20,6 +20,7 @@ import com.github.damianszwed.fishky.proxy.business.FlashcardSaveCommandHandler;
 import com.github.damianszwed.fishky.proxy.business.FlashcardServerSentEventHandler;
 import com.github.damianszwed.fishky.proxy.business.SwaggerHandler;
 import com.github.damianszwed.fishky.proxy.port.CommandQueryHandler;
+import com.github.damianszwed.fishky.proxy.port.IdEncoderDecoder;
 import com.github.damianszwed.fishky.proxy.port.flashcard.EventSource;
 import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardGroupStorage;
 import org.springframework.context.annotation.Bean;
@@ -40,8 +41,9 @@ public class CommandQueryWebConfiguration {
 
   @Bean
   public CommandQueryHandler flashcardSaveCommandHandler(
-      FlashcardGroupStorage flashcardGroupStorage) {
-    return new FlashcardSaveCommandHandler(flashcardGroupStorage);
+      FlashcardGroupStorage flashcardGroupStorage,
+      IdEncoderDecoder idEncoderDecoder) {
+    return new FlashcardSaveCommandHandler(flashcardGroupStorage, idEncoderDecoder);
   }
 
   @Bean
@@ -69,8 +71,9 @@ public class CommandQueryWebConfiguration {
 
   @Bean
   public CommandQueryHandler flashcardGroupSaveCommandHandler(
-      FlashcardGroupStorage flashcardGroupStorage) {
-    return new FlashcardGroupSaveCommandHandler(flashcardGroupStorage);
+      FlashcardGroupStorage flashcardGroupStorage,
+      IdEncoderDecoder idEncoderDecoder) {
+    return new FlashcardGroupSaveCommandHandler(flashcardGroupStorage, idEncoderDecoder);
   }
 
   @Bean
@@ -87,8 +90,9 @@ public class CommandQueryWebConfiguration {
 
   @Bean
   public CommandQueryHandler flashcardGroupSaveFlashcardCommandHandler(
-      FlashcardGroupStorage flashcardGroupStorage) {
-    return new FlashcardGroupSaveFlashcardCommandHandler(flashcardGroupStorage);
+      FlashcardGroupStorage flashcardGroupStorage,
+      IdEncoderDecoder idEncoderDecoder) {
+    return new FlashcardGroupSaveFlashcardCommandHandler(flashcardGroupStorage, idEncoderDecoder);
   }
 
   @Bean
