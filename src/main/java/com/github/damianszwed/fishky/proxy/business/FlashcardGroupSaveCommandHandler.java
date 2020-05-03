@@ -33,8 +33,7 @@ public class FlashcardGroupSaveCommandHandler implements CommandQueryHandler {
 
   private FlashcardGroup withIdAndOwner(FlashcardGroup flashcardGroup) {
     return flashcardGroup.toBuilder()
-        .id(Optional.ofNullable(flashcardGroup.getId())
-            .orElse(idEncoderDecoder.encodeId("user1@example.com", flashcardGroup.getName())))
+        .id(idEncoderDecoder.encodeId("user1@example.com", flashcardGroup.getName()))
         .owner("user1@example.com")
         .flashcards(
             Optional.ofNullable(flashcardGroup.getFlashcards()).orElse(Collections.emptyList()))
