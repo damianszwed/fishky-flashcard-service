@@ -9,20 +9,20 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 import com.github.damianszwed.fishky.proxy.business.FlashcardDeleteCommandHandler;
 import com.github.damianszwed.fishky.proxy.business.FlashcardGetAllCommandHandler;
 import com.github.damianszwed.fishky.proxy.business.FlashcardGetAllQueryHandler;
-import com.github.damianszwed.fishky.proxy.business.FlashcardGroupDeleteCommandHandler;
-import com.github.damianszwed.fishky.proxy.business.FlashcardGroupDeleteFlashcardCommandHandler;
-import com.github.damianszwed.fishky.proxy.business.FlashcardGroupGetAllFlashcardsQueryHandler;
-import com.github.damianszwed.fishky.proxy.business.FlashcardGroupGetAllQueryHandler;
-import com.github.damianszwed.fishky.proxy.business.FlashcardGroupSaveCommandHandler;
-import com.github.damianszwed.fishky.proxy.business.FlashcardGroupSaveFlashcardCommandHandler;
 import com.github.damianszwed.fishky.proxy.business.FlashcardProviderFlow;
 import com.github.damianszwed.fishky.proxy.business.FlashcardSaveCommandHandler;
 import com.github.damianszwed.fishky.proxy.business.FlashcardServerSentEventHandler;
+import com.github.damianszwed.fishky.proxy.business.FlashcardSetDeleteCommandHandler;
+import com.github.damianszwed.fishky.proxy.business.FlashcardSetDeleteFlashcardCommandHandler;
+import com.github.damianszwed.fishky.proxy.business.FlashcardSetGetAllFlashcardsQueryHandler;
+import com.github.damianszwed.fishky.proxy.business.FlashcardSetGetAllQueryHandler;
+import com.github.damianszwed.fishky.proxy.business.FlashcardSetSaveCommandHandler;
+import com.github.damianszwed.fishky.proxy.business.FlashcardSetSaveFlashcardCommandHandler;
 import com.github.damianszwed.fishky.proxy.business.SwaggerHandler;
 import com.github.damianszwed.fishky.proxy.port.CommandQueryHandler;
 import com.github.damianszwed.fishky.proxy.port.IdEncoderDecoder;
 import com.github.damianszwed.fishky.proxy.port.flashcard.EventSource;
-import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardGroupStorage;
+import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardSetStorage;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -35,21 +35,21 @@ public class CommandQueryWebConfiguration {
 
   @Bean
   public CommandQueryHandler flashcardGetAllQueryHandler(
-      FlashcardGroupStorage flashcardGroupStorage) {
-    return new FlashcardGetAllQueryHandler(flashcardGroupStorage);
+      FlashcardSetStorage flashcardSetStorage) {
+    return new FlashcardGetAllQueryHandler(flashcardSetStorage);
   }
 
   @Bean
   public CommandQueryHandler flashcardSaveCommandHandler(
-      FlashcardGroupStorage flashcardGroupStorage,
+      FlashcardSetStorage flashcardSetStorage,
       IdEncoderDecoder idEncoderDecoder) {
-    return new FlashcardSaveCommandHandler(flashcardGroupStorage, idEncoderDecoder);
+    return new FlashcardSaveCommandHandler(flashcardSetStorage, idEncoderDecoder);
   }
 
   @Bean
   public CommandQueryHandler flashcardDeleteCommandHandler(
-      FlashcardGroupStorage flashcardGroupStorage) {
-    return new FlashcardDeleteCommandHandler(flashcardGroupStorage);
+      FlashcardSetStorage flashcardSetStorage) {
+    return new FlashcardDeleteCommandHandler(flashcardSetStorage);
   }
 
   @Bean
@@ -64,41 +64,41 @@ public class CommandQueryWebConfiguration {
   }
 
   @Bean
-  public CommandQueryHandler flashcardGroupGetAllQueryHandler(
-      FlashcardGroupStorage flashcardGroupStorage) {
-    return new FlashcardGroupGetAllQueryHandler(flashcardGroupStorage);
+  public CommandQueryHandler flashcardSetGetAllQueryHandler(
+      FlashcardSetStorage flashcardSetStorage) {
+    return new FlashcardSetGetAllQueryHandler(flashcardSetStorage);
   }
 
   @Bean
-  public CommandQueryHandler flashcardGroupSaveCommandHandler(
-      FlashcardGroupStorage flashcardGroupStorage,
+  public CommandQueryHandler flashcardSetSaveCommandHandler(
+      FlashcardSetStorage flashcardSetStorage,
       IdEncoderDecoder idEncoderDecoder) {
-    return new FlashcardGroupSaveCommandHandler(flashcardGroupStorage, idEncoderDecoder);
+    return new FlashcardSetSaveCommandHandler(flashcardSetStorage, idEncoderDecoder);
   }
 
   @Bean
-  public CommandQueryHandler flashcardGroupDeleteCommandHandler(
-      FlashcardGroupStorage flashcardGroupStorage) {
-    return new FlashcardGroupDeleteCommandHandler(flashcardGroupStorage);
+  public CommandQueryHandler flashcardSetDeleteCommandHandler(
+      FlashcardSetStorage flashcardSetStorage) {
+    return new FlashcardSetDeleteCommandHandler(flashcardSetStorage);
   }
 
   @Bean
-  public CommandQueryHandler flashcardGroupGetAllFlashcardsQueryHandler(
-      FlashcardGroupStorage flashcardGroupStorage) {
-    return new FlashcardGroupGetAllFlashcardsQueryHandler(flashcardGroupStorage);
+  public CommandQueryHandler flashcardSetGetAllFlashcardsQueryHandler(
+      FlashcardSetStorage flashcardSetStorage) {
+    return new FlashcardSetGetAllFlashcardsQueryHandler(flashcardSetStorage);
   }
 
   @Bean
-  public CommandQueryHandler flashcardGroupSaveFlashcardCommandHandler(
-      FlashcardGroupStorage flashcardGroupStorage,
+  public CommandQueryHandler flashcardSetSaveFlashcardCommandHandler(
+      FlashcardSetStorage flashcardSetStorage,
       IdEncoderDecoder idEncoderDecoder) {
-    return new FlashcardGroupSaveFlashcardCommandHandler(flashcardGroupStorage, idEncoderDecoder);
+    return new FlashcardSetSaveFlashcardCommandHandler(flashcardSetStorage, idEncoderDecoder);
   }
 
   @Bean
-  public CommandQueryHandler flashcardGroupDeleteFlashcardCommandHandler(
-      FlashcardGroupStorage flashcardGroupStorage) {
-    return new FlashcardGroupDeleteFlashcardCommandHandler(flashcardGroupStorage);
+  public CommandQueryHandler flashcardSetDeleteFlashcardCommandHandler(
+      FlashcardSetStorage flashcardSetStorage) {
+    return new FlashcardSetDeleteFlashcardCommandHandler(flashcardSetStorage);
   }
 
   @Bean
@@ -117,23 +117,23 @@ public class CommandQueryWebConfiguration {
   }
 
   @Bean
-  public RouterFunction<ServerResponse> flashcardGroupRoutes(
-      CommandQueryHandler flashcardGroupGetAllQueryHandler,
-      CommandQueryHandler flashcardGroupSaveCommandHandler,
-      CommandQueryHandler flashcardGroupDeleteCommandHandler,
-      CommandQueryHandler flashcardGroupGetAllFlashcardsQueryHandler,
-      CommandQueryHandler flashcardGroupSaveFlashcardCommandHandler,
-      CommandQueryHandler flashcardGroupDeleteFlashcardCommandHandler
+  public RouterFunction<ServerResponse> flashcardSetRoutes(
+      CommandQueryHandler flashcardSetGetAllQueryHandler,
+      CommandQueryHandler flashcardSetSaveCommandHandler,
+      CommandQueryHandler flashcardSetDeleteCommandHandler,
+      CommandQueryHandler flashcardSetGetAllFlashcardsQueryHandler,
+      CommandQueryHandler flashcardSetSaveFlashcardCommandHandler,
+      CommandQueryHandler flashcardSetDeleteFlashcardCommandHandler
   ) {
-    return route(GET("/flashcardGroups"), flashcardGroupGetAllQueryHandler::handle)
-        .andRoute(POST("/flashcardGroups"), flashcardGroupSaveCommandHandler::handle)
-        .andRoute(DELETE("/flashcardGroups/{id}"), flashcardGroupDeleteCommandHandler::handle)
-        .andRoute(GET("/flashcardGroups/{id}/flashcards"),
-            flashcardGroupGetAllFlashcardsQueryHandler::handle)
-        .andRoute(POST("/flashcardGroups/{id}/flashcards"),
-            flashcardGroupSaveFlashcardCommandHandler::handle)
-        .andRoute(DELETE("/flashcardGroups/{flashcardGroupId}/flashcards/{flashcardId}"),
-            flashcardGroupDeleteFlashcardCommandHandler::handle);
+    return route(GET("/flashcardSets"), flashcardSetGetAllQueryHandler::handle)
+        .andRoute(POST("/flashcardSets"), flashcardSetSaveCommandHandler::handle)
+        .andRoute(DELETE("/flashcardSets/{id}"), flashcardSetDeleteCommandHandler::handle)
+        .andRoute(GET("/flashcardSets/{id}/flashcards"),
+            flashcardSetGetAllFlashcardsQueryHandler::handle)
+        .andRoute(POST("/flashcardSets/{id}/flashcards"),
+            flashcardSetSaveFlashcardCommandHandler::handle)
+        .andRoute(DELETE("/flashcardSets/{flashcardSetId}/flashcards/{flashcardId}"),
+            flashcardSetDeleteFlashcardCommandHandler::handle);
   }
 
   @Bean

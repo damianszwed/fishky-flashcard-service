@@ -4,7 +4,7 @@ import com.github.damianszwed.fishky.proxy.adapter.Base64IdEncoderDecoder;
 import com.github.damianszwed.fishky.proxy.business.FlashcardProviderFlow;
 import com.github.damianszwed.fishky.proxy.port.IdEncoderDecoder;
 import com.github.damianszwed.fishky.proxy.port.flashcard.EventSource;
-import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardGroupStorage;
+import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardSetStorage;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,8 +13,8 @@ public class BusinessConfiguration {
 
   @Bean
   FlashcardProviderFlow flashcardProviderFlow(
-      FlashcardGroupStorage flashcardGroupStorage) {
-    return new FlashcardProviderFlow(flashcardGroupStorage);
+      FlashcardSetStorage flashcardSetStorage) {
+    return new FlashcardProviderFlow(flashcardSetStorage);
   }
 
   @Bean
