@@ -5,22 +5,22 @@ import static org.springframework.web.reactive.function.server.ServerResponse.ac
 import com.github.damianszwed.fishky.proxy.port.CommandQueryHandler;
 import com.github.damianszwed.fishky.proxy.port.IdEncoderDecoder;
 import com.github.damianszwed.fishky.proxy.port.flashcard.Flashcard;
-import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardGroupStorage;
+import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardSetStorage;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
-public class FlashcardGroupSaveFlashcardCommandHandler implements CommandQueryHandler {
+public class FlashcardSetSaveFlashcardCommandHandler implements CommandQueryHandler {
 
-  private final FlashcardGroupStorage flashcardGroupStorage;
+  private final FlashcardSetStorage flashcardSetStorage;
   private final IdEncoderDecoder idEncoderDecoder;
 
-  public FlashcardGroupSaveFlashcardCommandHandler(
-      FlashcardGroupStorage flashcardGroupStorage,
+  public FlashcardSetSaveFlashcardCommandHandler(
+      FlashcardSetStorage flashcardSetStorage,
       IdEncoderDecoder idEncoderDecoder) {
-    this.flashcardGroupStorage = flashcardGroupStorage;
+    this.flashcardSetStorage = flashcardSetStorage;
     this.idEncoderDecoder = idEncoderDecoder;
   }
 
@@ -28,11 +28,11 @@ public class FlashcardGroupSaveFlashcardCommandHandler implements CommandQueryHa
   public Mono<ServerResponse> handle(ServerRequest serverRequest) {
     return serverRequest.bodyToMono(Flashcard.class)
         .doOnNext(flashcardToSave ->
-            flashcardGroupStorage.getById(serverRequest.pathVariable("id"))
-                .subscribe(flashcardGroup -> {
+            flashcardSetStorage.getById(serverRequest.pathVariable("id"))
+                .subscribe(flashcardSet -> {
                   String id = idEncoderDecoder
                       .encodeId("user1@example.com", flashcardToSave.getQuestion());
-                  List<Flashcard> flashcardsWithOneRemoved = flashcardGroup.getFlashcards().stream()
+                  List<Flashcard> flashcardsWithOneRemoved = flashcardSet.getFlashcards().stream()
                       .filter(flashcard -> !flashcard.getId().equals(id))
                       .collect(Collectors.toList());
                   flashcardsWithOneRemoved.add(flashcardToSave
@@ -40,8 +40,8 @@ public class FlashcardGroupSaveFlashcardCommandHandler implements CommandQueryHa
                       .id(id)
                       .build());
 
-                  flashcardGroupStorage.save(
-                      flashcardGroup.toBuilder()
+                  flashcardSetStorage.save(
+                      flashcardSet.toBuilder()
                           .flashcards(flashcardsWithOneRemoved)
                           .build()
                   );
