@@ -5,8 +5,8 @@ import static org.springframework.web.reactive.function.server.ServerResponse.ac
 import com.github.damianszwed.fishky.proxy.port.CommandQueryHandler;
 import com.github.damianszwed.fishky.proxy.port.IdEncoderDecoder;
 import com.github.damianszwed.fishky.proxy.port.flashcard.Flashcard;
-import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardGroup;
-import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardGroupStorage;
+import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardSet;
+import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardSetStorage;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -15,35 +15,35 @@ import reactor.core.publisher.Mono;
 
 public class FlashcardSaveCommandHandler implements CommandQueryHandler {
 
-  private final FlashcardGroupStorage flashcardGroupStorage;
+  private final FlashcardSetStorage flashcardSetStorage;
   private final IdEncoderDecoder idEncoderDecoder;
 
   public FlashcardSaveCommandHandler(
-      FlashcardGroupStorage flashcardGroupStorage,
+      FlashcardSetStorage flashcardSetStorage,
       IdEncoderDecoder idEncoderDecoder) {
-    this.flashcardGroupStorage = flashcardGroupStorage;
+    this.flashcardSetStorage = flashcardSetStorage;
     this.idEncoderDecoder = idEncoderDecoder;
   }
 
   @Override
   public Mono<ServerResponse> handle(ServerRequest serverRequest) {
     return serverRequest.bodyToMono(Flashcard.class)
-        .doOnNext(this::saveFlashcardToDefaultGroup)
+        .doOnNext(this::saveFlashcardToDefaultSet)
         .flatMap(flashcard -> accepted().build());
   }
 
-  private void saveFlashcardToDefaultGroup(Flashcard flashcardToSave) {
-    flashcardGroupStorage.get("user1@example.com", "default")
-        .switchIfEmpty(createFirstDefaultFlashcardGroup())
-        .subscribe(flashcardGroup -> {
+  private void saveFlashcardToDefaultSet(Flashcard flashcardToSave) {
+    flashcardSetStorage.get("user1@example.com", "Default")
+        .switchIfEmpty(createFirstDefaultFlashcardSet())
+        .subscribe(flashcardSet -> {
           String id = idEncoderDecoder.encodeId("user1@example.com", flashcardToSave.getQuestion());
-          List<Flashcard> flashcardsWithOneRemoved = flashcardGroup.getFlashcards().stream()
+          List<Flashcard> flashcardsWithOneRemoved = flashcardSet.getFlashcards().stream()
               .filter(flashcard -> !flashcard.getId().equals(id)).collect(Collectors.toList());
           flashcardsWithOneRemoved.add(flashcardToSave
               .toBuilder()
               .id(id)
               .build());
-          flashcardGroupStorage.save(flashcardGroup
+          flashcardSetStorage.save(flashcardSet
               .toBuilder()
               .flashcards(flashcardsWithOneRemoved)
               .build());
@@ -51,15 +51,15 @@ public class FlashcardSaveCommandHandler implements CommandQueryHandler {
   }
 
   /**
-   * Creates first default flashcard group if user doesn't have any groups.
+   * Creates first default flashcard set if user doesn't have any set.
    *
-   * @return first Default flashcard group
+   * @return first Default flashcard set
    */
-  private Mono<FlashcardGroup> createFirstDefaultFlashcardGroup() {
-    return Mono.just(FlashcardGroup.builder()
+  private Mono<FlashcardSet> createFirstDefaultFlashcardSet() {
+    return Mono.just(FlashcardSet.builder()
         .id("dXNlcjFAZXhhbXBsZS5jb20tZGVmYXVsdA==")//user1@example.com-default
         .owner("user1@example.com")
-        .name("default")
+        .name("Default")
         .build());
   }
 }
