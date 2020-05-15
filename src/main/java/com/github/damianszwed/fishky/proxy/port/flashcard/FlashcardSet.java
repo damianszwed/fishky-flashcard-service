@@ -19,6 +19,7 @@ public class FlashcardSet {
   @NotNull
   String name;
 
+  @NotNull
   String owner;
 
   @Builder.Default
