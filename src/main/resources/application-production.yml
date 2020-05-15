@@ -6,3 +6,9 @@ spring:
   data:
     mongodb:
       uri: ${MONGODB-URI}
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://dev-289513.oktapreview.com/oauth2/default
+          #TODO(Damian.Szwed)issuer-uri should be configurable
