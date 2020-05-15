@@ -21,6 +21,7 @@ import com.github.damianszwed.fishky.proxy.business.FlashcardSetSaveFlashcardCom
 import com.github.damianszwed.fishky.proxy.business.SwaggerHandler;
 import com.github.damianszwed.fishky.proxy.port.CommandQueryHandler;
 import com.github.damianszwed.fishky.proxy.port.IdEncoderDecoder;
+import com.github.damianszwed.fishky.proxy.port.OwnerProvider;
 import com.github.damianszwed.fishky.proxy.port.flashcard.EventSource;
 import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardSetStorage;
 import org.springframework.context.annotation.Bean;
@@ -65,8 +66,8 @@ public class CommandQueryWebConfiguration {
 
   @Bean
   public CommandQueryHandler flashcardSetGetAllQueryHandler(
-      FlashcardSetStorage flashcardSetStorage) {
-    return new FlashcardSetGetAllQueryHandler(flashcardSetStorage);
+      FlashcardSetStorage flashcardSetStorage, OwnerProvider ownerProvider) {
+    return new FlashcardSetGetAllQueryHandler(flashcardSetStorage, ownerProvider);
   }
 
   @Bean
