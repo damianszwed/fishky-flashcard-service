@@ -9,8 +9,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.reactive.ReactiveOAuth2ResourceServerAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.reactive.ReactiveSecurityAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.reactive.ReactiveUserDetailsServiceAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -21,9 +25,14 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
     BusinessConfiguration.class,
     CommandQueryWebConfiguration.class
 })
-@WebFluxTest
+@WebFluxTest(excludeAutoConfiguration = {
+    ReactiveSecurityAutoConfiguration.class,
+    ReactiveUserDetailsServiceAutoConfiguration.class,
+    ReactiveOAuth2ResourceServerAutoConfiguration.class
+})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @DisplayName("Fishky proxy service")
+@ActiveProfiles("development")
 class FishkyProxyServiceTest {
 
   @Autowired

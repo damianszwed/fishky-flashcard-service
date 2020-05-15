@@ -8,9 +8,8 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 @Configuration
 public class SpringTestConfiguration {
-
   @Bean
-  FishkyProxyDriver patientServiceDriver(
+  FishkyProxyDriver fishkyProxyDriver(
       WebTestClient webTestClient,
       EventSource eventSource) {
     return new FishkyProxyDriver(webTestClient, eventSource);
