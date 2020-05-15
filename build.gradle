@@ -62,8 +62,13 @@ sourceCompatibility = 1.11
 targetCompatibility = 1.11
 
 dependencies {
+    compile "org.springframework.boot:spring-boot-configuration-processor"
     compile 'org.springframework.boot:spring-boot-starter-webflux'
     compile 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
+    compile 'org.springframework.security:spring-security-config'
+    compile 'org.springframework.security:spring-security-oauth2-jose'
+    compile 'org.springframework.security:spring-security-oauth2-resource-server'
+
     compile 'io.vavr:vavr:0.9.0'
     compileOnly 'org.projectlombok:lombok:1.18.12'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
