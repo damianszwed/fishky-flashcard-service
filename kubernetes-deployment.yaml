@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: fishky-proxy
-        image: fishky-proxy:0.3.0
+        image: fishky-proxy:0.5.0
         resources:
           requests:
             cpu: 0.1
