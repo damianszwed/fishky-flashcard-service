@@ -12,8 +12,8 @@ import reactor.core.publisher.Mono;
 
 public class FlashcardSetGetAllQueryHandler implements CommandQueryHandler {
 
-  private FlashcardSetStorage flashcardSetStorage;
-  private OwnerProvider ownerProvider;
+  private final FlashcardSetStorage flashcardSetStorage;
+  private final OwnerProvider ownerProvider;
 
   public FlashcardSetGetAllQueryHandler(
       FlashcardSetStorage flashcardSetStorage,

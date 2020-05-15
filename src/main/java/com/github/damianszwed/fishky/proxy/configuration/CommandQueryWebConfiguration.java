@@ -73,8 +73,9 @@ public class CommandQueryWebConfiguration {
   @Bean
   public CommandQueryHandler flashcardSetSaveCommandHandler(
       FlashcardSetStorage flashcardSetStorage,
-      IdEncoderDecoder idEncoderDecoder) {
-    return new FlashcardSetSaveCommandHandler(flashcardSetStorage, idEncoderDecoder);
+      IdEncoderDecoder idEncoderDecoder,
+      OwnerProvider ownerProvider) {
+    return new FlashcardSetSaveCommandHandler(flashcardSetStorage, idEncoderDecoder, ownerProvider);
   }
 
   @Bean
@@ -92,8 +93,12 @@ public class CommandQueryWebConfiguration {
   @Bean
   public CommandQueryHandler flashcardSetSaveFlashcardCommandHandler(
       FlashcardSetStorage flashcardSetStorage,
-      IdEncoderDecoder idEncoderDecoder) {
-    return new FlashcardSetSaveFlashcardCommandHandler(flashcardSetStorage, idEncoderDecoder);
+      IdEncoderDecoder idEncoderDecoder,
+      OwnerProvider ownerProvider) {
+    return new FlashcardSetSaveFlashcardCommandHandler(
+        flashcardSetStorage,
+        idEncoderDecoder,
+        ownerProvider);
   }
 
   @Bean
