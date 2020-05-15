@@ -4,6 +4,7 @@ import static org.springframework.web.reactive.function.server.ServerResponse.ac
 
 import com.github.damianszwed.fishky.proxy.port.CommandQueryHandler;
 import com.github.damianszwed.fishky.proxy.port.IdEncoderDecoder;
+import com.github.damianszwed.fishky.proxy.port.OwnerProvider;
 import com.github.damianszwed.fishky.proxy.port.flashcard.Flashcard;
 import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardSetStorage;
 import java.util.List;
@@ -16,12 +17,15 @@ public class FlashcardSetSaveFlashcardCommandHandler implements CommandQueryHand
 
   private final FlashcardSetStorage flashcardSetStorage;
   private final IdEncoderDecoder idEncoderDecoder;
+  private final OwnerProvider ownerProvider;
 
   public FlashcardSetSaveFlashcardCommandHandler(
       FlashcardSetStorage flashcardSetStorage,
-      IdEncoderDecoder idEncoderDecoder) {
+      IdEncoderDecoder idEncoderDecoder,
+      OwnerProvider ownerProvider) {
     this.flashcardSetStorage = flashcardSetStorage;
     this.idEncoderDecoder = idEncoderDecoder;
+    this.ownerProvider = ownerProvider;
   }
 
   @Override
@@ -31,7 +35,8 @@ public class FlashcardSetSaveFlashcardCommandHandler implements CommandQueryHand
             flashcardSetStorage.getById(serverRequest.pathVariable("id"))
                 .subscribe(flashcardSet -> {
                   String id = idEncoderDecoder
-                      .encodeId("user1@example.com", flashcardToSave.getQuestion());
+                      .encodeId(ownerProvider.provide(serverRequest),
+                          flashcardToSave.getQuestion());
                   List<Flashcard> flashcardsWithOneRemoved = flashcardSet.getFlashcards().stream()
                       .filter(flashcard -> !flashcard.getId().equals(id))
                       .collect(Collectors.toList());

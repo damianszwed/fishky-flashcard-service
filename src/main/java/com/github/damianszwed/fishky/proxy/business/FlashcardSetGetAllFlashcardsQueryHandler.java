@@ -20,6 +20,7 @@ public class FlashcardSetGetAllFlashcardsQueryHandler implements CommandQueryHan
 
   @Override
   public Mono<ServerResponse> handle(ServerRequest serverRequest) {
+    //TODO(Damian.Szwed) make sure that requester is an owner.
     return ok().body(
         flashcardSetStorage.getById(serverRequest.pathVariable("id"))
             .map(FlashcardSet::getFlashcards),

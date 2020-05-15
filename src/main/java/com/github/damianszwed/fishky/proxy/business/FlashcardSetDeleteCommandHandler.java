@@ -18,6 +18,7 @@ public class FlashcardSetDeleteCommandHandler implements CommandQueryHandler {
 
   @Override
   public Mono<ServerResponse> handle(ServerRequest serverRequest) {
+    //TODO(Damian.Szwed) Make sure that only owner is able to delete it's flashcard set.
     return Mono.fromSupplier(() -> Void.TYPE)
         .doOnNext((v) -> flashcardSetStorage.remove(serverRequest.pathVariable("id")))
         .flatMap(p -> accepted().build());
