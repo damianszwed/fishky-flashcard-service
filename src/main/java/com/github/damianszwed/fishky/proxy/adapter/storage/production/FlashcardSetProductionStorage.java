@@ -18,7 +18,7 @@ public class FlashcardSetProductionStorage implements FlashcardSetStorage {
 
   @Override
   public Flux<FlashcardSet> get(String owner) {
-    return flashcardSetMongoRepository.findAll();
+    return flashcardSetMongoRepository.findAllByOwner(owner);
   }
 
   @Override
