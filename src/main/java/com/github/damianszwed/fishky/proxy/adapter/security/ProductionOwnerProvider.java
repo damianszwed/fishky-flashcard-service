@@ -19,6 +19,6 @@ public class ProductionOwnerProvider implements OwnerProvider {
     //TODO(Damian.Szwed) unit test for splitting the header
     String bearerToken = serverRequest.headers().firstHeader(HttpHeaders.AUTHORIZATION);
     String token = bearerToken.split(" ")[1];
-    return jwtDecoder.decode(token).getClaimAsString("sub");
+    return jwtDecoder.decode(token).getClaimAsString("sub").toLowerCase();
   }
 }
