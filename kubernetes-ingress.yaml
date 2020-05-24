@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: fishky-proxy
+  namespace: damianszwed
+  selfLink: /apis/networking.k8s.io/v1beta1/namespaces/damianszwed/ingresses/fishky-proxy
+  uid: b1c28e20-709f-466e-819d-fda03c495e7a
+  generation: 1
+  creationTimestamp: 2020-05-24T10:54:02Z
+  labels:
+    app: myapp
+  annotations:
+    cert-manager.io/cluster-issuer: kubesail-letsencrypt
+    certmanager.k8s.io/cluster-issuer: kubesail-letsencrypt
+spec:
+  tls:
+    - hosts:
+        - fishky-proxy.damianszwed.usw1.kubesail.io
+      secretName: fishky-proxy-ingress
+  rules:
+    - host: fishky-proxy.damianszwed.usw1.kubesail.io
+      http:
+        paths:
+          - backend:
+              serviceName: fishky-proxy-service
+              servicePort: 8080
+status:
+  loadBalancer:
+    ingress:
+      - ip: 10.2.29.222
