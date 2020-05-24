@@ -1,3 +1,6 @@
+server:
+  port: 30508
+
 spring:
   autoconfigure:
     exclude:

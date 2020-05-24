@@ -16,11 +16,15 @@ spec:
     spec:
       containers:
       - name: fishky-proxy
-        image: fishky-proxy:0.5.0
+        image: damianiero/fishky-proxy:0.6.0
         resources:
-          requests:
-            cpu: 0.1
-            memory: 300Mi
+#          #Request is commented because of free tier of kubesail.
+#          requests:
+#            cpu: 10m
+#            memory: 192Mi
+          limits:
+            cpu: 0.5
+            memory: 256Mi
         env:
         - name: GET_HOSTS_FROM
           value: dns
@@ -31,3 +35,19 @@ spec:
               key: mongodb.uri
         ports:
         - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /healthCheck
+            port: 8080
+          initialDelaySeconds: 20
+          timeoutSeconds: 2
+          periodSeconds: 3
+          failureThreshold: 2
+        livenessProbe:
+          httpGet:
+            path: /healthCheck
+            port: 8080
+          initialDelaySeconds: 40
+          timeoutSeconds: 2
+          periodSeconds: 8
+          failureThreshold: 1
