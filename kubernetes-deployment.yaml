@@ -18,12 +18,11 @@ spec:
       - name: fishky-proxy
         image: damianiero/fishky-proxy:0.6.0
         resources:
-#          #Request is commented because of free tier of kubesail.
-#          requests:
-#            cpu: 10m
-#            memory: 192Mi
+          requests:
+            cpu: 10m
+            memory: 192Mi
           limits:
-            cpu: 0.5
+            cpu: 20m
             memory: 256Mi
         env:
         - name: GET_HOSTS_FROM
