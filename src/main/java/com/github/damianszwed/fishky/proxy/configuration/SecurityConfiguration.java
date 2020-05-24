@@ -20,7 +20,7 @@ public class SecurityConfiguration {
         .addFilterAt(corsWebFilter, SecurityWebFiltersOrder.CORS)
         .csrf().disable()
         .authorizeExchange()
-        .pathMatchers("/management/**").permitAll()
+        .pathMatchers("/healthCheck").permitAll()
         .anyExchange()
         .authenticated()
         .and()

@@ -18,6 +18,7 @@ import com.github.damianszwed.fishky.proxy.business.FlashcardSetGetAllFlashcards
 import com.github.damianszwed.fishky.proxy.business.FlashcardSetGetAllQueryHandler;
 import com.github.damianszwed.fishky.proxy.business.FlashcardSetSaveCommandHandler;
 import com.github.damianszwed.fishky.proxy.business.FlashcardSetSaveFlashcardCommandHandler;
+import com.github.damianszwed.fishky.proxy.business.HealthCheckHandler;
 import com.github.damianszwed.fishky.proxy.business.SwaggerHandler;
 import com.github.damianszwed.fishky.proxy.port.CommandQueryHandler;
 import com.github.damianszwed.fishky.proxy.port.IdEncoderDecoder;
@@ -108,6 +109,11 @@ public class CommandQueryWebConfiguration {
   }
 
   @Bean
+  public CommandQueryHandler healthCheckHandler() {
+    return new HealthCheckHandler();
+  }
+
+  @Bean
   public CommandQueryHandler swaggerHandler() {
     return new SwaggerHandler();
   }
@@ -151,8 +157,11 @@ public class CommandQueryWebConfiguration {
   }
 
   @Bean
-  RouterFunction<ServerResponse> routes(CommandQueryHandler swaggerHandler) {
+  RouterFunction<ServerResponse> routes(
+      CommandQueryHandler swaggerHandler,
+      CommandQueryHandler healthCheckHandler) {
     return route(GET("/"), swaggerHandler::handle)
+        .andRoute(GET("/healthCheck"), healthCheckHandler::handle)
         .and(resources("/**", new ClassPathResource("static/")));
   }
 }
