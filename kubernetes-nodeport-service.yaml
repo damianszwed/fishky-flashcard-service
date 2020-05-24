@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: fishky-proxy-nodeport-service
+  labels:
+    app: fishky-proxy
+    tier: backend
+spec:
+  type: NodePort
+  ports:
+  - port: 30508
+    nodePort: 30508
+    targetPort: 8080
+  selector:
+    app: fishky-proxy
+    tier: backend
