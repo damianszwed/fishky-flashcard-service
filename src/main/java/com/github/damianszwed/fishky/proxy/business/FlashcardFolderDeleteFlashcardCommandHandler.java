@@ -4,48 +4,49 @@ import static org.springframework.web.reactive.function.server.ServerResponse.ac
 
 import com.github.damianszwed.fishky.proxy.port.CommandQueryHandler;
 import com.github.damianszwed.fishky.proxy.port.flashcard.Flashcard;
-import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardSet;
-import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardSetStorage;
+import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardFolder;
+import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardFolderStorage;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
-public class FlashcardSetDeleteFlashcardCommandHandler implements CommandQueryHandler {
+public class FlashcardFolderDeleteFlashcardCommandHandler implements CommandQueryHandler {
 
-  private FlashcardSetStorage flashcardSetStorage;
+  private FlashcardFolderStorage flashcardFolderStorage;
 
-  public FlashcardSetDeleteFlashcardCommandHandler(FlashcardSetStorage flashcardSetStorage) {
-    this.flashcardSetStorage = flashcardSetStorage;
+  public FlashcardFolderDeleteFlashcardCommandHandler(
+      FlashcardFolderStorage flashcardFolderStorage) {
+    this.flashcardFolderStorage = flashcardFolderStorage;
   }
 
   @Override
   public Mono<ServerResponse> handle(ServerRequest serverRequest) {
     //TODO(Damian.Szwed) make sure that requester is an owner.
-    String flashcardSetId = serverRequest.pathVariable("flashcardSetId");
+    String flashcardFolderId = serverRequest.pathVariable("flashcardFolderId");
     String flashcardId = serverRequest.pathVariable("flashcardId");
     return Mono.fromSupplier(() -> Void.TYPE)
-        .doOnNext((v) -> removeFlashcardFromFlashcardSet(flashcardSetId, flashcardId))
+        .doOnNext((v) -> removeFlashcardFromFlashcardFolder(flashcardFolderId, flashcardId))
         .flatMap(p -> accepted().build());
   }
 
-  private void removeFlashcardFromFlashcardSet(
-      String flashcardSetId,
+  private void removeFlashcardFromFlashcardFolder(
+      String flashcardFolderId,
       String flashcardId) {
-    flashcardSetStorage.getById(flashcardSetId)
-        .subscribe(flashcardSet ->
-            flashcardSetStorage.save(
-                flashcardSet.toBuilder()
-                    .flashcards(withRemovedParticularFlashcard(flashcardId, flashcardSet)
+    flashcardFolderStorage.getById(flashcardFolderId)
+        .subscribe(flashcardFolder ->
+            flashcardFolderStorage.save(
+                flashcardFolder.toBuilder()
+                    .flashcards(withRemovedParticularFlashcard(flashcardId, flashcardFolder)
                         .collect(Collectors.toList()))
                     .build()));
   }
 
   private Stream<Flashcard> withRemovedParticularFlashcard(
       String flashcardId,
-      FlashcardSet flashcardSet) {
-    return flashcardSet.getFlashcards().stream()
+      FlashcardFolder flashcardFolder) {
+    return flashcardFolder.getFlashcards().stream()
         .filter(flashcard -> !flashcard.getId()
             .equals(flashcardId));
   }

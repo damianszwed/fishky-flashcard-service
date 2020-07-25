@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Value
 @Document
 @Builder(toBuilder = true)
-public class FlashcardSet {
+public class FlashcardFolder {
 
   @Id
   String id;

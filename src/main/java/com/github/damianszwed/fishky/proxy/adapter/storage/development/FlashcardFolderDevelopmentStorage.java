@@ -3,8 +3,8 @@ package com.github.damianszwed.fishky.proxy.adapter.storage.development;
 import static java.util.Arrays.asList;
 
 import com.github.damianszwed.fishky.proxy.port.flashcard.Flashcard;
-import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardSet;
-import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardSetStorage;
+import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardFolder;
+import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardFolderStorage;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -12,12 +12,12 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Slf4j
-public class FlashcardSetDevelopmentStorage implements FlashcardSetStorage {
+public class FlashcardFolderDevelopmentStorage implements FlashcardFolderStorage {
 
-  private List<FlashcardSet> flashcardSets = new ArrayList<>();
+  private List<FlashcardFolder> flashcardFolders = new ArrayList<>();
 
-  public FlashcardSetDevelopmentStorage() {
-    flashcardSets.add(FlashcardSet.builder()
+  public FlashcardFolderDevelopmentStorage() {
+    flashcardFolders.add(FlashcardFolder.builder()
         .id("dXNlcjFAZXhhbXBsZS5jb20tZGVmYXVsdA==")//user1@example.com-default
         .owner("user1@example.com")
         .name("Default")
@@ -39,33 +39,33 @@ public class FlashcardSetDevelopmentStorage implements FlashcardSetStorage {
   }
 
   @Override
-  public Flux<FlashcardSet> get(String owner) {
-    return Flux.fromIterable(flashcardSets);
+  public Flux<FlashcardFolder> get(String owner) {
+    return Flux.fromIterable(flashcardFolders);
   }
 
   @Override
-  public Mono<FlashcardSet> get(String owner, String name) {
-    return Mono.justOrEmpty(flashcardSets.stream()
-        .filter(flashcardSet -> flashcardSet.getName().equals(name))
+  public Mono<FlashcardFolder> get(String owner, String name) {
+    return Mono.justOrEmpty(flashcardFolders.stream()
+        .filter(flashcardFolder -> flashcardFolder.getName().equals(name))
         .findFirst());
   }
 
   @Override
-  public Mono<FlashcardSet> getById(String id) {
+  public Mono<FlashcardFolder> getById(String id) {
     return Mono
         .justOrEmpty(
-            flashcardSets.stream().filter(flashcardSet -> flashcardSet.getId().equals(id))
+            flashcardFolders.stream().filter(flashcardFolder -> flashcardFolder.getId().equals(id))
                 .findFirst());
   }
 
   @Override
   public void remove(String id) {
-    flashcardSets.removeIf(givenFlashcardSet -> givenFlashcardSet.getId().equals(id));
+    flashcardFolders.removeIf(givenFlashcardFolder -> givenFlashcardFolder.getId().equals(id));
   }
 
   @Override
-  public void save(FlashcardSet flashcardSet) {
-    remove(flashcardSet.getId());
-    flashcardSets.add(flashcardSet);
+  public void save(FlashcardFolder flashcardFolder) {
+    remove(flashcardFolder.getId());
+    flashcardFolders.add(flashcardFolder);
   }
 }
