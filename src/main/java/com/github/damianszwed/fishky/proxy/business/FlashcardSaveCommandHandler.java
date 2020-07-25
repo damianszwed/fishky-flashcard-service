@@ -5,8 +5,8 @@ import static org.springframework.web.reactive.function.server.ServerResponse.ac
 import com.github.damianszwed.fishky.proxy.port.CommandQueryHandler;
 import com.github.damianszwed.fishky.proxy.port.IdEncoderDecoder;
 import com.github.damianszwed.fishky.proxy.port.flashcard.Flashcard;
-import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardSet;
-import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardSetStorage;
+import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardFolder;
+import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardFolderStorage;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -15,35 +15,35 @@ import reactor.core.publisher.Mono;
 
 public class FlashcardSaveCommandHandler implements CommandQueryHandler {
 
-  private final FlashcardSetStorage flashcardSetStorage;
+  private final FlashcardFolderStorage flashcardFolderStorage;
   private final IdEncoderDecoder idEncoderDecoder;
 
   public FlashcardSaveCommandHandler(
-      FlashcardSetStorage flashcardSetStorage,
+      FlashcardFolderStorage flashcardFolderStorage,
       IdEncoderDecoder idEncoderDecoder) {
-    this.flashcardSetStorage = flashcardSetStorage;
+    this.flashcardFolderStorage = flashcardFolderStorage;
     this.idEncoderDecoder = idEncoderDecoder;
   }
 
   @Override
   public Mono<ServerResponse> handle(ServerRequest serverRequest) {
     return serverRequest.bodyToMono(Flashcard.class)
-        .doOnNext(this::saveFlashcardToDefaultSet)
+        .doOnNext(this::saveFlashcardToDefaultFolder)
         .flatMap(flashcard -> accepted().build());
   }
 
-  private void saveFlashcardToDefaultSet(Flashcard flashcardToSave) {
-    flashcardSetStorage.get("user1@example.com", "Default")
-        .switchIfEmpty(createFirstDefaultFlashcardSet())
-        .subscribe(flashcardSet -> {
+  private void saveFlashcardToDefaultFolder(Flashcard flashcardToSave) {
+    flashcardFolderStorage.get("user1@example.com", "Default")
+        .switchIfEmpty(createFirstDefaultFlashcardFolder())
+        .subscribe(flashcardFolder -> {
           String id = idEncoderDecoder.encodeId("user1@example.com", flashcardToSave.getQuestion());
-          List<Flashcard> flashcardsWithOneRemoved = flashcardSet.getFlashcards().stream()
+          List<Flashcard> flashcardsWithOneRemoved = flashcardFolder.getFlashcards().stream()
               .filter(flashcard -> !flashcard.getId().equals(id)).collect(Collectors.toList());
           flashcardsWithOneRemoved.add(flashcardToSave
               .toBuilder()
               .id(id)
               .build());
-          flashcardSetStorage.save(flashcardSet
+          flashcardFolderStorage.save(flashcardFolder
               .toBuilder()
               .flashcards(flashcardsWithOneRemoved)
               .build());
@@ -51,12 +51,12 @@ public class FlashcardSaveCommandHandler implements CommandQueryHandler {
   }
 
   /**
-   * Creates first default flashcard set if user doesn't have any set.
+   * Creates first default flashcard folder if user doesn't have any folder.
    *
-   * @return first Default flashcard set
+   * @return first Default flashcard folder
    */
-  private Mono<FlashcardSet> createFirstDefaultFlashcardSet() {
-    return Mono.just(FlashcardSet.builder()
+  private Mono<FlashcardFolder> createFirstDefaultFlashcardFolder() {
+    return Mono.just(FlashcardFolder.builder()
         .id("dXNlcjFAZXhhbXBsZS5jb20tZGVmYXVsdA==")//user1@example.com-default
         .owner("user1@example.com")
         .name("Default")
