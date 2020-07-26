@@ -19,10 +19,10 @@ spec:
         image: damianiero/fishky-proxy:0.7.3
         resources:
           requests:
-            cpu: 100m
+            cpu: 20m
             memory: 192Mi
           limits:
-            cpu: 200m
+            cpu: 500m
             memory: 256Mi
         env:
         - name: GET_HOSTS_FROM
@@ -44,7 +44,7 @@ spec:
           failureThreshold: 2
         livenessProbe:
           httpGet:
-            path: /healthCheck
+            patgh: /healthCheck
             port: 8080
           initialDelaySeconds: 90
           timeoutSeconds: 2
