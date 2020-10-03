@@ -44,7 +44,7 @@ spec:
           failureThreshold: 2
         livenessProbe:
           httpGet:
-            patgh: /healthCheck
+            path: /healthCheck
             port: 8080
           initialDelaySeconds: 90
           timeoutSeconds: 2
