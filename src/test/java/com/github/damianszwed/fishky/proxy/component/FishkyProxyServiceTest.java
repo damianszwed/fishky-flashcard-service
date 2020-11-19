@@ -39,6 +39,18 @@ class FishkyProxyServiceTest {
   private FishkyProxyDriver fishkyProxyDriver;
 
   @Test
+  @DisplayName("Service should return all flashcard folders on query.")
+  void shouldReturnAllFlashcardFolders() {
+    fishkyProxyDriver.with(context -> {
+      context.when().student().queriesForFlashcardFolders();
+      context.then().student().receivesFlashcardFolders(
+          OutputSamples.FLASHCARD_FOLDERS
+      );
+    });
+  }
+
+  @Test
+  @Deprecated
   @DisplayName("Service should return all flashcards on query.")
   void shouldReturnAllFlashcards() {
     fishkyProxyDriver.with(context -> {
@@ -50,6 +62,20 @@ class FishkyProxyServiceTest {
   }
 
   @Test
+  @DisplayName("Service should save flashcard in particular folder on demand.")
+  void shouldSaveFlashcardInParticularFolder() {
+    fishkyProxyDriver.with(context -> {
+      context.when().student()
+          .savesFlashcardInFolder(InputSamples.NEW_FLASHCARD, InputSamples.FLASHCARD_FOLDER_NAME);
+      context.when().student().queriesForFlashcardFolders();
+      context.then().student().receivesFlashcardFolders(
+          OutputSamples.FLASHCARD_FOLDERS_WITH_NEW_FLASHCARD
+      );
+    });
+  }
+
+  @Test
+  @Deprecated
   @DisplayName("Service should save flashcards on demand.")
   void shouldSaveFlashcard() {
     fishkyProxyDriver.with(context -> {
