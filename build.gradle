@@ -89,7 +89,7 @@ dependencies {
 
 task updateVersion {
     doLast {
-        ant.replaceregexp(match: 'image: fishky-proxy:(.*)', replace: "image: fishky-proxy:${version}", flags: 'g', byline: true) {
+        ant.replaceregexp(match: 'image: damianiero/fishky-proxy:(.*)', replace: "image: damianiero/fishky-proxy:${version}", flags: 'g', byline: true) {
             fileset(dir: '.', includes: 'kubernetes-deployment.yaml')
         }
     }
