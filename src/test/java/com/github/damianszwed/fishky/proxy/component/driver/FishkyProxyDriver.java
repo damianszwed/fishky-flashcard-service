@@ -69,11 +69,34 @@ public class FishkyProxyDriver {
     }
 
     @Override
+    public void queriesForFlashcardFolders() {
+      response = webTestClient
+          .get().uri("/flashcardFolders")
+          .accept(MediaType.APPLICATION_JSON)
+          .exchange();
+    }
+
+    @Override
+    public void receivesFlashcardFolders(String flashcardFolders) {
+      response.expectBody().json(flashcardFolders);
+    }
+
+    @Override
     public void queriesForFlashcards() {
       response = webTestClient
           .get().uri("/flashcards")
           .accept(MediaType.APPLICATION_JSON)
           .exchange();
+    }
+
+    @Override
+    public void savesFlashcardInFolder(String newFlashcard, String flashcardFolderName) {
+      webTestClient
+          .post().uri("/flashcardFolders/" + flashcardFolderName + "/flashcards")
+          .accept(MediaType.APPLICATION_JSON)
+          .contentType(MediaType.APPLICATION_JSON)
+          .bodyValue(newFlashcard)
+          .exchange().expectStatus().isAccepted();
     }
 
     @Override
