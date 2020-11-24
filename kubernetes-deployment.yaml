@@ -7,7 +7,7 @@ spec:
     matchLabels:
       app: fishky-proxy
       tier: backend
-  replicas: 1
+  replicas: 3
   template:
     metadata:
       labels:
@@ -17,13 +17,6 @@ spec:
       containers:
       - name: fishky-proxy
         image: damianiero/fishky-proxy:0.7.4
-        resources:
-          requests:
-            cpu: 20m
-            memory: 192Mi
-          limits:
-            cpu: 400m
-            memory: 256Mi
         env:
         - name: GET_HOSTS_FROM
           value: dns

@@ -6,6 +6,7 @@ metadata:
     app: fishky-proxy
     tier: backend
 spec:
+  type: LoadBalancer
   ports:
   - port: 30508
     protocol: TCP
