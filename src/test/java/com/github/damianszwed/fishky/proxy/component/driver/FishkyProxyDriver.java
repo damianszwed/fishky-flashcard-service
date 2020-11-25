@@ -90,12 +90,24 @@ public class FishkyProxyDriver {
     }
 
     @Override
-    public void savesFlashcardInFolder(String newFlashcard, String flashcardFolderName) {
+    public void savesFlashcardInFolder(String newFlashcard, String flashcardFolderId) {
       webTestClient
-          .post().uri("/flashcardFolders/" + flashcardFolderName + "/flashcards")
+          .post()
+          .uri("/flashcardFolders/{flashcardFolderId}/flashcards", flashcardFolderId)
           .accept(MediaType.APPLICATION_JSON)
           .contentType(MediaType.APPLICATION_JSON)
           .bodyValue(newFlashcard)
+          .exchange().expectStatus().isAccepted();
+    }
+
+    @Override
+    public void deletesFlashcardFromFolder(String flashcardId, String flashcardFolderId) {
+      webTestClient
+          .delete()
+          .uri("/flashcardFolders/{flashcardFolderId}/flashcards/{flashcardId}",
+              flashcardFolderId,
+              flashcardId)
+          .accept(MediaType.APPLICATION_JSON)
           .exchange().expectStatus().isAccepted();
     }
 
