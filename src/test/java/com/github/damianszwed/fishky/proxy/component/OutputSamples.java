@@ -57,6 +57,25 @@ interface OutputSamples {
       + "  }\n"
       + "]";
 
+  String FLASHCARD_FOLDERS_WITHOUT_ONE_FLASHCARD = "[\n"
+      + "  {\n"
+      + "    \"id\": \"dXNlcjFAZXhhbXBsZS5jb20tZGVmYXVsdA==\",\n"
+      + "    \"name\": \"Default\",\n"
+      + "    \"owner\": \"user1@example.com\",\n"
+      + "    \"flashcards\": [\n"
+      + "      {\n"
+      + "        \"id\": \"dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25h\",\n"
+      + "        \"question\": \"questionA\",\n"
+      + "        \"answer\": \"answerA\"\n"
+      + "      },\n"
+      + "      {\n"
+      + "        \"id\": \"dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25j\",\n"
+      + "        \"question\": \"questionC\",\n"
+      + "        \"answer\": \"answerC\"\n"
+      + "      }\n"
+      + "    ]\n"
+      + "  }\n"
+      + "]";
 
   String DEFAULT_FLASHCARDS_ARRAY = "[\n"
       + "  {\n"

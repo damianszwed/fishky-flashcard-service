@@ -25,4 +25,6 @@ public interface Student {
   void receivesFlashcardFolders(String flashcardFolders);
 
   void savesFlashcardInFolder(String newFlashcard, String flashcardFolderName);
+
+  void deletesFlashcardFromFolder(String existingFlashcardId, String flashcardFolderName);
 }
