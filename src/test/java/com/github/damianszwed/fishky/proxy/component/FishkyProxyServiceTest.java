@@ -66,7 +66,7 @@ class FishkyProxyServiceTest {
   void shouldSaveFlashcardInParticularFolder() {
     fishkyProxyDriver.with(context -> {
       context.when().student()
-          .savesFlashcardInFolder(InputSamples.NEW_FLASHCARD, InputSamples.FLASHCARD_FOLDER_NAME);
+          .savesFlashcardInFolder(InputSamples.NEW_FLASHCARD, InputSamples.FLASHCARD_FOLDER_ID);
       context.when().student().queriesForFlashcardFolders();
       context.then().student().receivesFlashcardFolders(
           OutputSamples.FLASHCARD_FOLDERS_WITH_NEW_FLASHCARD
@@ -88,6 +88,7 @@ class FishkyProxyServiceTest {
   }
 
   @Test
+  @Deprecated
   @DisplayName("Service should delete flashcards on demand.")
   void shouldDeleteFlashcard() {
     fishkyProxyDriver.with(context -> {
@@ -95,6 +96,20 @@ class FishkyProxyServiceTest {
       context.when().student().queriesForFlashcards();
       context.then().student().receivesFlashcards(
           OutputSamples.FLASHCARDS_ARRAY_WITHOUT_ONE_FLASHCARD
+      );
+    });
+  }
+
+  @Test
+  @DisplayName("Service should delete flashcards on demand from particular folder.")
+  void shouldDeleteFlashcardFromParticularFolder() {
+    fishkyProxyDriver.with(context -> {
+      context.when().student()
+          .deletesFlashcardFromFolder(InputSamples.EXISTING_FLASHCARD_ID,
+              InputSamples.FLASHCARD_FOLDER_ID);
+      context.when().student().queriesForFlashcardFolders();
+      context.then().student().receivesFlashcardFolders(
+          OutputSamples.FLASHCARD_FOLDERS_WITHOUT_ONE_FLASHCARD
       );
     });
   }
