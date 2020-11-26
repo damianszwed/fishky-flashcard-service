@@ -50,18 +50,6 @@ class FishkyProxyServiceTest {
   }
 
   @Test
-  @Deprecated
-  @DisplayName("Service should return all flashcards on query.")
-  void shouldReturnAllFlashcards() {
-    fishkyProxyDriver.with(context -> {
-      context.when().student().queriesForFlashcards();
-      context.then().student().receivesFlashcards(
-          OutputSamples.DEFAULT_FLASHCARDS_ARRAY
-      );
-    });
-  }
-
-  @Test
   @DisplayName("Service should save flashcard in particular folder on demand.")
   void shouldSaveFlashcardInParticularFolder() {
     fishkyProxyDriver.with(context -> {
@@ -70,32 +58,6 @@ class FishkyProxyServiceTest {
       context.when().student().queriesForFlashcardFolders();
       context.then().student().receivesFlashcardFolders(
           OutputSamples.FLASHCARD_FOLDERS_WITH_NEW_FLASHCARD
-      );
-    });
-  }
-
-  @Test
-  @Deprecated
-  @DisplayName("Service should save flashcards on demand.")
-  void shouldSaveFlashcard() {
-    fishkyProxyDriver.with(context -> {
-      context.when().student().savesFlashcard(InputSamples.NEW_FLASHCARD);
-      context.when().student().queriesForFlashcards();
-      context.then().student().receivesFlashcards(
-          OutputSamples.FLASHCARDS_ARRAY_WITH_NEW_FLASHCARD
-      );
-    });
-  }
-
-  @Test
-  @Deprecated
-  @DisplayName("Service should delete flashcards on demand.")
-  void shouldDeleteFlashcard() {
-    fishkyProxyDriver.with(context -> {
-      context.when().student().deletesFlashcard(InputSamples.EXISTING_FLASHCARD_ID);
-      context.when().student().queriesForFlashcards();
-      context.then().student().receivesFlashcards(
-          OutputSamples.FLASHCARDS_ARRAY_WITHOUT_ONE_FLASHCARD
       );
     });
   }

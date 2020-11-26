@@ -52,23 +52,6 @@ public class FishkyProxyDriver {
     private Step flashcardStep;
 
     @Override
-    public void isListeningOnFlashcards() {
-      flashcardStep = StepVerifier.create(eventSource.getFlux()).expectNextCount(3);
-    }
-
-    @Override
-    public void commandsForAllFlashcards() {
-      webTestClient
-          .get().uri("/getAllFlashcardsCommand")
-          .exchange().expectStatus().isAccepted();
-    }
-
-    @Override
-    public void isNotifiedAboutAllFlashcards() {
-      flashcardStep.thenCancel().verify();
-    }
-
-    @Override
     public void queriesForFlashcardFolders() {
       response = webTestClient
           .get().uri("/flashcardFolders")
@@ -79,14 +62,6 @@ public class FishkyProxyDriver {
     @Override
     public void receivesFlashcardFolders(String flashcardFolders) {
       response.expectBody().json(flashcardFolders);
-    }
-
-    @Override
-    public void queriesForFlashcards() {
-      response = webTestClient
-          .get().uri("/flashcards")
-          .accept(MediaType.APPLICATION_JSON)
-          .exchange();
     }
 
     @Override
@@ -112,26 +87,20 @@ public class FishkyProxyDriver {
     }
 
     @Override
-    public void savesFlashcard(String flashcard) {
+    public void isListeningOnFlashcards() {
+      flashcardStep = StepVerifier.create(eventSource.getFlux()).expectNextCount(3);
+    }
+
+    @Override
+    public void commandsForAllFlashcards() {
       webTestClient
-          .post().uri("/flashcards")
-          .accept(MediaType.APPLICATION_JSON)
-          .contentType(MediaType.APPLICATION_JSON)
-          .bodyValue(flashcard)
+          .get().uri("/getAllFlashcardsCommand")
           .exchange().expectStatus().isAccepted();
     }
 
     @Override
-    public void deletesFlashcard(String flashcardId) {
-      webTestClient
-          .delete().uri("/flashcards/{id}", flashcardId)
-          .accept(MediaType.APPLICATION_JSON)
-          .exchange().expectStatus().isAccepted();
-    }
-
-    @Override
-    public void receivesFlashcards(String expectedJson) {
-      response.expectBody().json(expectedJson);
+    public void isNotifiedAboutAllFlashcards() {
+      flashcardStep.thenCancel().verify();
     }
   }
 }
