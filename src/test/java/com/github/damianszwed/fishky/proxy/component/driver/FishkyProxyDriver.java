@@ -76,6 +76,17 @@ public class FishkyProxyDriver {
     }
 
     @Override
+    public void modifiesFlashcardInFolder(String modifiedFlashcard, String flashcardFolderId) {
+      webTestClient
+          .put()
+          .uri("/flashcardFolders/{flashcardFolderId}/flashcards", flashcardFolderId)
+          .accept(MediaType.APPLICATION_JSON)
+          .contentType(MediaType.APPLICATION_JSON)
+          .bodyValue(modifiedFlashcard)
+          .exchange().expectStatus().isAccepted();
+    }
+
+    @Override
     public void deletesFlashcardFromFolder(String flashcardId, String flashcardFolderId) {
       webTestClient
           .delete()
