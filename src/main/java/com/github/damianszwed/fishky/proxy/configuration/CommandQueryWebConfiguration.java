@@ -3,6 +3,7 @@ package com.github.damianszwed.fishky.proxy.configuration;
 import static org.springframework.web.reactive.function.server.RequestPredicates.DELETE;
 import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
 import static org.springframework.web.reactive.function.server.RequestPredicates.POST;
+import static org.springframework.web.reactive.function.server.RequestPredicates.PUT;
 import static org.springframework.web.reactive.function.server.RouterFunctions.resources;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 
@@ -10,6 +11,7 @@ import com.github.damianszwed.fishky.proxy.business.FlashcardFolderDeleteCommand
 import com.github.damianszwed.fishky.proxy.business.FlashcardFolderDeleteFlashcardCommandHandler;
 import com.github.damianszwed.fishky.proxy.business.FlashcardFolderGetAllFlashcardsQueryHandler;
 import com.github.damianszwed.fishky.proxy.business.FlashcardFolderGetAllQueryHandler;
+import com.github.damianszwed.fishky.proxy.business.FlashcardFolderModifyFlashcardCommandHandler;
 import com.github.damianszwed.fishky.proxy.business.FlashcardFolderSaveCommandHandler;
 import com.github.damianszwed.fishky.proxy.business.FlashcardFolderSaveFlashcardCommandHandler;
 import com.github.damianszwed.fishky.proxy.business.FlashcardGetAllCommandHandler;
@@ -82,6 +84,17 @@ public class CommandQueryWebConfiguration {
   }
 
   @Bean
+  public CommandQueryHandler flashcardFolderModifyFlashcardCommandHandler(
+      FlashcardFolderStorage flashcardFolderStorage,
+      IdEncoderDecoder idEncoderDecoder,
+      OwnerProvider ownerProvider) {
+    return new FlashcardFolderModifyFlashcardCommandHandler(
+        flashcardFolderStorage,
+        idEncoderDecoder,
+        ownerProvider);
+  }
+
+  @Bean
   public CommandQueryHandler flashcardFolderDeleteFlashcardCommandHandler(
       FlashcardFolderStorage flashcardFolderStorage) {
     return new FlashcardFolderDeleteFlashcardCommandHandler(flashcardFolderStorage);
@@ -104,6 +117,7 @@ public class CommandQueryWebConfiguration {
       CommandQueryHandler flashcardFolderDeleteCommandHandler,
       CommandQueryHandler flashcardFolderGetAllFlashcardsQueryHandler,
       CommandQueryHandler flashcardFolderSaveFlashcardCommandHandler,
+      CommandQueryHandler flashcardFolderModifyFlashcardCommandHandler,
       CommandQueryHandler flashcardFolderDeleteFlashcardCommandHandler
   ) {
     return route(GET("/flashcardFolders"), flashcardFolderGetAllQueryHandler::handle)
@@ -113,6 +127,8 @@ public class CommandQueryWebConfiguration {
             flashcardFolderGetAllFlashcardsQueryHandler::handle)
         .andRoute(POST("/flashcardFolders/{id}/flashcards"),
             flashcardFolderSaveFlashcardCommandHandler::handle)
+        .andRoute(PUT("/flashcardFolders/{id}/flashcards"),
+            flashcardFolderModifyFlashcardCommandHandler::handle)
         .andRoute(DELETE("/flashcardFolders/{flashcardFolderId}/flashcards/{flashcardId}"),
             flashcardFolderDeleteFlashcardCommandHandler::handle);
   }

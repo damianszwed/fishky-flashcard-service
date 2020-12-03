@@ -6,9 +6,11 @@ public interface Student {
 
   void receivesFlashcardFolders(String flashcardFolders);
 
-  void savesFlashcardInFolder(String newFlashcard, String flashcardFolderName);
+  void savesFlashcardInFolder(String newFlashcard, String flashcardFolderId);
 
-  void deletesFlashcardFromFolder(String existingFlashcardId, String flashcardFolderName);
+  void modifiesFlashcardInFolder(String modifiedFlashcard, String flashcardFolderId);
+
+  void deletesFlashcardFromFolder(String existingFlashcardId, String flashcardFolderId);
 
   void commandsForAllFlashcards();
 
