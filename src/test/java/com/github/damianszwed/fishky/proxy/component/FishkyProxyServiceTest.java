@@ -63,11 +63,27 @@ class FishkyProxyServiceTest {
   }
 
   @Test
-  @DisplayName("Service should delete flashcards on demand from particular folder.")
+  @DisplayName("Service should modify flashcard on demand from particular folder.")
+  void shouldModifyFlashcardInParticularFolder() {
+    fishkyProxyDriver.with(context -> {
+      context.when().student()
+          .modifiesFlashcardInFolder(
+              InputSamples.MODIFIED_FLASHCARD,
+              InputSamples.FLASHCARD_FOLDER_ID);
+      context.when().student().queriesForFlashcardFolders();
+      context.then().student().receivesFlashcardFolders(
+          OutputSamples.FLASHCARD_FOLDERS_WITH_ONE_FLASHCARD_MODIFIED
+      );
+    });
+  }
+
+  @Test
+  @DisplayName("Service should delete flashcard on demand from particular folder.")
   void shouldDeleteFlashcardFromParticularFolder() {
     fishkyProxyDriver.with(context -> {
       context.when().student()
-          .deletesFlashcardFromFolder(InputSamples.EXISTING_FLASHCARD_ID,
+          .deletesFlashcardFromFolder(
+              InputSamples.EXISTING_FLASHCARD_ID,
               InputSamples.FLASHCARD_FOLDER_ID);
       context.when().student().queriesForFlashcardFolders();
       context.then().student().receivesFlashcardFolders(
