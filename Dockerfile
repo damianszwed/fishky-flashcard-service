@@ -1,4 +1,4 @@
-FROM openjdk:11-jdk
+FROM openjdk:11.0.7-jdk
 VOLUME /tmp
 # Set the working directory in the container to /app
 WORKDIR /app
