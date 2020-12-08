@@ -101,4 +101,14 @@ class FishkyProxyServiceTest {
       context.then().student().isNotifiedAboutAllFlashcards();
     });
   }
+
+  @Test
+  @DisplayName("Service should notify about all flashcard folders on demand.")
+  void shouldNotifyAboutAllFlashcardFoldersWhenCommandsForAllFlashcardFolders() {
+    fishkyProxyDriver.with(context -> {
+      context.given().student().isListeningOnFlashcardFolders();
+      context.when().student().commandsForAllFlashcardFolders();
+      context.then().student().isNotifiedAboutAllFlashcardFolders();
+    });
+  }
 }

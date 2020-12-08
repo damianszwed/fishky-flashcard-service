@@ -27,6 +27,7 @@ import com.github.damianszwed.fishky.proxy.port.IdEncoderDecoder;
 import com.github.damianszwed.fishky.proxy.port.OwnerProvider;
 import com.github.damianszwed.fishky.proxy.port.flashcard.EventSource;
 import com.github.damianszwed.fishky.proxy.port.flashcard.Flashcard;
+import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardFolder;
 import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardFolderStorage;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -58,9 +59,9 @@ public class CommandQueryWebConfiguration {
 
   @Bean
   public CommandQueryHandler flashcardFolderServerSentEventHandler(
-      FlashcardFolderProviderFlow flashcardFolderProviderFlow,
+      EventSource<FlashcardFolder> flashcardFoldersEventSource,
       OwnerProvider ownerProvider) {
-    return new FlashcardFolderServerSentEventHandler(flashcardFolderProviderFlow, ownerProvider);
+    return new FlashcardFolderServerSentEventHandler(flashcardFoldersEventSource, ownerProvider);
   }
 
   @Bean
