@@ -2,7 +2,7 @@ package com.github.damianszwed.fishky.proxy.port.flashcard;
 
 import reactor.core.publisher.Flux;
 
-public interface EventSource {
+public interface EventSource<T> {
 
-  Flux<Flashcard> getFlux();
+  Flux<T> getFlux(String owner);
 }

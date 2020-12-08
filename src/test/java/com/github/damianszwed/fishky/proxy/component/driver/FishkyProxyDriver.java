@@ -3,6 +3,7 @@ package com.github.damianszwed.fishky.proxy.component.driver;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import com.github.damianszwed.fishky.proxy.port.flashcard.EventSource;
+import com.github.damianszwed.fishky.proxy.port.flashcard.Flashcard;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.test.web.reactive.server.WebTestClient.ResponseSpec;
@@ -12,11 +13,11 @@ import reactor.test.StepVerifier.Step;
 public class FishkyProxyDriver {
 
   private final WebTestClient webTestClient;
-  private final EventSource eventSource;
+  private final EventSource<Flashcard> eventSource;
   private final Student student;
 
   FishkyProxyDriver(WebTestClient webTestClient,
-      EventSource eventSource) {
+      EventSource<Flashcard> eventSource) {
     this.webTestClient = webTestClient;
     this.eventSource = eventSource;
     this.student = createStudent();
@@ -99,7 +100,8 @@ public class FishkyProxyDriver {
 
     @Override
     public void isListeningOnFlashcards() {
-      flashcardStep = StepVerifier.create(eventSource.getFlux()).expectNextCount(3);
+      flashcardStep = StepVerifier.create(eventSource.getFlux("user1@example.com"))
+          .expectNextCount(3);
     }
 
     @Override

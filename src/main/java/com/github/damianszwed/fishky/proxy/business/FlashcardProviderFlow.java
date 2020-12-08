@@ -7,7 +7,7 @@ import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardFolderStorage
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.TopicProcessor;
 
-public class FlashcardProviderFlow implements EventSource {
+public class FlashcardProviderFlow implements EventSource<Flashcard> {
 
   private FlashcardFolderStorage flashcardFolderStorage;
   private final TopicProcessor<Flashcard> unicastProcessor;
@@ -24,7 +24,7 @@ public class FlashcardProviderFlow implements EventSource {
   }
 
   @Override
-  public Flux<Flashcard> getFlux() {
+  public Flux<Flashcard> getFlux(String owner) {
     return unicastProcessor.publish().autoConnect();
   }
 }
