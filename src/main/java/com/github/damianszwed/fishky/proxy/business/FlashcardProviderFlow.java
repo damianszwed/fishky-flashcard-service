@@ -25,6 +25,6 @@ public class FlashcardProviderFlow implements EventSource<Flashcard> {
 
   @Override
   public Flux<Flashcard> getFlux(String owner) {
-    return unicastProcessor.publish().autoConnect();
+    return unicastProcessor;
   }
 }
