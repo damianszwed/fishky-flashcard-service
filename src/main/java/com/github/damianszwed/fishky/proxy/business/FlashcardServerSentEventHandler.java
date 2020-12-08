@@ -10,9 +10,9 @@ import reactor.core.publisher.Mono;
 
 public class FlashcardServerSentEventHandler implements CommandQueryHandler {
 
-  private EventSource eventSource;
+  private EventSource<Flashcard> eventSource;
 
-  public FlashcardServerSentEventHandler(EventSource eventSource) {
+  public FlashcardServerSentEventHandler(EventSource<Flashcard> eventSource) {
     this.eventSource = eventSource;
   }
 
@@ -20,6 +20,6 @@ public class FlashcardServerSentEventHandler implements CommandQueryHandler {
   public Mono<ServerResponse> handle(ServerRequest serverRequest) {
     return ServerResponse.ok()
         .contentType(MediaType.APPLICATION_STREAM_JSON)
-        .body(eventSource.getFlux(), Flashcard.class);
+        .body(eventSource.getFlux("user1@example.com"), Flashcard.class);
   }
 }
