@@ -9,11 +9,14 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 
 import com.github.damianszwed.fishky.proxy.business.FlashcardFolderDeleteCommandHandler;
 import com.github.damianszwed.fishky.proxy.business.FlashcardFolderDeleteFlashcardCommandHandler;
+import com.github.damianszwed.fishky.proxy.business.FlashcardFolderGetAllCommandHandler;
 import com.github.damianszwed.fishky.proxy.business.FlashcardFolderGetAllFlashcardsQueryHandler;
 import com.github.damianszwed.fishky.proxy.business.FlashcardFolderGetAllQueryHandler;
 import com.github.damianszwed.fishky.proxy.business.FlashcardFolderModifyFlashcardCommandHandler;
+import com.github.damianszwed.fishky.proxy.business.FlashcardFolderProviderFlow;
 import com.github.damianszwed.fishky.proxy.business.FlashcardFolderSaveCommandHandler;
 import com.github.damianszwed.fishky.proxy.business.FlashcardFolderSaveFlashcardCommandHandler;
+import com.github.damianszwed.fishky.proxy.business.FlashcardFolderServerSentEventHandler;
 import com.github.damianszwed.fishky.proxy.business.FlashcardGetAllCommandHandler;
 import com.github.damianszwed.fishky.proxy.business.FlashcardProviderFlow;
 import com.github.damianszwed.fishky.proxy.business.FlashcardServerSentEventHandler;
@@ -23,6 +26,7 @@ import com.github.damianszwed.fishky.proxy.port.CommandQueryHandler;
 import com.github.damianszwed.fishky.proxy.port.IdEncoderDecoder;
 import com.github.damianszwed.fishky.proxy.port.OwnerProvider;
 import com.github.damianszwed.fishky.proxy.port.flashcard.EventSource;
+import com.github.damianszwed.fishky.proxy.port.flashcard.Flashcard;
 import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardFolderStorage;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -41,8 +45,22 @@ public class CommandQueryWebConfiguration {
   }
 
   @Bean
-  public CommandQueryHandler flashcardServerSentEventHandler(EventSource eventSource) {
+  public CommandQueryHandler flashcardServerSentEventHandler(EventSource<Flashcard> eventSource) {
     return new FlashcardServerSentEventHandler(eventSource);
+  }
+
+  @Bean
+  public CommandQueryHandler flashcardFolderGetAllCommandHandler(
+      FlashcardFolderProviderFlow flashcardFolderProviderFlow,
+      OwnerProvider ownerProvider) {
+    return new FlashcardFolderGetAllCommandHandler(flashcardFolderProviderFlow, ownerProvider);
+  }
+
+  @Bean
+  public CommandQueryHandler flashcardFolderServerSentEventHandler(
+      FlashcardFolderProviderFlow flashcardFolderProviderFlow,
+      OwnerProvider ownerProvider) {
+    return new FlashcardFolderServerSentEventHandler(flashcardFolderProviderFlow, ownerProvider);
   }
 
   @Bean
@@ -136,9 +154,15 @@ public class CommandQueryWebConfiguration {
   @Bean
   public RouterFunction<ServerResponse> sseRoutes(
       CommandQueryHandler flashcardGetAllCommandHandler,
-      CommandQueryHandler flashcardServerSentEventHandler) {
+      CommandQueryHandler flashcardServerSentEventHandler,
+      CommandQueryHandler flashcardFolderGetAllCommandHandler,
+      CommandQueryHandler flashcardFolderServerSentEventHandler) {
     return route(GET("/getAllFlashcardsCommand"), flashcardGetAllCommandHandler::handle)
-        .andRoute(GET("/flashcardsEventStream"), flashcardServerSentEventHandler::handle);
+        .andRoute(GET("/flashcardsEventStream"), flashcardServerSentEventHandler::handle)
+        .andRoute(GET("/getAllFlashcardFoldersCommand"),
+            flashcardFolderGetAllCommandHandler::handle)
+        .andRoute(GET("/flashcardFoldersEventStream"),
+            flashcardFolderServerSentEventHandler::handle);
   }
 
   @Bean
