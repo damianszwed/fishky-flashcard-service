@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import com.github.damianszwed.fishky.proxy.port.flashcard.EventSource;
 import com.github.damianszwed.fishky.proxy.port.flashcard.Flashcard;
+import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardFolder;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.test.web.reactive.server.WebTestClient.ResponseSpec;
@@ -14,12 +15,15 @@ public class FishkyProxyDriver {
 
   private final WebTestClient webTestClient;
   private final EventSource<Flashcard> eventSource;
+  private final EventSource<FlashcardFolder> flashcardFoldersEventSource;
   private final Student student;
 
   FishkyProxyDriver(WebTestClient webTestClient,
-      EventSource<Flashcard> eventSource) {
+      EventSource<Flashcard> eventSource,
+      EventSource<FlashcardFolder> flashcardFoldersEventSource) {
     this.webTestClient = webTestClient;
     this.eventSource = eventSource;
+    this.flashcardFoldersEventSource = flashcardFoldersEventSource;
     this.student = createStudent();
   }
 
@@ -50,7 +54,7 @@ public class FishkyProxyDriver {
   private class StudentImpl implements Student {
 
     private ResponseSpec response;
-    private Step flashcardStep;
+    private Step step;
 
     @Override
     public void queriesForFlashcardFolders() {
@@ -99,9 +103,10 @@ public class FishkyProxyDriver {
     }
 
     @Override
-    public void isListeningOnFlashcards() {
-      flashcardStep = StepVerifier.create(eventSource.getFlux("user1@example.com"))
-          .expectNextCount(3);
+    public void commandsForAllFlashcardFolders() {
+      webTestClient
+          .get().uri("/getAllFlashcardFoldersCommand")
+          .exchange().expectStatus().isAccepted();
     }
 
     @Override
@@ -112,8 +117,25 @@ public class FishkyProxyDriver {
     }
 
     @Override
+    public void isListeningOnFlashcardFolders() {
+      step = StepVerifier.create(flashcardFoldersEventSource.getFlux("user1@example.com"))
+          .expectNextCount(1);
+    }
+
+    @Override
+    public void isListeningOnFlashcards() {
+      step = StepVerifier.create(eventSource.getFlux("user1@example.com"))
+          .expectNextCount(3);
+    }
+
+    @Override
+    public void isNotifiedAboutAllFlashcardFolders() {
+      step.thenCancel().verify();
+    }
+
+    @Override
     public void isNotifiedAboutAllFlashcards() {
-      flashcardStep.thenCancel().verify();
+      step.thenCancel().verify();
     }
   }
 }

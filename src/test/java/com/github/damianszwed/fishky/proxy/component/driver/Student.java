@@ -12,9 +12,18 @@ public interface Student {
 
   void deletesFlashcardFromFolder(String existingFlashcardId, String flashcardFolderId);
 
+  void commandsForAllFlashcardFolders();
+
+  @Deprecated
   void commandsForAllFlashcards();
 
+  void isListeningOnFlashcardFolders();
+
+  @Deprecated
   void isListeningOnFlashcards();
 
+  void isNotifiedAboutAllFlashcardFolders();
+
+  @Deprecated
   void isNotifiedAboutAllFlashcards();
 }
