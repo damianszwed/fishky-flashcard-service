@@ -1,5 +1,6 @@
 package com.github.damianszwed.fishky.proxy.business;
 
+import com.github.damianszwed.fishky.proxy.port.EventTrigger;
 import com.github.damianszwed.fishky.proxy.port.flashcard.EventSource;
 import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardFolder;
 import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardFolderStorage;
@@ -11,7 +12,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.FluxSink;
 
 @Slf4j
-public class FlashcardFolderProviderFlow implements EventSource<FlashcardFolder> {
+public class FlashcardFolderProviderFlow implements EventSource<FlashcardFolder>, EventTrigger {
 
   private final FlashcardFolderStorage flashcardFolderStorage;
   private final Map<String, EmitterProcessor<FlashcardFolder>> emittersByOwners = new HashMap<>();
@@ -21,19 +22,20 @@ public class FlashcardFolderProviderFlow implements EventSource<FlashcardFolder>
     this.flashcardFolderStorage = flashcardFolderStorage;
   }
 
-  void getAll(String owner) {
+  @Override
+  public void fireUp(String owner) {
     final FluxSink<FlashcardFolder> sink = getSink(owner);
     flashcardFolderStorage.get(owner).subscribe(sink::next);
-  }
-
-  private FluxSink<FlashcardFolder> getSink(String owner) {
-    final EmitterProcessor<FlashcardFolder> processor = getProcessor(owner);
-    return sinksByOwners.computeIfAbsent(owner, o_O -> processor.sink());
   }
 
   @Override
   public Flux<FlashcardFolder> getFlux(String owner) {
     return getProcessor(owner);
+  }
+
+  private FluxSink<FlashcardFolder> getSink(String owner) {
+    final EmitterProcessor<FlashcardFolder> processor = getProcessor(owner);
+    return sinksByOwners.computeIfAbsent(owner, o_O -> processor.sink());
   }
 
   private EmitterProcessor<FlashcardFolder> getProcessor(String owner) {
