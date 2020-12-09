@@ -11,7 +11,7 @@ import reactor.core.publisher.Mono;
 @Deprecated
 public class FlashcardServerSentEventHandler implements CommandQueryHandler {
 
-  private EventSource<Flashcard> eventSource;
+  private final EventSource<Flashcard> eventSource;
 
   public FlashcardServerSentEventHandler(EventSource<Flashcard> eventSource) {
     this.eventSource = eventSource;

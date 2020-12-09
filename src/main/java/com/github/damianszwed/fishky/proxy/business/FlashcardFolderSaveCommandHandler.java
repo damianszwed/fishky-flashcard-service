@@ -6,7 +6,7 @@ import com.github.damianszwed.fishky.proxy.port.CommandQueryHandler;
 import com.github.damianszwed.fishky.proxy.port.IdEncoderDecoder;
 import com.github.damianszwed.fishky.proxy.port.OwnerProvider;
 import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardFolder;
-import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardFolderStorage;
+import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardFolderService;
 import java.util.Collections;
 import java.util.Optional;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -15,15 +15,15 @@ import reactor.core.publisher.Mono;
 
 public class FlashcardFolderSaveCommandHandler implements CommandQueryHandler {
 
-  private final FlashcardFolderStorage flashcardFolderStorage;
+  private final FlashcardFolderService flashcardFolderService;
   private final IdEncoderDecoder idEncoderDecoder;
   private final OwnerProvider ownerProvider;
 
   public FlashcardFolderSaveCommandHandler(
-      FlashcardFolderStorage flashcardFolderStorage,
+      FlashcardFolderService flashcardFolderService,
       IdEncoderDecoder idEncoderDecoder,
       OwnerProvider ownerProvider) {
-    this.flashcardFolderStorage = flashcardFolderStorage;
+    this.flashcardFolderService = flashcardFolderService;
     this.idEncoderDecoder = idEncoderDecoder;
     this.ownerProvider = ownerProvider;
   }
@@ -32,8 +32,9 @@ public class FlashcardFolderSaveCommandHandler implements CommandQueryHandler {
   public Mono<ServerResponse> handle(ServerRequest serverRequest) {
     return serverRequest.bodyToMono(FlashcardFolder.class)
         .doOnNext(
-            flashcardFolder -> flashcardFolderStorage
-                .save(withIdAndOwner(flashcardFolder, serverRequest)))
+            flashcardFolder -> flashcardFolderService
+                .save(ownerProvider.provide(serverRequest),
+                    withIdAndOwner(flashcardFolder, serverRequest)))
         .flatMap(flashcard -> accepted().build());
   }
 

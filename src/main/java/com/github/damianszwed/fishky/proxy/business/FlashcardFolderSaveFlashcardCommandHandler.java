@@ -6,7 +6,7 @@ import com.github.damianszwed.fishky.proxy.port.CommandQueryHandler;
 import com.github.damianszwed.fishky.proxy.port.IdEncoderDecoder;
 import com.github.damianszwed.fishky.proxy.port.OwnerProvider;
 import com.github.damianszwed.fishky.proxy.port.flashcard.Flashcard;
-import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardFolderStorage;
+import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardFolderService;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -15,15 +15,15 @@ import reactor.core.publisher.Mono;
 
 public class FlashcardFolderSaveFlashcardCommandHandler implements CommandQueryHandler {
 
-  private final FlashcardFolderStorage flashcardFolderStorage;
+  private final FlashcardFolderService flashcardFolderService;
   private final IdEncoderDecoder idEncoderDecoder;
   private final OwnerProvider ownerProvider;
 
   public FlashcardFolderSaveFlashcardCommandHandler(
-      FlashcardFolderStorage flashcardFolderStorage,
+      FlashcardFolderService flashcardFolderService,
       IdEncoderDecoder idEncoderDecoder,
       OwnerProvider ownerProvider) {
-    this.flashcardFolderStorage = flashcardFolderStorage;
+    this.flashcardFolderService = flashcardFolderService;
     this.idEncoderDecoder = idEncoderDecoder;
     this.ownerProvider = ownerProvider;
   }
@@ -32,7 +32,8 @@ public class FlashcardFolderSaveFlashcardCommandHandler implements CommandQueryH
   public Mono<ServerResponse> handle(ServerRequest serverRequest) {
     return serverRequest.bodyToMono(Flashcard.class)
         .doOnNext(flashcardToSave ->
-            flashcardFolderStorage.getById(serverRequest.pathVariable("id"))
+            flashcardFolderService
+                .getById(ownerProvider.provide(serverRequest), serverRequest.pathVariable("id"))
                 .subscribe(flashcardFolder -> {
                   String id = idEncoderDecoder
                       .encodeId(ownerProvider.provide(serverRequest),
@@ -46,8 +47,8 @@ public class FlashcardFolderSaveFlashcardCommandHandler implements CommandQueryH
                       .id(id)
                       .build());
 
-                  flashcardFolderStorage.save(
-                      flashcardFolder.toBuilder()
+                  flashcardFolderService.save(
+                      ownerProvider.provide(serverRequest), flashcardFolder.toBuilder()
                           .flashcards(flashcardsWithOneRemoved)
                           .build()
                   );
