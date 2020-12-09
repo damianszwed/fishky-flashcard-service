@@ -4,7 +4,7 @@ import static java.util.Arrays.asList;
 
 import com.github.damianszwed.fishky.proxy.port.flashcard.Flashcard;
 import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardFolder;
-import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardFolderStorage;
+import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardFolderService;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +12,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Slf4j
-public class FlashcardFolderDevelopmentStorage implements FlashcardFolderStorage {
+public class FlashcardFolderDevelopmentStorage implements FlashcardFolderService {
 
   private List<FlashcardFolder> flashcardFolders = new ArrayList<>();
 
@@ -44,28 +44,30 @@ public class FlashcardFolderDevelopmentStorage implements FlashcardFolderStorage
   }
 
   @Override
-  public Mono<FlashcardFolder> get(String owner, String name) {
+  public Mono<FlashcardFolder> get(String owner, String flashcardFolderName) {
     return Mono.justOrEmpty(flashcardFolders.stream()
-        .filter(flashcardFolder -> flashcardFolder.getName().equals(name))
+        .filter(flashcardFolder -> flashcardFolder.getName().equals(flashcardFolderName))
         .findFirst());
   }
 
   @Override
-  public Mono<FlashcardFolder> getById(String id) {
+  public Mono<FlashcardFolder> getById(String owner, String flashcardFolderId) {
     return Mono
         .justOrEmpty(
-            flashcardFolders.stream().filter(flashcardFolder -> flashcardFolder.getId().equals(id))
+            flashcardFolders.stream().filter(flashcardFolder -> flashcardFolder.getId().equals(
+                flashcardFolderId))
                 .findFirst());
   }
 
   @Override
-  public void remove(String id) {
-    flashcardFolders.removeIf(givenFlashcardFolder -> givenFlashcardFolder.getId().equals(id));
+  public void remove(String owner, String flashcardFolderId) {
+    flashcardFolders.removeIf(givenFlashcardFolder -> givenFlashcardFolder.getId().equals(
+        flashcardFolderId));
   }
 
   @Override
-  public void save(FlashcardFolder flashcardFolder) {
-    remove(flashcardFolder.getId());
+  public void save(String owner, FlashcardFolder flashcardFolder) {
+    remove(owner, flashcardFolder.getId());
     flashcardFolders.add(flashcardFolder);
   }
 }

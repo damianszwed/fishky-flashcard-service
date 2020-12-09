@@ -3,7 +3,7 @@ package com.github.damianszwed.fishky.proxy.business;
 import com.github.damianszwed.fishky.proxy.port.EventTrigger;
 import com.github.damianszwed.fishky.proxy.port.flashcard.EventSource;
 import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardFolder;
-import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardFolderStorage;
+import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardFolderService;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
@@ -14,18 +14,18 @@ import reactor.core.publisher.FluxSink;
 @Slf4j
 public class FlashcardFolderProviderFlow implements EventSource<FlashcardFolder>, EventTrigger {
 
-  private final FlashcardFolderStorage flashcardFolderStorage;
+  private final FlashcardFolderService flashcardFolderService;
   private final Map<String, EmitterProcessor<FlashcardFolder>> emittersByOwners = new HashMap<>();
   private final Map<String, FluxSink<FlashcardFolder>> sinksByOwners = new HashMap<>();
 
-  public FlashcardFolderProviderFlow(FlashcardFolderStorage flashcardFolderStorage) {
-    this.flashcardFolderStorage = flashcardFolderStorage;
+  public FlashcardFolderProviderFlow(FlashcardFolderService flashcardFolderService) {
+    this.flashcardFolderService = flashcardFolderService;
   }
 
   @Override
   public void fireUp(String owner) {
     final FluxSink<FlashcardFolder> sink = getSink(owner);
-    flashcardFolderStorage.get(owner).subscribe(sink::next);
+    flashcardFolderService.get(owner).subscribe(sink::next);
   }
 
   @Override

@@ -3,9 +3,10 @@ package com.github.damianszwed.fishky.proxy.business;
 import static org.springframework.web.reactive.function.server.ServerResponse.accepted;
 
 import com.github.damianszwed.fishky.proxy.port.CommandQueryHandler;
+import com.github.damianszwed.fishky.proxy.port.OwnerProvider;
 import com.github.damianszwed.fishky.proxy.port.flashcard.Flashcard;
 import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardFolder;
-import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardFolderStorage;
+import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardFolderService;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -14,11 +15,14 @@ import reactor.core.publisher.Mono;
 
 public class FlashcardFolderDeleteFlashcardCommandHandler implements CommandQueryHandler {
 
-  private FlashcardFolderStorage flashcardFolderStorage;
+  private final FlashcardFolderService flashcardFolderService;
+  private final OwnerProvider ownerProvider;
 
   public FlashcardFolderDeleteFlashcardCommandHandler(
-      FlashcardFolderStorage flashcardFolderStorage) {
-    this.flashcardFolderStorage = flashcardFolderStorage;
+      FlashcardFolderService flashcardFolderService,
+      OwnerProvider ownerProvider) {
+    this.flashcardFolderService = flashcardFolderService;
+    this.ownerProvider = ownerProvider;
   }
 
   @Override
@@ -27,17 +31,19 @@ public class FlashcardFolderDeleteFlashcardCommandHandler implements CommandQuer
     String flashcardFolderId = serverRequest.pathVariable("flashcardFolderId");
     String flashcardId = serverRequest.pathVariable("flashcardId");
     return Mono.fromSupplier(() -> Void.TYPE)
-        .doOnNext((v) -> removeFlashcardFromFlashcardFolder(flashcardFolderId, flashcardId))
+        .doOnNext((v) -> removeFlashcardFromFlashcardFolder(ownerProvider.provide(serverRequest),
+            flashcardFolderId, flashcardId))
         .flatMap(p -> accepted().build());
   }
 
   private void removeFlashcardFromFlashcardFolder(
+      String owner,
       String flashcardFolderId,
       String flashcardId) {
-    flashcardFolderStorage.getById(flashcardFolderId)
+    flashcardFolderService.getById(owner, flashcardFolderId)
         .subscribe(flashcardFolder ->
-            flashcardFolderStorage.save(
-                flashcardFolder.toBuilder()
+            flashcardFolderService.save(
+                owner, flashcardFolder.toBuilder()
                     .flashcards(withRemovedParticularFlashcard(flashcardId, flashcardFolder)
                         .collect(Collectors.toList()))
                     .build()));

@@ -8,7 +8,7 @@ import com.github.damianszwed.fishky.proxy.port.IdEncoderDecoder;
 import com.github.damianszwed.fishky.proxy.port.flashcard.EventSource;
 import com.github.damianszwed.fishky.proxy.port.flashcard.Flashcard;
 import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardFolder;
-import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardFolderStorage;
+import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardFolderService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -17,8 +17,8 @@ public class BusinessConfiguration {
 
   @Bean
   FlashcardProviderFlow flashcardProviderFlow(
-      FlashcardFolderStorage flashcardFolderStorage) {
-    return new FlashcardProviderFlow(flashcardFolderStorage);
+      FlashcardFolderService flashcardFolderService) {
+    return new FlashcardProviderFlow(flashcardFolderService);
   }
 
   @Bean
@@ -28,8 +28,8 @@ public class BusinessConfiguration {
 
   @Bean
   FlashcardFolderProviderFlow flashcardFolderProviderFlow(
-      FlashcardFolderStorage flashcardFolderStorage) {
-    return new FlashcardFolderProviderFlow(flashcardFolderStorage);
+      FlashcardFolderService flashcardFolderService) {
+    return new FlashcardFolderProviderFlow(flashcardFolderService);
   }
 
   @Bean

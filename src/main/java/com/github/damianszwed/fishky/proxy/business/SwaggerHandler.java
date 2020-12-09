@@ -27,7 +27,7 @@ public class SwaggerHandler implements CommandQueryHandler {
     } catch (URISyntaxException e) {
       log.error("An error occurred while creating URI.", e);
       return status(HttpStatus.INTERNAL_SERVER_ERROR)
-          .syncBody("Error while creating swagger page.");
+          .bodyValue("Error while creating swagger page.");
     }
   }
 }
