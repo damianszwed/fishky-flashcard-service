@@ -1,13 +1,13 @@
 package com.github.damianszwed.fishky.proxy.adapter.storage.production;
 
 import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardFolder;
-import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardFolderStorage;
+import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardFolderService;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Slf4j
-public class FlashcardFolderProductionStorage implements FlashcardFolderStorage {
+public class FlashcardFolderProductionStorage implements FlashcardFolderService {
 
   private FlashcardFolderMongoRepository flashcardFolderMongoRepository;
 
@@ -22,17 +22,17 @@ public class FlashcardFolderProductionStorage implements FlashcardFolderStorage 
   }
 
   @Override
-  public Mono<FlashcardFolder> get(String owner, String name) {
-    return flashcardFolderMongoRepository.findByName(name);
+  public Mono<FlashcardFolder> get(String owner, String flashcardFolderName) {
+    return flashcardFolderMongoRepository.findByName(flashcardFolderName);
   }
 
   @Override
-  public Mono<FlashcardFolder> getById(String id) {
-    return flashcardFolderMongoRepository.findById(id);
+  public Mono<FlashcardFolder> getById(String owner, String flashcardFolderId) {
+    return flashcardFolderMongoRepository.findById(flashcardFolderId);
   }
 
   @Override
-  public void save(FlashcardFolder flashcardFolder) {
+  public void save(String owner, FlashcardFolder flashcardFolder) {
     flashcardFolderMongoRepository.save(flashcardFolder)
         .doOnError(throwable -> log.info(throwable.getMessage(), throwable))
         .subscribe(newFlashcardFikder -> log
@@ -40,9 +40,9 @@ public class FlashcardFolderProductionStorage implements FlashcardFolderStorage 
   }
 
   @Override
-  public void remove(String id) {
-    flashcardFolderMongoRepository.deleteById(id)
+  public void remove(String owner, String flashcardFolderId) {
+    flashcardFolderMongoRepository.deleteById(flashcardFolderId)
         .doOnError(throwable -> log.info(throwable.getMessage(), throwable))
-        .subscribe(o_O -> log.info("FlashcardFolder {} has been removed.", id));
+        .subscribe(o_O -> log.info("FlashcardFolder {} has been removed.", flashcardFolderId));
   }
 }

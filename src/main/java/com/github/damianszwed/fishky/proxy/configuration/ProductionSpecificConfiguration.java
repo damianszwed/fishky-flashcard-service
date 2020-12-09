@@ -4,7 +4,7 @@ import com.github.damianszwed.fishky.proxy.adapter.security.ProductionOwnerProvi
 import com.github.damianszwed.fishky.proxy.adapter.storage.production.FlashcardFolderMongoRepository;
 import com.github.damianszwed.fishky.proxy.adapter.storage.production.FlashcardFolderProductionStorage;
 import com.github.damianszwed.fishky.proxy.port.OwnerProvider;
-import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardFolderStorage;
+import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardFolderService;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +16,7 @@ import org.springframework.security.oauth2.jwt.JwtDecoders;
 public class ProductionSpecificConfiguration {
 
   @Bean
-  FlashcardFolderStorage flashcardFolderStorage(
+  FlashcardFolderService flashcardFolderStorage(
       FlashcardFolderMongoRepository flashcardFolderMongoRepository) {
     return new FlashcardFolderProductionStorage(flashcardFolderMongoRepository);
   }
