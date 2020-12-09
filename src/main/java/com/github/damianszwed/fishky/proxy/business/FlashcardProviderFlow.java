@@ -7,6 +7,7 @@ import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardFolderStorage
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.TopicProcessor;
 
+@Deprecated
 public class FlashcardProviderFlow implements EventSource<Flashcard> {
 
   private FlashcardFolderStorage flashcardFolderStorage;
