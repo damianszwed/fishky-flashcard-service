@@ -9,10 +9,12 @@ import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardFolder;
 import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardFolderService;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
+@Slf4j
 public class FlashcardFolderDeleteFlashcardCommandHandler implements CommandQueryHandler {
 
   private final FlashcardFolderService flashcardFolderService;
@@ -40,13 +42,17 @@ public class FlashcardFolderDeleteFlashcardCommandHandler implements CommandQuer
       String owner,
       String flashcardFolderId,
       String flashcardId) {
-    flashcardFolderService.getById(owner, flashcardFolderId)
+    flashcardFolderService
+        .getById(owner, flashcardFolderId)
         .subscribe(flashcardFolder ->
             flashcardFolderService.save(
-                owner, flashcardFolder.toBuilder()
+                owner,
+                flashcardFolder.toBuilder()
                     .flashcards(withRemovedParticularFlashcard(flashcardId, flashcardFolder)
                         .collect(Collectors.toList()))
-                    .build()));
+                    .build())
+                .subscribe(newFlashcardFolder ->
+                    log.info("FlashcardFolder {} has been saved.", newFlashcardFolder.getId())));
   }
 
   private Stream<Flashcard> withRemovedParticularFlashcard(
