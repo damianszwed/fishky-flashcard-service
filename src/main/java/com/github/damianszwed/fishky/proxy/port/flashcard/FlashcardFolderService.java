@@ -11,7 +11,7 @@ public interface FlashcardFolderService {
 
   Mono<FlashcardFolder> getById(String owner, String flashcardFolderId);
 
-  void save(String owner, FlashcardFolder flashcardFolder);
+  Mono<FlashcardFolder> save(String owner, FlashcardFolder flashcardFolder);
 
-  void remove(String owner, String flashcardFolderId);
+  Mono<Void> remove(String owner, String flashcardFolderId);
 }

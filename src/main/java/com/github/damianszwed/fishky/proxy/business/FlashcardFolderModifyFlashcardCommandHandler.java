@@ -9,10 +9,12 @@ import com.github.damianszwed.fishky.proxy.port.flashcard.Flashcard;
 import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardFolderService;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
+@Slf4j
 public class FlashcardFolderModifyFlashcardCommandHandler implements CommandQueryHandler {
 
   private final FlashcardFolderService flashcardFolderService;
@@ -48,8 +50,10 @@ public class FlashcardFolderModifyFlashcardCommandHandler implements CommandQuer
                   flashcardFolderService.save(
                       ownerProvider.provide(serverRequest), flashcardFolder.toBuilder()
                           .flashcards(flashcardsWithOneRemoved)
-                          .build()
-                  );
+                          .build())
+                      .subscribe(newFlashcardFolder ->
+                          log.info("FlashcardFolder {} has been saved.",
+                              newFlashcardFolder.getId()));
                 }))
         .flatMap(flashcard -> accepted().build());
   }
