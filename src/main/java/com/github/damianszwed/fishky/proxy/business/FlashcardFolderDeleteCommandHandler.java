@@ -5,10 +5,12 @@ import static org.springframework.web.reactive.function.server.ServerResponse.ac
 import com.github.damianszwed.fishky.proxy.port.CommandQueryHandler;
 import com.github.damianszwed.fishky.proxy.port.OwnerProvider;
 import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardFolderService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
+@Slf4j
 public class FlashcardFolderDeleteCommandHandler implements CommandQueryHandler {
 
   private final FlashcardFolderService flashcardFolderService;
@@ -25,7 +27,9 @@ public class FlashcardFolderDeleteCommandHandler implements CommandQueryHandler 
     //TODO(Damian.Szwed) Make sure that only owner is able to delete it's flashcard folder.
     return Mono.fromSupplier(() -> Void.TYPE)
         .doOnNext((v) -> flashcardFolderService.remove(ownerProvider.provide(serverRequest),
-            serverRequest.pathVariable("id")))
+            serverRequest.pathVariable("id"))
+            .subscribe(o_O -> log
+                .info("FlashcardFolder {} has been removed.", serverRequest.pathVariable("id"))))
         .flatMap(p -> accepted().build());
   }
 }

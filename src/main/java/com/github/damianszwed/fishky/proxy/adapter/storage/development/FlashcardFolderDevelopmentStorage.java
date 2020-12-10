@@ -60,14 +60,18 @@ public class FlashcardFolderDevelopmentStorage implements FlashcardFolderService
   }
 
   @Override
-  public void remove(String owner, String flashcardFolderId) {
-    flashcardFolders.removeIf(givenFlashcardFolder -> givenFlashcardFolder.getId().equals(
-        flashcardFolderId));
+  public Mono<Void> remove(String owner, String flashcardFolderId) {
+    return Mono.fromSupplier(() -> Void.TYPE)
+        .doOnNext((v) ->
+            flashcardFolders.removeIf(givenFlashcardFolder ->
+                givenFlashcardFolder.getId().equals(flashcardFolderId)))
+        .then();
   }
 
   @Override
-  public void save(String owner, FlashcardFolder flashcardFolder) {
-    remove(owner, flashcardFolder.getId());
-    flashcardFolders.add(flashcardFolder);
+  public Mono<FlashcardFolder> save(String owner, FlashcardFolder flashcardFolder) {
+    return remove(owner, flashcardFolder.getId())
+        .doOnTerminate(() -> flashcardFolders.add(flashcardFolder))
+        .map((v) -> flashcardFolder);
   }
 }

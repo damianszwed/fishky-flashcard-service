@@ -3,9 +3,11 @@ package com.github.damianszwed.fishky.proxy.business;
 import com.github.damianszwed.fishky.proxy.port.EventTrigger;
 import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardFolder;
 import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardFolderService;
+import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+@Slf4j
 public class FlashcardFolderEmittingStorage implements FlashcardFolderService {
 
   private final FlashcardFolderService flashcardFolderStorage;
@@ -33,14 +35,24 @@ public class FlashcardFolderEmittingStorage implements FlashcardFolderService {
   }
 
   @Override
-  public void save(String owner, FlashcardFolder flashcardFolder) {
-    flashcardFolderStorage.save(owner, flashcardFolder);
-    getAllFoldersEventTrigger.fireUp(owner);//TODO(Damian.Szwed) this for sure wont work yet
+  public Mono<FlashcardFolder> save(String owner, FlashcardFolder flashcardFolder) {
+    return flashcardFolderStorage.save(owner, flashcardFolder)
+        .doOnNext(o_O -> {
+          log.info("save folder - doOnNext -> getAllFoldersEventTrigger.fireUp(owner)");
+          getAllFoldersEventTrigger.fireUp(owner);
+        });
   }
 
   @Override
-  public void remove(String owner, String flashcardFolderId) {
-    flashcardFolderStorage.remove(owner, flashcardFolderId);
-    getAllFoldersEventTrigger.fireUp(owner);//TODO(Damian.Szwed) this for sure wont work yet
+  public Mono<Void> remove(String owner, String flashcardFolderId) {
+    return flashcardFolderStorage.remove(owner, flashcardFolderId)
+        .doOnNext(o_O -> {
+          log.info("remove folder - doOnNext -> getAllFoldersEventTrigger.fireUp(owner)");
+          getAllFoldersEventTrigger.fireUp(owner);
+        })
+        .doOnTerminate(() -> {
+          log.info("remove folder - doOnTerminate -> getAllFoldersEventTrigger.fireUp(owner)");
+          getAllFoldersEventTrigger.fireUp(owner);
+        });
   }
 }

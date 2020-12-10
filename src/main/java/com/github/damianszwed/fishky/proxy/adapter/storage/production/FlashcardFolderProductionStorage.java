@@ -32,17 +32,14 @@ public class FlashcardFolderProductionStorage implements FlashcardFolderService 
   }
 
   @Override
-  public void save(String owner, FlashcardFolder flashcardFolder) {
-    flashcardFolderMongoRepository.save(flashcardFolder)
-        .doOnError(throwable -> log.info(throwable.getMessage(), throwable))
-        .subscribe(newFlashcardFikder -> log
-            .info("FlashcardFolder {} has been saved.", newFlashcardFikder.getId()));
+  public Mono<FlashcardFolder> save(String owner, FlashcardFolder flashcardFolder) {
+    return flashcardFolderMongoRepository.save(flashcardFolder)
+        .doOnError(throwable -> log.info(throwable.getMessage(), throwable));
   }
 
   @Override
-  public void remove(String owner, String flashcardFolderId) {
-    flashcardFolderMongoRepository.deleteById(flashcardFolderId)
-        .doOnError(throwable -> log.info(throwable.getMessage(), throwable))
-        .subscribe(o_O -> log.info("FlashcardFolder {} has been removed.", flashcardFolderId));
+  public Mono<Void> remove(String owner, String flashcardFolderId) {
+    return flashcardFolderMongoRepository.deleteById(flashcardFolderId)
+        .doOnError(throwable -> log.info(throwable.getMessage(), throwable));
   }
 }
