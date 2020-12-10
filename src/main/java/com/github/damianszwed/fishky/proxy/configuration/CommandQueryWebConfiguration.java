@@ -90,7 +90,9 @@ public class CommandQueryWebConfiguration {
   public CommandQueryHandler flashcardFolderGetAllFlashcardsQueryHandler(
       FlashcardFolderService flashcardFolderEmittingStorage,
       OwnerProvider ownerProvider) {
-    return new FlashcardFolderGetAllFlashcardsQueryHandler(flashcardFolderEmittingStorage, ownerProvider);
+    return new FlashcardFolderGetAllFlashcardsQueryHandler(
+        flashcardFolderEmittingStorage,
+        ownerProvider);
   }
 
   @Bean
@@ -119,7 +121,9 @@ public class CommandQueryWebConfiguration {
   public CommandQueryHandler flashcardFolderDeleteFlashcardCommandHandler(
       FlashcardFolderService flashcardFolderEmittingStorage,
       OwnerProvider ownerProvider) {
-    return new FlashcardFolderDeleteFlashcardCommandHandler(flashcardFolderEmittingStorage, ownerProvider);
+    return new FlashcardFolderDeleteFlashcardCommandHandler(
+        flashcardFolderEmittingStorage,
+        ownerProvider);
   }
 
   @Bean
