@@ -66,60 +66,60 @@ public class CommandQueryWebConfiguration {
 
   @Bean
   public CommandQueryHandler flashcardFolderGetAllQueryHandler(
-      FlashcardFolderService flashcardFolderService, OwnerProvider ownerProvider) {
-    return new FlashcardFolderGetAllQueryHandler(flashcardFolderService, ownerProvider);
+      FlashcardFolderService flashcardFolderEmittingStorage, OwnerProvider ownerProvider) {
+    return new FlashcardFolderGetAllQueryHandler(flashcardFolderEmittingStorage, ownerProvider);
   }
 
   @Bean
   public CommandQueryHandler flashcardFolderSaveCommandHandler(
-      FlashcardFolderService flashcardFolderService,
+      FlashcardFolderService flashcardFolderEmittingStorage,
       IdEncoderDecoder idEncoderDecoder,
       OwnerProvider ownerProvider) {
-    return new FlashcardFolderSaveCommandHandler(flashcardFolderService, idEncoderDecoder,
+    return new FlashcardFolderSaveCommandHandler(flashcardFolderEmittingStorage, idEncoderDecoder,
         ownerProvider);
   }
 
   @Bean
   public CommandQueryHandler flashcardFolderDeleteCommandHandler(
-      FlashcardFolderService flashcardFolderService,
+      FlashcardFolderService flashcardFolderEmittingStorage,
       OwnerProvider ownerProvider) {
-    return new FlashcardFolderDeleteCommandHandler(flashcardFolderService, ownerProvider);
+    return new FlashcardFolderDeleteCommandHandler(flashcardFolderEmittingStorage, ownerProvider);
   }
 
   @Bean
   public CommandQueryHandler flashcardFolderGetAllFlashcardsQueryHandler(
-      FlashcardFolderService flashcardFolderService,
+      FlashcardFolderService flashcardFolderEmittingStorage,
       OwnerProvider ownerProvider) {
-    return new FlashcardFolderGetAllFlashcardsQueryHandler(flashcardFolderService, ownerProvider);
+    return new FlashcardFolderGetAllFlashcardsQueryHandler(flashcardFolderEmittingStorage, ownerProvider);
   }
 
   @Bean
   public CommandQueryHandler flashcardFolderSaveFlashcardCommandHandler(
-      FlashcardFolderService flashcardFolderService,
+      FlashcardFolderService flashcardFolderEmittingStorage,
       IdEncoderDecoder idEncoderDecoder,
       OwnerProvider ownerProvider) {
     return new FlashcardFolderSaveFlashcardCommandHandler(
-        flashcardFolderService,
+        flashcardFolderEmittingStorage,
         idEncoderDecoder,
         ownerProvider);
   }
 
   @Bean
   public CommandQueryHandler flashcardFolderModifyFlashcardCommandHandler(
-      FlashcardFolderService flashcardFolderService,
+      FlashcardFolderService flashcardFolderEmittingStorage,
       IdEncoderDecoder idEncoderDecoder,
       OwnerProvider ownerProvider) {
     return new FlashcardFolderModifyFlashcardCommandHandler(
-        flashcardFolderService,
+        flashcardFolderEmittingStorage,
         idEncoderDecoder,
         ownerProvider);
   }
 
   @Bean
   public CommandQueryHandler flashcardFolderDeleteFlashcardCommandHandler(
-      FlashcardFolderService flashcardFolderService,
+      FlashcardFolderService flashcardFolderEmittingStorage,
       OwnerProvider ownerProvider) {
-    return new FlashcardFolderDeleteFlashcardCommandHandler(flashcardFolderService, ownerProvider);
+    return new FlashcardFolderDeleteFlashcardCommandHandler(flashcardFolderEmittingStorage, ownerProvider);
   }
 
   @Bean
