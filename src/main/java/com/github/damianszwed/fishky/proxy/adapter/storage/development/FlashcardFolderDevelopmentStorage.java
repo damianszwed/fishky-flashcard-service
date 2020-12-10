@@ -72,6 +72,6 @@ public class FlashcardFolderDevelopmentStorage implements FlashcardFolderService
   public Mono<FlashcardFolder> save(String owner, FlashcardFolder flashcardFolder) {
     return remove(owner, flashcardFolder.getId())
         .doOnTerminate(() -> flashcardFolders.add(flashcardFolder))
-        .map((v) -> flashcardFolder);
+        .then(Mono.just(flashcardFolder));
   }
 }

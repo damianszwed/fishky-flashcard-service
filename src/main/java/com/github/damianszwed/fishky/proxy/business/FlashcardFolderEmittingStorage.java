@@ -46,10 +46,6 @@ public class FlashcardFolderEmittingStorage implements FlashcardFolderService {
   @Override
   public Mono<Void> remove(String owner, String flashcardFolderId) {
     return flashcardFolderStorage.remove(owner, flashcardFolderId)
-        .doOnNext(o_O -> {
-          log.info("remove folder - doOnNext -> getAllFoldersEventTrigger.fireUp(owner)");
-          getAllFoldersEventTrigger.fireUp(owner);
-        })
         .doOnTerminate(() -> {
           log.info("remove folder - doOnTerminate -> getAllFoldersEventTrigger.fireUp(owner)");
           getAllFoldersEventTrigger.fireUp(owner);
