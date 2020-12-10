@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: fishky-proxy
-        image: damianiero/fishky-proxy:0.9.3
+        image: damianiero/fishky-proxy:0.9.4
         env:
         - name: GET_HOSTS_FROM
           value: dns

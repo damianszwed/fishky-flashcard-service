@@ -1,6 +1,7 @@
 package com.github.damianszwed.fishky.proxy.configuration;
 
 import com.github.damianszwed.fishky.proxy.adapter.Base64IdEncoderDecoder;
+import com.github.damianszwed.fishky.proxy.business.FlashcardFolderEmittingStorage;
 import com.github.damianszwed.fishky.proxy.business.FlashcardFolderProviderFlow;
 import com.github.damianszwed.fishky.proxy.business.FlashcardProviderFlow;
 import com.github.damianszwed.fishky.proxy.port.EventTrigger;
@@ -17,8 +18,8 @@ public class BusinessConfiguration {
 
   @Bean
   FlashcardProviderFlow flashcardProviderFlow(
-      FlashcardFolderService flashcardFolderService) {
-    return new FlashcardProviderFlow(flashcardFolderService);
+      FlashcardFolderService flashcardFolderStorage) {
+    return new FlashcardProviderFlow(flashcardFolderStorage);
   }
 
   @Bean
@@ -28,8 +29,8 @@ public class BusinessConfiguration {
 
   @Bean
   FlashcardFolderProviderFlow flashcardFolderProviderFlow(
-      FlashcardFolderService flashcardFolderService) {
-    return new FlashcardFolderProviderFlow(flashcardFolderService);
+      FlashcardFolderService flashcardFolderStorage) {
+    return new FlashcardFolderProviderFlow(flashcardFolderStorage);
   }
 
   @Bean
@@ -46,5 +47,12 @@ public class BusinessConfiguration {
   @Bean
   IdEncoderDecoder idEncoderDecoder() {
     return new Base64IdEncoderDecoder();
+  }
+
+  @Bean
+  FlashcardFolderService flashcardFolderEmittingStorage(
+      FlashcardFolderService flashcardFolderStorage,
+      EventTrigger getAllFoldersEventTrigger) {
+    return new FlashcardFolderEmittingStorage(flashcardFolderStorage, getAllFoldersEventTrigger);
   }
 }
