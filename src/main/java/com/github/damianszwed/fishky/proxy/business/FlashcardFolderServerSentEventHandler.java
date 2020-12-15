@@ -7,6 +7,7 @@ import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardFolder;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public class FlashcardFolderServerSentEventHandler implements CommandQueryHandler {
@@ -24,9 +25,9 @@ public class FlashcardFolderServerSentEventHandler implements CommandQueryHandle
   @Override
   public Mono<ServerResponse> handle(ServerRequest serverRequest) {
     return ServerResponse.ok()
-        .contentType(MediaType.APPLICATION_STREAM_JSON)
+        .contentType(MediaType.TEXT_EVENT_STREAM)
         .body(flashcardFoldersEventSource.getFlux(ownerProvider.provide(serverRequest)),
-            FlashcardFolder.class);
+            Flux.class);
   }
 
 }

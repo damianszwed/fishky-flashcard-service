@@ -28,14 +28,15 @@ public class FlashcardFolderProviderFlow implements EventSource<FlashcardFolder>
     flashcardFolderService.get(owner).subscribe(sink::next);
   }
 
-  @Override
-  public Flux<FlashcardFolder> getFlux(String owner) {
-    return getProcessor(owner);
-  }
-
   private FluxSink<FlashcardFolder> getSink(String owner) {
     final EmitterProcessor<FlashcardFolder> processor = getProcessor(owner);
     return sinksByOwners.computeIfAbsent(owner, o_O -> processor.sink());
+  }
+
+  @Override
+  public Flux<FlashcardFolder> getFlux(String owner) {
+    log.info("Owner {} gets SSE.", owner);
+    return getProcessor(owner);
   }
 
   private EmitterProcessor<FlashcardFolder> getProcessor(String owner) {
@@ -44,7 +45,7 @@ public class FlashcardFolderProviderFlow implements EventSource<FlashcardFolder>
   }
 
   private static EmitterProcessor<FlashcardFolder> createEmitterProcessor(String o_O) {
-    return EmitterProcessor.create();
+    return EmitterProcessor.create(false);
   }
 
 }
