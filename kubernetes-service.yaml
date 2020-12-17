@@ -2,6 +2,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: fishky-proxy-service
+  annotations:
+    cloud.google.com/backend-config: '{"ports": {"30508":"fishky-proxy-backend-config"}}'
   labels:
     app: fishky-proxy
     tier: backend
