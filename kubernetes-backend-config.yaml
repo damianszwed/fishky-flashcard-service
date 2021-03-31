@@ -5,3 +5,5 @@ metadata:
 spec:
   #This config has to be applied so GCP will not interrupt SSE connections.
   timeoutSec: 215999
+  sessionAffinity:
+    affinityType: "CLIENT_IP"
