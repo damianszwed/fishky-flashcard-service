@@ -9,7 +9,7 @@ metadata:
     tier: backend
 spec:
   type: LoadBalancer
-  #sessionAffinity: ClientIP # It will not work, because Ingress is used.
+  #sessionAffinity: ClientIP # It will not work, because Ingress is used. See kubernetes-backend-config.yaml
   ports:
   - port: 30508
     protocol: TCP
