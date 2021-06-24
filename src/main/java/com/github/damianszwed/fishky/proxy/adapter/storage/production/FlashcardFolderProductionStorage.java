@@ -9,7 +9,7 @@ import reactor.core.publisher.Mono;
 @Slf4j
 public class FlashcardFolderProductionStorage implements FlashcardFolderService {
 
-  private FlashcardFolderMongoRepository flashcardFolderMongoRepository;
+  private final FlashcardFolderMongoRepository flashcardFolderMongoRepository;
 
   public FlashcardFolderProductionStorage(
       FlashcardFolderMongoRepository flashcardFolderMongoRepository) {
