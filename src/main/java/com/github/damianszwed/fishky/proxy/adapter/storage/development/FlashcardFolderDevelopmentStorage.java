@@ -1,6 +1,7 @@
 package com.github.damianszwed.fishky.proxy.adapter.storage.development;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 
 import com.github.damianszwed.fishky.proxy.port.flashcard.Flashcard;
 import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardFolder;
@@ -14,7 +15,7 @@ import reactor.core.publisher.Mono;
 @Slf4j
 public class FlashcardFolderDevelopmentStorage implements FlashcardFolderService {
 
-  private List<FlashcardFolder> flashcardFolders = new ArrayList<>();
+  private final List<FlashcardFolder> flashcardFolders = new ArrayList<>();
 
   public FlashcardFolderDevelopmentStorage() {
     flashcardFolders.add(FlashcardFolder.builder()
@@ -25,15 +26,15 @@ public class FlashcardFolderDevelopmentStorage implements FlashcardFolderService
             Flashcard.builder()
                 .id("dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25h")//user1@example.com-questiona
                 .question("questionA")
-                .answer("answerA").build(),
+                .answers(singletonList("answerA")).build(),
             Flashcard.builder()
                 .id("dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25i")//user1@example.com-questionb
                 .question("questionB")
-                .answer("answerB").build(),
+                .answers(singletonList("answerB")).build(),
             Flashcard.builder()
                 .id("dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25j")//user1@example.com-questionc
                 .question("questionC")
-                .answer("answerC").build()
+                .answers(singletonList("answerC")).build()
         ))
         .build());
   }
