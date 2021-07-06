@@ -16,7 +16,7 @@ public class CorsFilterConfiguration {
   public CorsWebFilter corsWebFilter(SecurityProperties securityProperties) {
     CorsConfiguration corsConfig = new CorsConfiguration();
     corsConfig.setAllowedHeaders(securityProperties.getCors().getAllowedHeaders());
-    corsConfig.setAllowedOrigins(securityProperties.getCors().getAllowedOrigins());
+    corsConfig.setAllowedOriginPatterns(securityProperties.getCors().getAllowedOrigins());
     corsConfig
         .setAllowedMethods(
             EnumSet.allOf(HttpMethod.class).stream().map(Enum::name).collect(Collectors.toList()));
