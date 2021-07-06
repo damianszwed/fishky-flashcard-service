@@ -14,16 +14,7 @@ public interface Student {
 
   void commandsForAllFlashcardFolders();
 
-  @Deprecated
-  void commandsForAllFlashcards();
-
   void isListeningOnFlashcardFolders();
 
-  @Deprecated
-  void isListeningOnFlashcards();
-
   void isNotifiedAboutAllFlashcardFolders();
-
-  @Deprecated
-  void isNotifiedAboutAllFlashcards();
 }

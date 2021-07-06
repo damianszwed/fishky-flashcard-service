@@ -93,16 +93,6 @@ class FishkyProxyServiceTest {
   }
 
   @Test
-  @DisplayName("Service should notify about all flashcards on demand.")
-  void shouldNotifyAboutAllFlashcardsWhenCommandsForAllFlashcards() {
-    fishkyProxyDriver.with(context -> {
-      context.given().student().isListeningOnFlashcards();
-      context.when().student().commandsForAllFlashcards();
-      context.then().student().isNotifiedAboutAllFlashcards();
-    });
-  }
-
-  @Test
   @DisplayName("Service should notify about all flashcard folders on demand.")
   void shouldNotifyAboutAllFlashcardFoldersWhenCommandsForAllFlashcardFolders() {
     fishkyProxyDriver.with(context -> {

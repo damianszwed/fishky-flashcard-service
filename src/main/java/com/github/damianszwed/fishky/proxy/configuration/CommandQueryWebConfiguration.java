@@ -17,16 +17,12 @@ import com.github.damianszwed.fishky.proxy.business.FlashcardFolderProviderFlow;
 import com.github.damianszwed.fishky.proxy.business.FlashcardFolderSaveCommandHandler;
 import com.github.damianszwed.fishky.proxy.business.FlashcardFolderSaveFlashcardCommandHandler;
 import com.github.damianszwed.fishky.proxy.business.FlashcardFolderServerSentEventHandler;
-import com.github.damianszwed.fishky.proxy.business.FlashcardGetAllCommandHandler;
-import com.github.damianszwed.fishky.proxy.business.FlashcardProviderFlow;
-import com.github.damianszwed.fishky.proxy.business.FlashcardServerSentEventHandler;
 import com.github.damianszwed.fishky.proxy.business.HealthCheckHandler;
 import com.github.damianszwed.fishky.proxy.business.SwaggerHandler;
 import com.github.damianszwed.fishky.proxy.port.CommandQueryHandler;
 import com.github.damianszwed.fishky.proxy.port.IdEncoderDecoder;
 import com.github.damianszwed.fishky.proxy.port.OwnerProvider;
 import com.github.damianszwed.fishky.proxy.port.flashcard.EventSource;
-import com.github.damianszwed.fishky.proxy.port.flashcard.Flashcard;
 import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardFolder;
 import com.github.damianszwed.fishky.proxy.port.flashcard.FlashcardFolderService;
 import org.springframework.context.annotation.Bean;
@@ -38,17 +34,6 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 
 @Configuration
 public class CommandQueryWebConfiguration {
-
-  @Bean
-  public CommandQueryHandler flashcardGetAllCommandHandler(
-      FlashcardProviderFlow flashcardProviderFlow) {
-    return new FlashcardGetAllCommandHandler(flashcardProviderFlow);
-  }
-
-  @Bean
-  public CommandQueryHandler flashcardServerSentEventHandler(EventSource<Flashcard> eventSource) {
-    return new FlashcardServerSentEventHandler(eventSource);
-  }
 
   @Bean
   public CommandQueryHandler flashcardFolderGetAllCommandHandler(
@@ -161,14 +146,10 @@ public class CommandQueryWebConfiguration {
 
   @Bean
   public RouterFunction<ServerResponse> sseRoutes(
-      CommandQueryHandler flashcardGetAllCommandHandler,
-      CommandQueryHandler flashcardServerSentEventHandler,
       CommandQueryHandler flashcardFolderGetAllCommandHandler,
       CommandQueryHandler flashcardFolderServerSentEventHandler) {
-    return route(GET("/getAllFlashcardsCommand"), flashcardGetAllCommandHandler::handle)
-        .andRoute(GET("/flashcardsEventStream"), flashcardServerSentEventHandler::handle)
-        .andRoute(GET("/getAllFlashcardFoldersCommand"),
-            flashcardFolderGetAllCommandHandler::handle)
+    return route(GET("/getAllFlashcardFoldersCommand"),
+        flashcardFolderGetAllCommandHandler::handle)
         .andRoute(GET("/flashcardFoldersEventStream"),
             flashcardFolderServerSentEventHandler::handle);
   }
