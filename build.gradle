@@ -18,6 +18,7 @@ plugins {
 }
 
 ext {
+    //TODO(Damian.Szwed) Should I use set()?
     junitPlatformVersion = '1.6.2'
     junitJupiterVersion = '5.6.2'
     mockitoVersion = '3.3.3'
@@ -28,7 +29,8 @@ ext {
 group = 'com.github.damianszwed'
 
 jar {
-    archiveBaseName.set('fishky-proxy')
+    //TODO(Damian.Szwed) Is below line needed at all?
+    archiveBaseName.set('fishky-flashcard-service')
     enabled = false
     archiveClassifier.set('')
 }
@@ -92,7 +94,7 @@ dependencies {
 
 task updateVersion {
     doLast {
-        ant.replaceregexp(match: 'image: damianiero/fishky-proxy:(.*)', replace: "image: damianiero/fishky-proxy:${version}", flags: 'g', byline: true) {
+        ant.replaceregexp(match: 'image: damianiero/fishky-flashcard-service:(.*)', replace: "image: damianiero/fishky-flashcard-service:${version}", flags: 'g', byline: true) {
             fileset(dir: '.', includes: 'kubernetes-deployment.yaml')
         }
     }
@@ -107,12 +109,12 @@ task kubernetesService(type: Exec) {
 }
 
 task tagDockerImage(type: Exec) {
-    commandLine 'docker', 'tag', "fishky-proxy:${version}", "damianiero/fishky-proxy:${version}"
+    commandLine 'docker', 'tag', "fishky-flashcard-service:${version}", "damianiero/fishky-flashcard-service:${version}"
 }
 
 task pushDockerImage(type: Exec) {
     dependsOn tagDockerImage
-    commandLine 'docker', 'push', "damianiero/fishky-proxy:${version}"
+    commandLine 'docker', 'push', "damianiero/fishky-flashcard-service:${version}"
 }
 
 task deployByKubernetes {
