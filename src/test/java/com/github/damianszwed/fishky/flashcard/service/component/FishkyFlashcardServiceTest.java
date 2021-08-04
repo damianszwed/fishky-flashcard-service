@@ -1,6 +1,6 @@
 package com.github.damianszwed.fishky.flashcard.service.component;
 
-import com.github.damianszwed.fishky.flashcard.service.component.driver.FishkyProxyDriver;
+import com.github.damianszwed.fishky.flashcard.service.component.driver.FishkyFlashcardServiceDriver;
 import com.github.damianszwed.fishky.flashcard.service.component.driver.SpringTestConfiguration;
 import com.github.damianszwed.fishky.flashcard.service.configuration.BusinessConfiguration;
 import com.github.damianszwed.fishky.flashcard.service.configuration.CommandQueryWebConfiguration;
@@ -31,17 +31,17 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
     ReactiveOAuth2ResourceServerAutoConfiguration.class
 })
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-@DisplayName("Fishky proxy service")
+@DisplayName("Fishky flashcard service")
 @ActiveProfiles("development")
-class FishkyProxyServiceTest {
+class FishkyFlashcardServiceTest {
 
   @Autowired
-  private FishkyProxyDriver fishkyProxyDriver;
+  private FishkyFlashcardServiceDriver fishkyFlashcardServiceDriver;
 
   @Test
   @DisplayName("Service should return all flashcard folders on query.")
   void shouldReturnAllFlashcardFolders() {
-    fishkyProxyDriver.with(context -> {
+    fishkyFlashcardServiceDriver.with(context -> {
       context.when().student().queriesForFlashcardFolders();
       context.then().student().receivesFlashcardFolders(
           OutputSamples.FLASHCARD_FOLDERS
@@ -52,7 +52,7 @@ class FishkyProxyServiceTest {
   @Test
   @DisplayName("Service should save flashcard in particular folder on demand.")
   void shouldSaveFlashcardInParticularFolder() {
-    fishkyProxyDriver.with(context -> {
+    fishkyFlashcardServiceDriver.with(context -> {
       context.when().student()
           .savesFlashcardInFolder(InputSamples.NEW_FLASHCARD, InputSamples.FLASHCARD_FOLDER_ID);
       context.when().student().queriesForFlashcardFolders();
@@ -65,7 +65,7 @@ class FishkyProxyServiceTest {
   @Test
   @DisplayName("Service should modify flashcard on demand from particular folder.")
   void shouldModifyFlashcardInParticularFolder() {
-    fishkyProxyDriver.with(context -> {
+    fishkyFlashcardServiceDriver.with(context -> {
       context.when().student()
           .modifiesFlashcardInFolder(
               InputSamples.MODIFIED_FLASHCARD,
@@ -80,7 +80,7 @@ class FishkyProxyServiceTest {
   @Test
   @DisplayName("Service should delete flashcard on demand from particular folder.")
   void shouldDeleteFlashcardFromParticularFolder() {
-    fishkyProxyDriver.with(context -> {
+    fishkyFlashcardServiceDriver.with(context -> {
       context.when().student()
           .deletesFlashcardFromFolder(
               InputSamples.EXISTING_FLASHCARD_ID,
@@ -95,7 +95,7 @@ class FishkyProxyServiceTest {
   @Test
   @DisplayName("Service should notify about all flashcard folders on demand.")
   void shouldNotifyAboutAllFlashcardFoldersWhenCommandsForAllFlashcardFolders() {
-    fishkyProxyDriver.with(context -> {
+    fishkyFlashcardServiceDriver.with(context -> {
       context.given().student().isListeningOnFlashcardFolders();
       context.when().student().commandsForAllFlashcardFolders();
       context.then().student().isNotifiedAboutAllFlashcardFolders();

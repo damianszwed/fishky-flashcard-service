@@ -10,10 +10,10 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 public class SpringTestConfiguration {
 
   @Bean
-  FishkyProxyDriver fishkyProxyDriver(
+  FishkyFlashcardServiceDriver fishkyFlashcardServiceDriver(
       WebTestClient webTestClient,
       EventSource<FlashcardFolder> flashcardFoldersEventSource) {
-    return new FishkyProxyDriver(webTestClient, flashcardFoldersEventSource);
+    return new FishkyFlashcardServiceDriver(webTestClient, flashcardFoldersEventSource);
   }
 
 }
