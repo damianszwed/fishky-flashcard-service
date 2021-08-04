@@ -10,14 +10,14 @@ import org.springframework.test.web.reactive.server.WebTestClient.ResponseSpec;
 import reactor.test.StepVerifier;
 import reactor.test.StepVerifier.Step;
 
-public class FishkyProxyDriver {
+public class FishkyFlashcardServiceDriver {
 
   private final WebTestClient webTestClient;
   private final EventSource<FlashcardFolder> flashcardFoldersEventSource;
   private final Student student;
 
-  FishkyProxyDriver(WebTestClient webTestClient,
-      EventSource<FlashcardFolder> flashcardFoldersEventSource) {
+  FishkyFlashcardServiceDriver(WebTestClient webTestClient,
+                               EventSource<FlashcardFolder> flashcardFoldersEventSource) {
     this.webTestClient = webTestClient;
     this.flashcardFoldersEventSource = flashcardFoldersEventSource;
     this.student = createStudent();

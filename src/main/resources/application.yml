@@ -5,6 +5,6 @@ logging:
 
 spring:
   application:
-    name: fishky-proxy
+    name: fishky-flashcard-service
   profiles:
     active: development
