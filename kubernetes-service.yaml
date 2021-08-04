@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: fishky-proxy-service
+  name: fishky-flashcard-service
   annotations:
-    cloud.google.com/backend-config: '{"ports": {"30508":"fishky-proxy-backend-config"}}'
+    cloud.google.com/backend-config: '{"ports": {"30508":"fishky-flashcard-service-backend-config"}}'
   labels:
-    app: fishky-proxy
+    app: fishky-flashcard-service
     tier: backend
 spec:
   type: LoadBalancer
@@ -15,5 +15,5 @@ spec:
     protocol: TCP
     targetPort: 8080
   selector:
-    app: fishky-proxy
+    app: fishky-flashcard-service
     tier: backend

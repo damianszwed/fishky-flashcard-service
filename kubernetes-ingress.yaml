@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: fishky-proxy-ingress
+  name: fishky-flashcard-service-ingress
   annotations:
     #gcloud compute addresses create api-fishky-pl --global
     #gcloud compute addresses describe api-fishky-pl --global
@@ -9,5 +9,5 @@ metadata:
     networking.gke.io/managed-certificates: fishky-managed-certificate
 spec:
   backend:
-    serviceName: fishky-proxy-service
+    serviceName: fishky-flashcard-service
     servicePort: 30508
