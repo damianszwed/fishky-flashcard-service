@@ -1,29 +1,29 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: fishky-proxy
+  name: fishky-flashcard-service
 spec:
   selector:
     matchLabels:
-      app: fishky-proxy
+      app: fishky-flashcard-service
       tier: backend
   replicas: 3
   template:
     metadata:
       labels:
-        app: fishky-proxy
+        app: fishky-flashcard-service
         tier: backend
     spec:
       containers:
-      - name: fishky-proxy
-        image: damianiero/fishky-proxy:0.11.1
+      - name: fishky-flashcard-service
+        image: damianiero/fishky-flashcard-service:0.12.0
         env:
         - name: GET_HOSTS_FROM
           value: dns
         - name: MONGODB-URI
           valueFrom:
             secretKeyRef:
-              name: fishky-proxy-secret
+              name: fishky-mongo-secret
               key: mongodb.uri
         ports:
         - containerPort: 8080
