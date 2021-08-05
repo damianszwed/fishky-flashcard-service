@@ -6,6 +6,7 @@ import com.github.damianszwed.fishky.flashcard.service.configuration.BusinessCon
 import com.github.damianszwed.fishky.flashcard.service.configuration.CommandQueryWebConfiguration;
 import com.github.damianszwed.fishky.flashcard.service.configuration.DevelopmentSpecificConfiguration;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.boot.autoconfigure.security.oauth2.resource.reactive.
 import org.springframework.boot.autoconfigure.security.reactive.ReactiveSecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.reactive.ReactiveUserDetailsServiceAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -93,12 +95,23 @@ class FishkyFlashcardServiceTest {
   }
 
   @Test
+  @Tag("SSE")
   @DisplayName("Service should notify about all flashcard folders on demand.")
   void shouldNotifyAboutAllFlashcardFoldersWhenCommandsForAllFlashcardFolders() {
     fishkyFlashcardServiceDriver.with(context -> {
       context.given().student().isListeningOnFlashcardFolders();
       context.when().student().commandsForAllFlashcardFolders();
       context.then().student().isNotifiedAboutAllFlashcardFolders();
+    });
+  }
+
+  @Test
+  @Tag("Validation")
+  @DisplayName("Service should not allow to create a folder with empty name.")
+  void shouldNotAllowToCreateAFolderWithEmptyName() {
+    fishkyFlashcardServiceDriver.with(context -> {
+      context.when().student().createsFolder(InputSamples.FLASHCARD_FOLDER_WITH_EMPTY_NAME);
+      context.then().student().receivesAnError(HttpStatus.BAD_REQUEST);
     });
   }
 }
