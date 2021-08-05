@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.EventSource;
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolder;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.test.web.reactive.server.WebTestClient.ResponseSpec;
@@ -114,6 +115,22 @@ public class FishkyFlashcardServiceDriver {
     @Override
     public void isNotifiedAboutAllFlashcardFolders() {
       step.thenCancel().verify();
+    }
+
+    @Override
+    public void createsFolder(String flashcardFolder) {
+      response = webTestClient
+              .post()
+              .uri("/flashcardFolders")
+              .accept(MediaType.APPLICATION_JSON)
+              .contentType(MediaType.APPLICATION_JSON)
+              .bodyValue(flashcardFolder)
+              .exchange();
+    }
+
+    @Override
+    public void receivesAnError(HttpStatus status) {
+      response.expectStatus().isEqualTo(status);
     }
   }
 }
