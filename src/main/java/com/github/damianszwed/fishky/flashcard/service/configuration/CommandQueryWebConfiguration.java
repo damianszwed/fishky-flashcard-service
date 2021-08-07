@@ -19,12 +19,14 @@ import com.github.damianszwed.fishky.flashcard.service.business.FlashcardFolderS
 import com.github.damianszwed.fishky.flashcard.service.business.FlashcardFolderServerSentEventHandler;
 import com.github.damianszwed.fishky.flashcard.service.business.HealthCheckHandler;
 import com.github.damianszwed.fishky.flashcard.service.business.SwaggerHandler;
+import com.github.damianszwed.fishky.flashcard.service.business.ValidatorRequestHandler;
 import com.github.damianszwed.fishky.flashcard.service.port.CommandQueryHandler;
 import com.github.damianszwed.fishky.flashcard.service.port.IdEncoderDecoder;
 import com.github.damianszwed.fishky.flashcard.service.port.OwnerProvider;
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.EventSource;
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolder;
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderService;
+import javax.validation.Validator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -34,6 +36,11 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 
 @Configuration
 public class CommandQueryWebConfiguration {
+
+  @Bean
+  public ValidatorRequestHandler validatorRequestHandler(Validator validator) {
+    return new ValidatorRequestHandler(validator);
+  }
 
   @Bean
   public CommandQueryHandler flashcardFolderGetAllCommandHandler(
@@ -59,9 +66,10 @@ public class CommandQueryWebConfiguration {
   public CommandQueryHandler flashcardFolderSaveCommandHandler(
       FlashcardFolderService flashcardFolderEmittingStorage,
       IdEncoderDecoder idEncoderDecoder,
-      OwnerProvider ownerProvider) {
+      OwnerProvider ownerProvider,
+      ValidatorRequestHandler validatorRequestHandler) {
     return new FlashcardFolderSaveCommandHandler(flashcardFolderEmittingStorage, idEncoderDecoder,
-        ownerProvider);
+        ownerProvider, validatorRequestHandler);
   }
 
   @Bean
