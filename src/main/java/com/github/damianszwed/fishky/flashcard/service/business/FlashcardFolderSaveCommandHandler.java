@@ -20,26 +20,34 @@ public class FlashcardFolderSaveCommandHandler implements CommandQueryHandler {
   private final FlashcardFolderService flashcardFolderService;
   private final IdEncoderDecoder idEncoderDecoder;
   private final OwnerProvider ownerProvider;
+  private final ValidatorRequestHandler validatorRequestHandler;
 
   public FlashcardFolderSaveCommandHandler(
       FlashcardFolderService flashcardFolderService,
       IdEncoderDecoder idEncoderDecoder,
-      OwnerProvider ownerProvider) {
+      OwnerProvider ownerProvider,
+      ValidatorRequestHandler validatorRequestHandler) {
     this.flashcardFolderService = flashcardFolderService;
     this.idEncoderDecoder = idEncoderDecoder;
     this.ownerProvider = ownerProvider;
+    this.validatorRequestHandler = validatorRequestHandler;
   }
 
   @Override
   public Mono<ServerResponse> handle(ServerRequest serverRequest) {
-    return serverRequest.bodyToMono(FlashcardFolder.class)
-        .doOnNext(
-            flashcardFolder -> flashcardFolderService
-                .save(ownerProvider.provide(serverRequest),
-                    withIdAndOwner(flashcardFolder, serverRequest))
-                .subscribe(newFlashcardFolder ->
-                    log.info("FlashcardFolder {} has been saved.", newFlashcardFolder.getId())))
-        .flatMap(flashcard -> accepted().build());
+    return validatorRequestHandler
+        .requireValidBody(
+            mono -> mono.doOnNext(
+                flashcardFolder -> flashcardFolderService
+                    .save(ownerProvider.provide(serverRequest),
+                        withIdAndOwner(flashcardFolder, serverRequest))
+                    .subscribe(newFlashcardFolder ->
+                        log.info("FlashcardFolder {} has been saved.",
+                            newFlashcardFolder.getId())))
+                .flatMap(flashcard -> accepted().build()),
+            serverRequest,
+            FlashcardFolder.class
+        );
   }
 
   private FlashcardFolder withIdAndOwner(

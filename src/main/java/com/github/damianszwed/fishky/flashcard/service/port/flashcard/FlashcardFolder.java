@@ -2,6 +2,7 @@ package com.github.damianszwed.fishky.flashcard.service.port.flashcard;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Value;
@@ -17,6 +18,7 @@ public class FlashcardFolder {
   String id;
 
   @NotNull
+  @NotBlank
   String name;
 
   @NotNull
