@@ -1,5 +1,7 @@
 package com.github.damianszwed.fishky.flashcard.service.component.driver;
 
+import org.springframework.http.HttpStatus;
+
 public interface Student {
 
   void queriesForFlashcardFolders();
@@ -17,4 +19,8 @@ public interface Student {
   void isListeningOnFlashcardFolders();
 
   void isNotifiedAboutAllFlashcardFolders();
+
+  void createsFolder(String flashcardFolder);
+
+  void receivesAnError(HttpStatus status);
 }
