@@ -17,6 +17,7 @@ public class ProductionOwnerProvider implements OwnerProvider {
   public String provide(ServerRequest serverRequest) {
     //TODO(Damian.Szwed) error handling.
     //TODO(Damian.Szwed) unit test for splitting the header
+    //TODO(Damian.Szwed) should return optional
     String bearerToken = serverRequest.headers().firstHeader(HttpHeaders.AUTHORIZATION);
     String token = bearerToken.split(" ")[1];
     return jwtDecoder.decode(token).getClaimAsString("sub").toLowerCase();
