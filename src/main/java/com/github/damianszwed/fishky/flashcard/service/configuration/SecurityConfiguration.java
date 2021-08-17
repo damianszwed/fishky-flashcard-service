@@ -20,7 +20,10 @@ public class SecurityConfiguration {
         .addFilterAt(corsWebFilter, SecurityWebFiltersOrder.CORS)
         .csrf().disable()
         .authorizeExchange()
-        .pathMatchers("/healthCheck").permitAll()
+        .pathMatchers(
+            "/healthCheck",
+            "/owners/broughtin/flashcardFolders")//TODO(Damian.Szwed) broughtin should be configurable
+        .permitAll()
         .anyExchange()
         .authenticated()
         .and()
