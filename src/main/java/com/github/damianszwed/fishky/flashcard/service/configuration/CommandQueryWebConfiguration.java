@@ -137,7 +137,8 @@ public class CommandQueryWebConfiguration {
   }
 
   @Bean
-  public RouterFunction<ServerResponse> ownerRoutes(CommandQueryHandler ownersFoldersGetAllQueryHandler) {
+  public RouterFunction<ServerResponse> ownerRoutes(
+      CommandQueryHandler ownersFoldersGetAllQueryHandler) {
     return route(GET("/owners/{id}/flashcardFolders"), ownersFoldersGetAllQueryHandler::handle);
   }
 
