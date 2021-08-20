@@ -28,8 +28,10 @@ public class OwnersFoldersGetAllQueryHandler implements CommandQueryHandler {
   @Override
   public Mono<ServerResponse> handle(ServerRequest serverRequest) {
     final String ownerId = serverRequest.pathVariable("id");
+    //TODO(Damian.Szwed) refactor this
     if (!"broughtin".equals(ownerId)) {
-      final String ownerIdFromToken = ownerProvider.provide(serverRequest);
+      //TODO(Damian.Szwed) broughtin as static property
+      final String ownerIdFromToken = ownerProvider.provide(serverRequest).get();
       if (!ownerIdFromToken.equals(ownerId)) {
         log.error("Security error! User {} tries to get {} flashcards.", ownerIdFromToken, ownerId);
         return badRequest().build();

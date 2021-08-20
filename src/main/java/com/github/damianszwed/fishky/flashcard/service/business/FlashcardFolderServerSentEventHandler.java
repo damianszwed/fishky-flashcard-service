@@ -1,5 +1,7 @@
 package com.github.damianszwed.fishky.flashcard.service.business;
 
+import static org.springframework.web.reactive.function.server.ServerResponse.badRequest;
+
 import com.github.damianszwed.fishky.flashcard.service.port.CommandQueryHandler;
 import com.github.damianszwed.fishky.flashcard.service.port.OwnerProvider;
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.EventSource;
@@ -24,10 +26,11 @@ public class FlashcardFolderServerSentEventHandler implements CommandQueryHandle
 
   @Override
   public Mono<ServerResponse> handle(ServerRequest serverRequest) {
-    return ServerResponse.ok()
-        .contentType(MediaType.TEXT_EVENT_STREAM)
-        .body(flashcardFoldersEventSource.getFlux(ownerProvider.provide(serverRequest)),
-            Flux.class);
+    return ownerProvider.provide(serverRequest)
+        .map(ownerId -> ServerResponse.ok()
+            .contentType(MediaType.TEXT_EVENT_STREAM)
+            .body(flashcardFoldersEventSource.getFlux(ownerId),
+                Flux.class))
+        .orElse(badRequest().build());
   }
-
 }
