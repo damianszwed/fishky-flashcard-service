@@ -22,5 +22,7 @@ public interface Student {
 
   void createsFolder(String flashcardFolder);
 
-  void receivesAnError(HttpStatus status);
+  void receives(HttpStatus status);
+
+  void deletesFolder(String flashcardFolderId);
 }
