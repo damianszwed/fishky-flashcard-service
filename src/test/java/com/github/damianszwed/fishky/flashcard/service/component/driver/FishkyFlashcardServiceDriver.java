@@ -129,7 +129,17 @@ public class FishkyFlashcardServiceDriver {
     }
 
     @Override
-    public void receivesAnError(HttpStatus status) {
+    public void deletesFolder(String flashcardFolderId) {
+      response = webTestClient
+          .delete()
+          .uri("/flashcardFolders/{flashcardFolderId}",
+              flashcardFolderId)
+          .accept(MediaType.APPLICATION_JSON)
+          .exchange();
+    }
+
+    @Override
+    public void receives(HttpStatus status) {
       response.expectStatus().isEqualTo(status);
     }
   }

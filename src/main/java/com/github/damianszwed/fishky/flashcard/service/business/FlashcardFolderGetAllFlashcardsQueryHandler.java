@@ -1,5 +1,6 @@
 package com.github.damianszwed.fishky.flashcard.service.business;
 
+import static org.springframework.web.reactive.function.server.ServerResponse.badRequest;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 
 import com.github.damianszwed.fishky.flashcard.service.port.CommandQueryHandler;
@@ -26,10 +27,12 @@ public class FlashcardFolderGetAllFlashcardsQueryHandler implements CommandQuery
   @Override
   public Mono<ServerResponse> handle(ServerRequest serverRequest) {
     //TODO(Damian.Szwed) make sure that requester is an owner.
-    return ok().body(
-        flashcardFolderService
-            .getById(ownerProvider.provide(serverRequest), serverRequest.pathVariable("id"))
-            .map(FlashcardFolder::getFlashcards),
-        Flashcard.class);
+    return Mono.justOrEmpty(ownerProvider.provide(serverRequest))
+        .flatMap(ownerId -> ok().body(
+            flashcardFolderService
+                .getById(ownerId, serverRequest.pathVariable("id"))
+                .map(FlashcardFolder::getFlashcards),
+            Flashcard.class))
+        .switchIfEmpty(badRequest().build());
   }
 }
