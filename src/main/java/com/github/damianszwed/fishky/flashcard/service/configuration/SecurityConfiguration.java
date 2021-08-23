@@ -20,7 +20,10 @@ public class SecurityConfiguration {
         .addFilterAt(corsWebFilter, SecurityWebFiltersOrder.CORS)
         .csrf().disable()
         .authorizeExchange()
-        .pathMatchers("/healthCheck").permitAll()
+        .pathMatchers(
+            "/healthCheck",
+            "/owners/" + BusinessProperties.SYSTEM_USER_ID + "/flashcardFolders")
+        .permitAll()
         .anyExchange()
         .authenticated()
         .and()

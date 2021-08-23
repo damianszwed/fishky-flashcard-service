@@ -62,6 +62,14 @@ public class FishkyFlashcardServiceDriver {
     }
 
     @Override
+    public void queriesForFlashcardFoldersByOwner(String ownerId) {
+      response = webTestClient
+          .get().uri("/owners/{ownerId}/flashcardFolders", ownerId)
+          .accept(MediaType.APPLICATION_JSON)
+          .exchange();
+    }
+
+    @Override
     public void receivesFlashcardFolders(String flashcardFolders) {
       response.expectBody().json(flashcardFolders);
     }
@@ -129,7 +137,17 @@ public class FishkyFlashcardServiceDriver {
     }
 
     @Override
-    public void receivesAnError(HttpStatus status) {
+    public void deletesFolder(String flashcardFolderId) {
+      response = webTestClient
+          .delete()
+          .uri("/flashcardFolders/{flashcardFolderId}",
+              flashcardFolderId)
+          .accept(MediaType.APPLICATION_JSON)
+          .exchange();
+    }
+
+    @Override
+    public void receives(HttpStatus status) {
       response.expectStatus().isEqualTo(status);
     }
   }

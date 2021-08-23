@@ -18,6 +18,7 @@ import com.github.damianszwed.fishky.flashcard.service.business.FlashcardFolderS
 import com.github.damianszwed.fishky.flashcard.service.business.FlashcardFolderSaveFlashcardCommandHandler;
 import com.github.damianszwed.fishky.flashcard.service.business.FlashcardFolderServerSentEventHandler;
 import com.github.damianszwed.fishky.flashcard.service.business.HealthCheckHandler;
+import com.github.damianszwed.fishky.flashcard.service.business.OwnersFoldersGetAllQueryHandler;
 import com.github.damianszwed.fishky.flashcard.service.business.SwaggerHandler;
 import com.github.damianszwed.fishky.flashcard.service.business.ValidatorRequestHandler;
 import com.github.damianszwed.fishky.flashcard.service.port.CommandQueryHandler;
@@ -60,6 +61,12 @@ public class CommandQueryWebConfiguration {
   public CommandQueryHandler flashcardFolderGetAllQueryHandler(
           FlashcardFolderService flashcardFolderEmittingStorage, OwnerProvider ownerProvider) {
     return new FlashcardFolderGetAllQueryHandler(flashcardFolderEmittingStorage, ownerProvider);
+  }
+
+  @Bean
+  public CommandQueryHandler ownersFoldersGetAllQueryHandler(
+      FlashcardFolderService flashcardFolderEmittingStorage, OwnerProvider ownerProvider) {
+    return new OwnersFoldersGetAllQueryHandler(flashcardFolderEmittingStorage, ownerProvider);
   }
 
   @Bean
@@ -130,6 +137,12 @@ public class CommandQueryWebConfiguration {
   }
 
   @Bean
+  public RouterFunction<ServerResponse> ownerRoutes(
+      CommandQueryHandler ownersFoldersGetAllQueryHandler) {
+    return route(GET("/owners/{id}/flashcardFolders"), ownersFoldersGetAllQueryHandler::handle);
+  }
+
+  @Bean
   public RouterFunction<ServerResponse> flashcardFolderRoutes(
       CommandQueryHandler flashcardFolderGetAllQueryHandler,
       CommandQueryHandler flashcardFolderSaveCommandHandler,
@@ -137,8 +150,7 @@ public class CommandQueryWebConfiguration {
       CommandQueryHandler flashcardFolderGetAllFlashcardsQueryHandler,
       CommandQueryHandler flashcardFolderSaveFlashcardCommandHandler,
       CommandQueryHandler flashcardFolderModifyFlashcardCommandHandler,
-      CommandQueryHandler flashcardFolderDeleteFlashcardCommandHandler
-  ) {
+      CommandQueryHandler flashcardFolderDeleteFlashcardCommandHandler) {
     return route(GET("/flashcardFolders"), flashcardFolderGetAllQueryHandler::handle)
         .andRoute(POST("/flashcardFolders"), flashcardFolderSaveCommandHandler::handle)
         .andRoute(DELETE("/flashcardFolders/{id}"), flashcardFolderDeleteCommandHandler::handle)

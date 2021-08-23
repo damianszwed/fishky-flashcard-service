@@ -1,6 +1,7 @@
 package com.github.damianszwed.fishky.flashcard.service.adapter.security;
 
 import com.github.damianszwed.fishky.flashcard.service.port.OwnerProvider;
+import java.util.Optional;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -14,11 +15,11 @@ public class ProductionOwnerProvider implements OwnerProvider {
   }
 
   @Override
-  public String provide(ServerRequest serverRequest) {
+  public Optional<String> provide(ServerRequest serverRequest) {
     //TODO(Damian.Szwed) error handling.
     //TODO(Damian.Szwed) unit test for splitting the header
     String bearerToken = serverRequest.headers().firstHeader(HttpHeaders.AUTHORIZATION);
     String token = bearerToken.split(" ")[1];
-    return jwtDecoder.decode(token).getClaimAsString("sub").toLowerCase();
+    return Optional.of(jwtDecoder.decode(token).getClaimAsString("sub").toLowerCase());
   }
 }

@@ -95,6 +95,58 @@ class FishkyFlashcardServiceTest {
   }
 
   @Test
+  @DisplayName("Service should allow to delete owned folder.")
+  void shouldAllowToDeleteOwnedFolder() {
+    fishkyFlashcardServiceDriver.with(context -> {
+      context.when().student().deletesFolder(InputSamples.FLASHCARD_FOLDER_ID);
+      context.then().student().receives(HttpStatus.ACCEPTED);
+    });
+  }
+
+  @Test
+  @DisplayName("Service should return all brought in flashcard folders on query.")
+  void shouldReturnBroughtInFlashcardFoldersOnQuery() {
+    fishkyFlashcardServiceDriver.with(context -> {
+      context.when().student().queriesForFlashcardFoldersByOwner("broughtin");
+      context.then().student().receivesFlashcardFolders(
+          OutputSamples.FLASHCARD_FOLDERS
+      );
+    });
+  }
+
+  @Test
+  @DisplayName("Service should return all brought in flashcard folders on query.")
+  void shouldReturnOwnedFlashcardFoldersOnQuery() {
+    fishkyFlashcardServiceDriver.with(context -> {
+      context.when().student().queriesForFlashcardFoldersByOwner("user1@example.com");
+      context.then().student().receivesFlashcardFolders(
+          OutputSamples.FLASHCARD_FOLDERS
+      );
+    });
+  }
+
+  @Test
+  @DisplayName("Service should not allow to query not owned flashcards folders.")
+  void shouldNotAllowToQueryNotOwnedFlashcards() {
+    fishkyFlashcardServiceDriver.with(context -> {
+      context.when().student().queriesForFlashcardFoldersByOwner("otherOwner");
+      context.then().student().receives(HttpStatus.BAD_REQUEST);
+    });
+  }
+
+  @Test
+  @DisplayName("Service should delete folder on demand.")
+  void shouldDeleteFolderOnDemand() {
+    fishkyFlashcardServiceDriver.with(context -> {
+      context.when().student().deletesFolder(InputSamples.FLASHCARD_FOLDER_ID);
+      context.when().student().queriesForFlashcardFolders();
+      context.then().student().receivesFlashcardFolders(
+          OutputSamples.EMPTY_FLASHCARD_FOLDERS
+      );
+    });
+  }
+
+  @Test
   @Tag("SSE")
   @DisplayName("Service should notify about all flashcard folders on demand.")
   void shouldNotifyAboutAllFlashcardFoldersWhenCommandsForAllFlashcardFolders() {
@@ -111,7 +163,7 @@ class FishkyFlashcardServiceTest {
   void shouldNotAllowToCreateAFolderWithEmptyName() {
     fishkyFlashcardServiceDriver.with(context -> {
       context.when().student().createsFolder(InputSamples.FLASHCARD_FOLDER_WITH_EMPTY_NAME);
-      context.then().student().receivesAnError(HttpStatus.BAD_REQUEST);
+      context.then().student().receives(HttpStatus.BAD_REQUEST);
     });
   }
 }

@@ -1,6 +1,7 @@
 package com.github.damianszwed.fishky.flashcard.service.business;
 
 import static org.springframework.web.reactive.function.server.ServerResponse.accepted;
+import static org.springframework.web.reactive.function.server.ServerResponse.badRequest;
 
 import com.github.damianszwed.fishky.flashcard.service.port.CommandQueryHandler;
 import com.github.damianszwed.fishky.flashcard.service.port.OwnerProvider;
@@ -32,10 +33,11 @@ public class FlashcardFolderDeleteFlashcardCommandHandler implements CommandQuer
     //TODO(Damian.Szwed) make sure that requester is an owner.
     String flashcardFolderId = serverRequest.pathVariable("flashcardFolderId");
     String flashcardId = serverRequest.pathVariable("flashcardId");
-    return Mono.fromSupplier(() -> Void.TYPE)
-        .doOnNext((v) -> removeFlashcardFromFlashcardFolder(ownerProvider.provide(serverRequest),
-            flashcardFolderId, flashcardId))
-        .flatMap(p -> accepted().build());
+    return Mono.justOrEmpty(ownerProvider.provide(serverRequest))
+        .doOnNext(ownerId ->
+            removeFlashcardFromFlashcardFolder(ownerId, flashcardFolderId, flashcardId))
+        .flatMap(p -> accepted().build())
+        .switchIfEmpty(badRequest().build());
   }
 
   private void removeFlashcardFromFlashcardFolder(

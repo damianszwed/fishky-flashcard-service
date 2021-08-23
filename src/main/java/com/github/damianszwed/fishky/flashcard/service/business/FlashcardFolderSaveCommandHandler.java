@@ -1,6 +1,7 @@
 package com.github.damianszwed.fishky.flashcard.service.business;
 
 import static org.springframework.web.reactive.function.server.ServerResponse.accepted;
+import static org.springframework.web.reactive.function.server.ServerResponse.badRequest;
 
 import com.github.damianszwed.fishky.flashcard.service.port.CommandQueryHandler;
 import com.github.damianszwed.fishky.flashcard.service.port.IdEncoderDecoder;
@@ -35,28 +36,28 @@ public class FlashcardFolderSaveCommandHandler implements CommandQueryHandler {
 
   @Override
   public Mono<ServerResponse> handle(ServerRequest serverRequest) {
-    return validatorRequestHandler
-        .requireValidBody(
-            mono -> mono.doOnNext(
-                flashcardFolder -> flashcardFolderService
-                    .save(ownerProvider.provide(serverRequest),
-                        withIdAndOwner(flashcardFolder, serverRequest))
-                    .subscribe(newFlashcardFolder ->
-                        log.info("FlashcardFolder {} has been saved.",
-                            newFlashcardFolder.getId())))
-                .flatMap(flashcard -> accepted().build()),
-            serverRequest,
-            FlashcardFolder.class
-        );
+    return ownerProvider.provide(serverRequest)
+        .map(ownerId ->
+            validatorRequestHandler.requireValidBody(
+                mono ->
+                    mono.doOnNext(
+                        flashcardFolder ->
+                            flashcardFolderService
+                                .save(ownerId, withIdAndOwner(flashcardFolder, ownerId))
+                                .subscribe(newFlashcardFolder ->
+                                    log.info("FlashcardFolder {} has been saved.",
+                                        newFlashcardFolder.getId())))
+                        .flatMap(flashcard -> accepted().build()),
+                serverRequest,
+                FlashcardFolder.class
+            ))
+        .orElse(badRequest().build());
   }
 
-  private FlashcardFolder withIdAndOwner(
-      FlashcardFolder flashcardFolder,
-      ServerRequest serverRequest) {
+  private FlashcardFolder withIdAndOwner(FlashcardFolder flashcardFolder, String ownerId) {
     return flashcardFolder.toBuilder()
-        .id(idEncoderDecoder
-            .encodeId(ownerProvider.provide(serverRequest), flashcardFolder.getName()))
-        .owner(ownerProvider.provide(serverRequest))
+        .id(idEncoderDecoder.encodeId(ownerId, flashcardFolder.getName()))
+        .owner(ownerId)
         .flashcards(
             Optional.ofNullable(flashcardFolder.getFlashcards()).orElse(Collections.emptyList()))
         .build();

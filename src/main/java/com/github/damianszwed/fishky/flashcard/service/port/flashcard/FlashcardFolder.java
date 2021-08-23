@@ -21,7 +21,6 @@ public class FlashcardFolder {
   @NotBlank
   String name;
 
-  @NotNull
   String owner;
 
   @Builder.Default
