@@ -105,13 +105,32 @@ class FishkyFlashcardServiceTest {
 
   @Test
   @DisplayName("Service should return all brought in flashcard folders on query.")
-  void shouldReturnALlBroughtInFlashcardFoldersOnQuery() {
+  void shouldReturnBroughtInFlashcardFoldersOnQuery() {
     fishkyFlashcardServiceDriver.with(context -> {
-      //TODO(Damian.Szwed) change request
-      context.when().student().queriesForFlashcardFolders();
+      context.when().student().queriesForFlashcardFoldersByOwner("broughtin");
       context.then().student().receivesFlashcardFolders(
           OutputSamples.FLASHCARD_FOLDERS
       );
+    });
+  }
+
+  @Test
+  @DisplayName("Service should return all brought in flashcard folders on query.")
+  void shouldReturnOwnedFlashcardFoldersOnQuery() {
+    fishkyFlashcardServiceDriver.with(context -> {
+      context.when().student().queriesForFlashcardFoldersByOwner("user1@example.com");
+      context.then().student().receivesFlashcardFolders(
+          OutputSamples.FLASHCARD_FOLDERS
+      );
+    });
+  }
+
+  @Test
+  @DisplayName("Service should not allow to query not owned flashcards folders.")
+  void shouldNotAllowToQueryNotOwnedFlashcards() {
+    fishkyFlashcardServiceDriver.with(context -> {
+      context.when().student().queriesForFlashcardFoldersByOwner("otherOwner");
+      context.then().student().receives(HttpStatus.BAD_REQUEST);
     });
   }
 
