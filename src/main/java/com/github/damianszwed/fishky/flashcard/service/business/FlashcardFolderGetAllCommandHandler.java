@@ -1,6 +1,7 @@
 package com.github.damianszwed.fishky.flashcard.service.business;
 
 import static org.springframework.web.reactive.function.server.ServerResponse.accepted;
+import static org.springframework.web.reactive.function.server.ServerResponse.badRequest;
 
 import com.github.damianszwed.fishky.flashcard.service.port.CommandQueryHandler;
 import com.github.damianszwed.fishky.flashcard.service.port.EventTrigger;
@@ -23,7 +24,9 @@ public class FlashcardFolderGetAllCommandHandler implements CommandQueryHandler 
 
   @Override
   public Mono<ServerResponse> handle(ServerRequest serverRequest) {
-    getAllFoldersEventTrigger.fireUp(ownerProvider.provide(serverRequest));
-    return accepted().build();
+    return Mono.justOrEmpty(ownerProvider.provide(serverRequest))
+        .doOnNext(getAllFoldersEventTrigger::fireUp)
+        .flatMap(p -> accepted().build())
+        .switchIfEmpty(badRequest().build());
   }
 }

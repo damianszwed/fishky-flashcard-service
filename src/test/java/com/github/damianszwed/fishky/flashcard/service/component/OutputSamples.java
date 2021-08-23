@@ -57,6 +57,10 @@ interface OutputSamples {
       + "  }\n"
       + "]";
 
+  //language=JSON
+  String EMPTY_FLASHCARD_FOLDERS = "[]";
+
+  //language=JSON
   String FLASHCARD_FOLDERS_WITHOUT_ONE_FLASHCARD = "[\n"
       + "  {\n"
       + "    \"id\": \"dXNlcjFAZXhhbXBsZS5jb20tZGVmYXVsdA==\",\n"
@@ -100,5 +104,4 @@ interface OutputSamples {
       + "    ]\n"
       + "  }\n"
       + "]";
-  ;
 }
