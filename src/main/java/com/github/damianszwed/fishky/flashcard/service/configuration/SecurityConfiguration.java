@@ -22,8 +22,7 @@ public class SecurityConfiguration {
         .authorizeExchange()
         .pathMatchers(
             "/healthCheck",
-            //TODO(Damian.Szwed) broughtin should be configurable
-            "/owners/broughtin/flashcardFolders")
+            "/owners/" + BusinessProperties.SYSTEM_USER_ID + "/flashcardFolders")
         .permitAll()
         .anyExchange()
         .authenticated()

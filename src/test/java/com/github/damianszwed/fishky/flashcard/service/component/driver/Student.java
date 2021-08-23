@@ -6,6 +6,8 @@ public interface Student {
 
   void queriesForFlashcardFolders();
 
+  void queriesForFlashcardFoldersByOwner(String ownerId);
+
   void receivesFlashcardFolders(String flashcardFolders);
 
   void savesFlashcardInFolder(String newFlashcard, String flashcardFolderId);
