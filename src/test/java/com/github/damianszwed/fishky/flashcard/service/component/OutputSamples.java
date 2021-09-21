@@ -2,6 +2,7 @@ package com.github.damianszwed.fishky.flashcard.service.component;
 
 interface OutputSamples {
 
+  //language=JSON
   String FLASHCARD_FOLDERS = "[\n"
       + "  {\n"
       + "    \"id\": \"dXNlcjFAZXhhbXBsZS5jb20tZGVmYXVsdA==\",\n"
@@ -27,6 +28,7 @@ interface OutputSamples {
       + "  }\n"
       + "]";
 
+  //language=JSON
   String FLASHCARD_FOLDERS_WITH_NEW_FLASHCARD = "[\n"
       + "  {\n"
       + "    \"id\": \"dXNlcjFAZXhhbXBsZS5jb20tZGVmYXVsdA==\",\n"
@@ -80,6 +82,8 @@ interface OutputSamples {
       + "    ]\n"
       + "  }\n"
       + "]";
+
+  //language=JSON
   String FLASHCARD_FOLDERS_WITH_ONE_FLASHCARD_MODIFIED = "[\n"
       + "  {\n"
       + "    \"id\": \"dXNlcjFAZXhhbXBsZS5jb20tZGVmYXVsdA==\",\n"
@@ -100,6 +104,26 @@ interface OutputSamples {
       + "        \"id\": \"dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25j\",\n"
       + "        \"question\": \"questionC\",\n"
       + "        \"answers\": [\"answerC\"]\n"
+      + "      }\n"
+      + "    ]\n"
+      + "  }\n"
+      + "]";
+
+  //language=JSON
+  String SYSTEM_USER_FOLDERS = "[\n"
+      + "  {\n"
+      + "    \"id\": \"YnJvdWdodGluLXR1cmlzbQ==\",\n"
+      + "    \"name\": \"Turism\",\n"
+      + "    \"owner\": \"broughtin\",\n"
+      + "    \"flashcards\": [\n"
+      + "      {\n"
+      + "        \"id\": \"YnJvdWdodGluLWV4Y3Vyc2lvbg==\",\n"
+      + "        \"question\": \"excursion\",\n"
+      + "        \"answers\": [\n"
+      + "          \"wycieczka\",\n"
+      + "          \"wyprawa\",\n"
+      + "          \"wypad\"\n"
+      + "        ]\n"
       + "      }\n"
       + "    ]\n"
       + "  }\n"

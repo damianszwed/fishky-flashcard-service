@@ -109,13 +109,13 @@ class FishkyFlashcardServiceTest {
     fishkyFlashcardServiceDriver.with(context -> {
       context.when().student().queriesForFlashcardFoldersByOwner("broughtin");
       context.then().student().receivesFlashcardFolders(
-          OutputSamples.FLASHCARD_FOLDERS
+          OutputSamples.SYSTEM_USER_FOLDERS
       );
     });
   }
 
   @Test
-  @DisplayName("Service should return all brought in flashcard folders on query.")
+  @DisplayName("Service should return all owned flashcard folders on query.")
   void shouldReturnOwnedFlashcardFoldersOnQuery() {
     fishkyFlashcardServiceDriver.with(context -> {
       context.when().student().queriesForFlashcardFoldersByOwner("user1@example.com");
