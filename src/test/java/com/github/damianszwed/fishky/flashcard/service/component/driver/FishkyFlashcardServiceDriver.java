@@ -147,10 +147,10 @@ public class FishkyFlashcardServiceDriver {
     }
 
     @Override
-    public void copiesFlashcardFolder(String folderId, String owner) {
+    public void copiesFlashcardFolder(String folderId, String ownerId) {
       webTestClient
           .post()
-          .uri("/owners/{owner}/flashcardFolders/{folderId}/copy", owner, folderId)
+          .uri("/owners/{ownerId}/flashcardFolders/{folderId}/copy", ownerId, folderId)
           .accept(MediaType.APPLICATION_JSON)
           .exchange().expectStatus().isAccepted();
     }
