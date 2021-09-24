@@ -29,7 +29,7 @@ public class OwnersFoldersGetAllQueryHandler implements CommandQueryHandler {
   @Override
   public Mono<ServerResponse> handle(ServerRequest serverRequest) {
 
-    final String ownerId = serverRequest.pathVariable("id");
+    final String ownerId = serverRequest.pathVariable("ownerId");
     if (BusinessProperties.SYSTEM_USER_ID.equals(ownerId)) {
       return getAllFlashcardsByOwnerId(ownerId);
     }

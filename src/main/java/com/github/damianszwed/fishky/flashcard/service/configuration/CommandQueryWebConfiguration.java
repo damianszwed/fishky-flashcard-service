@@ -7,6 +7,7 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 import static org.springframework.web.reactive.function.server.RouterFunctions.resources;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 
+import com.github.damianszwed.fishky.flashcard.service.business.CopyFolderCommandHandler;
 import com.github.damianszwed.fishky.flashcard.service.business.FlashcardFolderDeleteCommandHandler;
 import com.github.damianszwed.fishky.flashcard.service.business.FlashcardFolderDeleteFlashcardCommandHandler;
 import com.github.damianszwed.fishky.flashcard.service.business.FlashcardFolderGetAllCommandHandler;
@@ -67,6 +68,17 @@ public class CommandQueryWebConfiguration {
   public CommandQueryHandler ownersFoldersGetAllQueryHandler(
       FlashcardFolderService flashcardFolderEmittingStorage, OwnerProvider ownerProvider) {
     return new OwnersFoldersGetAllQueryHandler(flashcardFolderEmittingStorage, ownerProvider);
+  }
+
+  @Bean
+  public CommandQueryHandler copyFolderCommandHandler(
+      FlashcardFolderService flashcardFolderEmittingStorage,
+      IdEncoderDecoder idEncoderDecoder,
+      OwnerProvider ownerProvider) {
+    return new CopyFolderCommandHandler(
+        flashcardFolderEmittingStorage,
+        idEncoderDecoder,
+        ownerProvider);
   }
 
   @Bean
@@ -138,8 +150,11 @@ public class CommandQueryWebConfiguration {
 
   @Bean
   public RouterFunction<ServerResponse> ownerRoutes(
-      CommandQueryHandler ownersFoldersGetAllQueryHandler) {
-    return route(GET("/owners/{id}/flashcardFolders"), ownersFoldersGetAllQueryHandler::handle);
+      CommandQueryHandler ownersFoldersGetAllQueryHandler,
+      CommandQueryHandler copyFolderCommandHandler) {
+    return route(GET("/owners/{ownerId}/flashcardFolders"), ownersFoldersGetAllQueryHandler::handle)
+        .andRoute(POST("/owners/{ownerId}/flashcardFolders/{folderId}/copy"),
+            copyFolderCommandHandler::handle);
   }
 
   @Bean
