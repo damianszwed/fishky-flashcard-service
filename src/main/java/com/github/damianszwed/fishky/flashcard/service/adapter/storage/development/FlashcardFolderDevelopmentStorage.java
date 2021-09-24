@@ -16,6 +16,7 @@ import reactor.core.publisher.Mono;
 public class FlashcardFolderDevelopmentStorage implements FlashcardFolderService {
 
   private final List<FlashcardFolder> flashcardFolders = new ArrayList<>();
+
   @SuppressWarnings("FieldCanBeLocal")
   private final FlashcardFolder user1Folder = FlashcardFolder.builder()
       .id("dXNlcjFAZXhhbXBsZS5jb20tZGVmYXVsdA==")//user1@example.com-default
@@ -36,6 +37,7 @@ public class FlashcardFolderDevelopmentStorage implements FlashcardFolderService
               .answers(singletonList("answerC")).build()
       ))
       .build();
+
   @SuppressWarnings("FieldCanBeLocal")
   private final FlashcardFolder broughtInFolder = FlashcardFolder.builder()
       .id("YnJvdWdodGluLXR1cmlzbQ==")//broughtin-turism

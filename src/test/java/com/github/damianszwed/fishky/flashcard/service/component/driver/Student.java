@@ -26,5 +26,7 @@ public interface Student {
 
   void receives(HttpStatus status);
 
-  void deletesFolder(String flashcardFolderId);
+  void deletesFolder(String folderId);
+
+  void copiesFlashcardFolder(String folderId, String owner);
 }
