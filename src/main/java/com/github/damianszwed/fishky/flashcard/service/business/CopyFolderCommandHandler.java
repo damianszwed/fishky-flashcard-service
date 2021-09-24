@@ -50,9 +50,9 @@ public class CopyFolderCommandHandler implements CommandQueryHandler {
   }
 
   private Mono<ServerResponse> badRequestFolderToCopyNotFound(
-      String ownerId,
-      String folderIdToCopy) {
-    log.warn("Not found folder to copy with id {} owned by {}", folderIdToCopy, ownerId);
-    return badRequest().build();
+      final String ownerId,
+      final String folderIdToCopy) {
+    return badRequest().build().doOnNext(serverResponse -> log
+        .warn("Not found folder to copy with id {} owned by {}", folderIdToCopy, ownerId));
   }
 }
