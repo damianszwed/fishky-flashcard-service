@@ -137,13 +137,22 @@ public class FishkyFlashcardServiceDriver {
     }
 
     @Override
-    public void deletesFolder(String flashcardFolderId) {
+    public void deletesFolder(String folderId) {
       response = webTestClient
           .delete()
-          .uri("/flashcardFolders/{flashcardFolderId}",
-              flashcardFolderId)
+          .uri("/flashcardFolders/{folderId}",
+              folderId)
           .accept(MediaType.APPLICATION_JSON)
           .exchange();
+    }
+
+    @Override
+    public void copiesFlashcardFolder(String folderId, String owner) {
+      webTestClient
+          .post()
+          .uri("/owners/{owner}/flashcardFolders/{folderId}/copy", owner, folderId)
+          .accept(MediaType.APPLICATION_JSON)
+          .exchange().expectStatus().isAccepted();
     }
 
     @Override

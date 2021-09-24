@@ -115,6 +115,18 @@ class FishkyFlashcardServiceTest {
   }
 
   @Test
+  @DisplayName("Service should copy brought in flashcard folder on demand.")
+  void shouldCopySystemUserFolderOnDemand() {
+    fishkyFlashcardServiceDriver.with(context -> {
+      context.given().student().copiesFlashcardFolder(InputSamples.SYSTEM_USER_FOLDER_ID, "broughtin");
+      context.when().student().queriesForFlashcardFoldersByOwner("user1@example.com");
+      context.then().student().receivesFlashcardFolders(
+          OutputSamples.FLASHCARD_FOLDERS_WITH_COPIED_FOLDER
+      );
+    });
+  }
+
+  @Test
   @DisplayName("Service should return all owned flashcard folders on query.")
   void shouldReturnOwnedFlashcardFoldersOnQuery() {
     fishkyFlashcardServiceDriver.with(context -> {
