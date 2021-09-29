@@ -65,6 +65,7 @@ public class FlashcardFolderDevelopmentStorage implements FlashcardFolderService
   @Override
   public Mono<FlashcardFolder> get(String owner, String flashcardFolderName) {
     return Mono.justOrEmpty(flashcardFolders.stream()
+        .filter(flashcardFolder -> flashcardFolder.getOwner().equals(owner))
         .filter(flashcardFolder -> flashcardFolder.getName().equals(flashcardFolderName))
         .findFirst());
   }

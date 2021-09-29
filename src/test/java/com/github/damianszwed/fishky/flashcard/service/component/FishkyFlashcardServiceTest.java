@@ -116,6 +116,26 @@ class FishkyFlashcardServiceTest {
   }
 
   @Test
+  @DisplayName("Service should return the accepted message on copy existing folder.")
+  void shouldReturnTheAcceptedMessageOnCopy() {
+    fishkyFlashcardServiceDriver.with(context -> {
+      context.given().student()
+          .copiesFlashcardFolder(InputSamples.SYSTEM_USER_FOLDER_ID, "broughtin");
+      context.then().student().receives(HttpStatus.ACCEPTED);
+    });
+  }
+
+  @Test
+  @DisplayName("Service should return an error on copy non existing folder.")
+  void shouldReturnAnErrorOnCopyNonExistingFolder() {
+    fishkyFlashcardServiceDriver.with(context -> {
+      context.given().student()
+          .copiesFlashcardFolder("non-existing-folders-id", "broughtin");
+      context.then().student().receives(HttpStatus.BAD_REQUEST);
+    });
+  }
+
+  @Test
   @DisplayName("Service should copy brought in flashcard folder on demand.")
   void shouldCopySystemUserFolderOnDemand() {
     fishkyFlashcardServiceDriver.with(context -> {
@@ -132,7 +152,7 @@ class FishkyFlashcardServiceTest {
   @DisplayName("Service should merge folders on copy brought in flashcard folder.")
   void shouldMergeFoldersOnCopy() {
     fishkyFlashcardServiceDriver.with(context -> {
-      context.given().student().createsFolder("Turism");
+      context.given().student().createsFolder(InputSamples.TURISM_FLASHCARD_FOLDER);
       context.given().student()
           .savesFlashcardInFolder(
               InputSamples.NEW_FLASHCARD,
@@ -145,8 +165,6 @@ class FishkyFlashcardServiceTest {
       );
     });
   }
-
-  //TODO(Damian.Szwed) case z kopiowaniem nieistniejacego folderu.
 
   @Test
   @DisplayName("Service should return all owned flashcard folders on query.")

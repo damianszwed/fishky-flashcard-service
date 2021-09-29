@@ -24,4 +24,12 @@ interface InputSamples {
       + "  \"flashcards\": [],\n"
       + "  \"id\": \"placeholder\"\n"
       + "}";
+
+  //language=JSON
+  String TURISM_FLASHCARD_FOLDER = "{\n"
+      + "  \"name\": \"Turism\",\n"
+      + "  \"flashcards\": [],\n"
+      + "  \"id\": \"placeholder\"\n"
+      + "}";
+
 }

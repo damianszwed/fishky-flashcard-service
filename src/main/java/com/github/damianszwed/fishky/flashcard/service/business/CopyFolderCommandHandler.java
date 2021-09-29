@@ -52,7 +52,7 @@ public class CopyFolderCommandHandler implements CommandQueryHandler {
       final FlashcardFolder flashcardFolderToCopy) {
     return flashcardFolderService
         .get(userId, flashcardFolderToCopy.getName())
-        .flatMap(flashcardFolder -> mergeAndSaveFlashcardFolders(userId, flashcardFolderToCopy, //TODO(Damian.Szwed) byc moze trzeba uzyc map zamiast flatmap
+        .flatMap(flashcardFolder -> mergeAndSaveFlashcardFolders(userId, flashcardFolderToCopy,
             flashcardFolder))
         .switchIfEmpty(saveFlashcardFolder(userId, flashcardFolderToCopy.toBuilder()
             .id(idEncoderDecoder.encodeId(userId, flashcardFolderToCopy.getName()))
