@@ -56,7 +56,8 @@ class FishkyFlashcardServiceTest {
   void shouldSaveFlashcardInParticularFolder() {
     fishkyFlashcardServiceDriver.with(context -> {
       context.when().student()
-          .savesFlashcardInFolder(InputSamples.NEW_FLASHCARD, InputSamples.FLASHCARD_FOLDER_ID);
+          .savesFlashcardInFolder(InputSamples.NEW_FLASHCARD,
+              InputSamples.FLASHCARD_FIRST_FOLDER_ID);
       context.when().student().queriesForFlashcardFolders();
       context.then().student().receivesFlashcardFolders(
           OutputSamples.FLASHCARD_FOLDERS_WITH_NEW_FLASHCARD
@@ -71,7 +72,7 @@ class FishkyFlashcardServiceTest {
       context.when().student()
           .modifiesFlashcardInFolder(
               InputSamples.MODIFIED_FLASHCARD,
-              InputSamples.FLASHCARD_FOLDER_ID);
+              InputSamples.FLASHCARD_FIRST_FOLDER_ID);
       context.when().student().queriesForFlashcardFolders();
       context.then().student().receivesFlashcardFolders(
           OutputSamples.FLASHCARD_FOLDERS_WITH_ONE_FLASHCARD_MODIFIED
@@ -86,7 +87,7 @@ class FishkyFlashcardServiceTest {
       context.when().student()
           .deletesFlashcardFromFolder(
               InputSamples.EXISTING_FLASHCARD_ID,
-              InputSamples.FLASHCARD_FOLDER_ID);
+              InputSamples.FLASHCARD_FIRST_FOLDER_ID);
       context.when().student().queriesForFlashcardFolders();
       context.then().student().receivesFlashcardFolders(
           OutputSamples.FLASHCARD_FOLDERS_WITHOUT_ONE_FLASHCARD
@@ -98,7 +99,7 @@ class FishkyFlashcardServiceTest {
   @DisplayName("Service should allow to delete owned folder.")
   void shouldAllowToDeleteOwnedFolder() {
     fishkyFlashcardServiceDriver.with(context -> {
-      context.when().student().deletesFolder(InputSamples.FLASHCARD_FOLDER_ID);
+      context.when().student().deletesFolder(InputSamples.FLASHCARD_FIRST_FOLDER_ID);
       context.then().student().receives(HttpStatus.ACCEPTED);
     });
   }
@@ -128,6 +129,26 @@ class FishkyFlashcardServiceTest {
   }
 
   @Test
+  @DisplayName("Service should merge folders on copy brought in flashcard folder.")
+  void shouldMergeFoldersOnCopy() {
+    fishkyFlashcardServiceDriver.with(context -> {
+      context.given().student().createsFolder("Turism");
+      context.given().student()
+          .savesFlashcardInFolder(
+              InputSamples.NEW_FLASHCARD,
+              InputSamples.FLASHCARD_TURISM_FOLDER_ID);
+      context.given().student()
+          .copiesFlashcardFolder(InputSamples.SYSTEM_USER_FOLDER_ID, "broughtin");
+      context.when().student().queriesForFlashcardFoldersByOwner("user1@example.com");
+      context.then().student().receivesFlashcardFolders(
+          OutputSamples.FLASHCARD_FOLDERS_WITH_TURISM_FOLDER_WITH_COPIED_FOLDER
+      );
+    });
+  }
+
+  //TODO(Damian.Szwed) case z kopiowaniem nieistniejacego folderu.
+
+  @Test
   @DisplayName("Service should return all owned flashcard folders on query.")
   void shouldReturnOwnedFlashcardFoldersOnQuery() {
     fishkyFlashcardServiceDriver.with(context -> {
@@ -151,7 +172,7 @@ class FishkyFlashcardServiceTest {
   @DisplayName("Service should delete folder on demand.")
   void shouldDeleteFolderOnDemand() {
     fishkyFlashcardServiceDriver.with(context -> {
-      context.when().student().deletesFolder(InputSamples.FLASHCARD_FOLDER_ID);
+      context.when().student().deletesFolder(InputSamples.FLASHCARD_FIRST_FOLDER_ID);
       context.when().student().queriesForFlashcardFolders();
       context.then().student().receivesFlashcardFolders(
           OutputSamples.EMPTY_FLASHCARD_FOLDERS

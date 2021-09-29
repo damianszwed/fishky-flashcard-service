@@ -7,7 +7,10 @@ import static org.springframework.web.reactive.function.server.ServerResponse.st
 import com.github.damianszwed.fishky.flashcard.service.port.CommandQueryHandler;
 import com.github.damianszwed.fishky.flashcard.service.port.IdEncoderDecoder;
 import com.github.damianszwed.fishky.flashcard.service.port.OwnerProvider;
+import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolder;
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderService;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -37,16 +40,44 @@ public class CopyFolderCommandHandler implements CommandQueryHandler {
           final String ownerId = serverRequest.pathVariable("ownerId");
           final String folderIdToCopy = serverRequest.pathVariable("folderId");
           return flashcardFolderService.getById(ownerId, folderIdToCopy)
-              .flatMap(flashcardFolderToCopy -> flashcardFolderService
-                  .save(userId, flashcardFolderToCopy.toBuilder()
-                      .id(idEncoderDecoder.encodeId(userId, flashcardFolderToCopy.getName()))
-                      .owner(userId)
-                      .build())
-                  .flatMap(p -> accepted().build())
-                  .switchIfEmpty(status(HttpStatus.INTERNAL_SERVER_ERROR).build()))
+              .flatMap(flashcardFolderToCopy -> mergeAndCopyFlashcardFolder(userId,
+                  flashcardFolderToCopy))
               .switchIfEmpty(badRequestFolderToCopyNotFound(ownerId, folderIdToCopy));
         })
         .switchIfEmpty(badRequest().build());
+  }
+
+  private Mono<ServerResponse> mergeAndCopyFlashcardFolder(
+      final String userId,
+      final FlashcardFolder flashcardFolderToCopy) {
+    return flashcardFolderService
+        .get(userId, flashcardFolderToCopy.getName())
+        .flatMap(flashcardFolder -> mergeAndSaveFlashcardFolders(userId, flashcardFolderToCopy, //TODO(Damian.Szwed) byc moze trzeba uzyc map zamiast flatmap
+            flashcardFolder))
+        .switchIfEmpty(saveFlashcardFolder(userId, flashcardFolderToCopy.toBuilder()
+            .id(idEncoderDecoder.encodeId(userId, flashcardFolderToCopy.getName()))
+            .owner(userId)
+            .build()));
+  }
+
+  private Mono<ServerResponse> mergeAndSaveFlashcardFolders(
+      final String userId,
+      final FlashcardFolder flashcardFolderToCopy,
+      final FlashcardFolder flashcardFolder) {
+    return saveFlashcardFolder(userId, flashcardFolder.toBuilder()
+        .flashcards(Stream.concat(flashcardFolder.getFlashcards().stream(),
+            flashcardFolderToCopy.getFlashcards().stream())
+            .collect(Collectors.toList()))
+        .build());
+  }
+
+  private Mono<ServerResponse> saveFlashcardFolder(
+      final String userId,
+      final FlashcardFolder flashcardFolderToSave) {
+    return flashcardFolderService
+        .save(userId, flashcardFolderToSave)
+        .flatMap(p -> accepted().build())
+        .switchIfEmpty(status(HttpStatus.INTERNAL_SERVER_ERROR).build());
   }
 
   private Mono<ServerResponse> badRequestFolderToCopyNotFound(
