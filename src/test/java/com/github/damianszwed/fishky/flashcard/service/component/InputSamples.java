@@ -15,8 +15,9 @@ interface InputSamples {
       +
       "}";
   String EXISTING_FLASHCARD_ID = "dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25i";
-  String FLASHCARD_FOLDER_ID = "dXNlcjFAZXhhbXBsZS5jb20tZGVmYXVsdA==";
+  String FLASHCARD_FIRST_FOLDER_ID = "dXNlcjFAZXhhbXBsZS5jb20tZGVmYXVsdA==";
   String SYSTEM_USER_FOLDER_ID = "YnJvdWdodGluLXR1cmlzbQ==";
+  String FLASHCARD_TURISM_FOLDER_ID = "dXNlcjFAZXhhbXBsZS5jb20tdHVyaXNt";
   //language=JSON
   String FLASHCARD_FOLDER_WITH_EMPTY_NAME = "{\n"
       + "  \"name\": \" \",\n"

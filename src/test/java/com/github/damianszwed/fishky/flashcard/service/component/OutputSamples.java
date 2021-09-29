@@ -174,4 +174,53 @@ interface OutputSamples {
       +
       "]";
 
+  //language=JSON
+  String FLASHCARD_FOLDERS_WITH_TURISM_FOLDER_WITH_COPIED_FOLDER = "[\n"
+      + "  {\n"
+      + "    \"id\": \"dXNlcjFAZXhhbXBsZS5jb20tZGVmYXVsdA==\",\n"
+      + "    \"name\": \"Default\",\n"
+      + "    \"owner\": \"user1@example.com\",\n"
+      + "    \"flashcards\": [\n"
+      + "      {\n"
+      + "        \"id\": \"dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25h\",\n"
+      + "        \"question\": \"questionA\",\n"
+      + "        \"answers\": [\"answerA\"]\n"
+      + "      },\n"
+      + "      {\n"
+      + "        \"id\": \"dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25i\",\n"
+      + "        \"question\": \"questionB\",\n"
+      + "        \"answers\": [\"answerB\"]\n"
+      + "      },\n"
+      + "      {\n"
+      + "        \"id\": \"dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25j\",\n"
+      + "        \"question\": \"questionC\",\n"
+      + "        \"answers\": [\"answerC\"]\n"
+      + "      }\n"
+      + "    ]\n"
+      + "  },\n"
+      + "  {\n"
+      + "    \"id\": \"dXNlcjFAZXhhbXBsZS5jb20tdHVyaXNt\",\n"
+      + "    \"name\": \"Turism\",\n"
+      + "    \"owner\": \"user1@example.com\",\n"
+      + "    \"flashcards\": [\n"
+      + "      {\n"
+      + "        \"question\": \"questionD\",\n"
+      + "        \"answers\": [\"answerD\"]\n"
+      + "      },\n"
+      + "      {\n"
+      + "        \"id\": \"YnJvdWdodGluLWV4Y3Vyc2lvbg==\",\n"
+      + "        \"question\": \"excursion\",\n"
+      + "        \"answers\": [\n"
+      +
+      "          \"wycieczka\",\n"
+      + "          \"wyprawa\",\n"
+      +
+      "          \"wypad\"\n"
+      + "        ]\n"
+      + "      }\n"
+      + "    ]\n"
+      + "  }\n"
+      +
+      "]";
+
 }
