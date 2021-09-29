@@ -18,7 +18,7 @@ public class FishkyFlashcardServiceDriver {
   private final Student student;
 
   FishkyFlashcardServiceDriver(WebTestClient webTestClient,
-                               EventSource<FlashcardFolder> flashcardFoldersEventSource) {
+      EventSource<FlashcardFolder> flashcardFoldersEventSource) {
     this.webTestClient = webTestClient;
     this.flashcardFoldersEventSource = flashcardFoldersEventSource;
     this.student = createStudent();
@@ -128,12 +128,12 @@ public class FishkyFlashcardServiceDriver {
     @Override
     public void createsFolder(String flashcardFolder) {
       response = webTestClient
-              .post()
-              .uri("/flashcardFolders")
-              .accept(MediaType.APPLICATION_JSON)
-              .contentType(MediaType.APPLICATION_JSON)
-              .bodyValue(flashcardFolder)
-              .exchange();
+          .post()
+          .uri("/flashcardFolders")
+          .accept(MediaType.APPLICATION_JSON)
+          .contentType(MediaType.APPLICATION_JSON)
+          .bodyValue(flashcardFolder)
+          .exchange();
     }
 
     @Override
@@ -148,11 +148,11 @@ public class FishkyFlashcardServiceDriver {
 
     @Override
     public void copiesFlashcardFolder(String folderId, String ownerId) {
-      webTestClient
+      response = webTestClient
           .post()
           .uri("/owners/{ownerId}/flashcardFolders/{folderId}/copy", ownerId, folderId)
           .accept(MediaType.APPLICATION_JSON)
-          .exchange().expectStatus().isAccepted();
+          .exchange();
     }
 
     @Override
