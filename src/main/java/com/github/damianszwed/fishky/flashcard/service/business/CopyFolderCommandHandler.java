@@ -1,7 +1,6 @@
 package com.github.damianszwed.fishky.flashcard.service.business;
 
 import static org.springframework.web.reactive.function.server.ServerResponse.accepted;
-import static org.springframework.web.reactive.function.server.ServerResponse.badRequest;
 import static org.springframework.web.reactive.function.server.ServerResponse.status;
 
 import com.github.damianszwed.fishky.flashcard.service.port.CommandQueryHandler;
@@ -16,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
+import reactor.util.function.Tuple2;
+import reactor.util.function.Tuples;
 
 @Slf4j
 public class CopyFolderCommandHandler implements CommandQueryHandler {
@@ -34,63 +35,58 @@ public class CopyFolderCommandHandler implements CommandQueryHandler {
   }
 
   @Override
-  public Mono<ServerResponse> handle(ServerRequest serverRequest) {
+  public Mono<ServerResponse> handle(final ServerRequest serverRequest) {
+    final String ownerId = serverRequest.pathVariable("ownerId");
+    final String folderIdToCopy = serverRequest.pathVariable("folderId");
+    return flashcardFolderService.getById(ownerId, folderIdToCopy)
+        .flatMap(flashcardFolderToCopy -> retrieveUserId(serverRequest, flashcardFolderToCopy))
+        .flatMap(this::retrieveExistingFolder)
+        .map(this::regenerateIds)
+        .flatMap(this::saveCopiedFolder)
+        .flatMap(p -> accepted().build())
+        .switchIfEmpty(status(HttpStatus.BAD_REQUEST).build());
+  }
+
+  private Mono<Tuple2<String, FlashcardFolder>> retrieveUserId(ServerRequest serverRequest,
+      FlashcardFolder flashcardFolderToCopy) {
+    log.info("On copying {}'s {} - retrieve userId operation.", flashcardFolderToCopy.getOwner(),
+        flashcardFolderToCopy.getName());
     return Mono.justOrEmpty(ownerProvider.provide(serverRequest))
-        .flatMap(userId -> {
-          final String ownerId = serverRequest.pathVariable("ownerId");
-          final String folderIdToCopy = serverRequest.pathVariable("folderId");
-          return flashcardFolderService.getById(ownerId, folderIdToCopy)
-              .flatMap(flashcardFolderToCopy -> mergeAndCopyFlashcardFolder(userId,
-                  flashcardFolderToCopy))
-              .switchIfEmpty(badRequestFolderToCopyNotFound(ownerId, folderIdToCopy));
-        })
-        .switchIfEmpty(badRequest().build());
+        .map(userId -> Tuples.of(userId, flashcardFolderToCopy));
   }
 
-  private Mono<ServerResponse> mergeAndCopyFlashcardFolder(
-      final String userId,
-      final FlashcardFolder flashcardFolderToCopy) {
+  private Mono<Tuple2<String, FlashcardFolder>> retrieveExistingFolder(
+      Tuple2<String, FlashcardFolder> tuples) {
+    log.info("On copying {}'s {} - trying to retrieve existing folder for user {}.",
+        tuples.getT2().getOwner(), tuples.getT2().getName(), tuples.getT1());
     return flashcardFolderService
-        .get(userId, flashcardFolderToCopy.getName())
-        .flatMap(flashcardFolder -> mergeAndSaveFlashcardFolders(userId, flashcardFolderToCopy,
-            flashcardFolder))
-        .switchIfEmpty(saveFlashcardFolder(userId, flashcardFolderToCopy.toBuilder()
-            .id(idEncoderDecoder.encodeId(userId, flashcardFolderToCopy.getName()))
-            .owner(userId)
-            .build()));
+        .get(tuples.getT1(), tuples.getT2().getName()).map(existingFolder -> {
+          final FlashcardFolder build = existingFolder.toBuilder()
+              .flashcards(Stream.concat(existingFolder.getFlashcards().stream(),
+                  tuples.getT2().getFlashcards().stream())
+                  .collect(Collectors.toList()))
+              .build();
+          return Tuples.of(tuples.getT1(), build);
+        })
+        .defaultIfEmpty(Tuples.of(tuples.getT1(), tuples.getT2()));
   }
 
-  private Mono<ServerResponse> mergeAndSaveFlashcardFolders(
-      final String userId,
-      final FlashcardFolder flashcardFolderToCopy,
-      final FlashcardFolder flashcardFolder) {
-    return saveFlashcardFolder(userId, flashcardFolder.toBuilder()
-        .flashcards(Stream.concat(flashcardFolder.getFlashcards().stream(),
-            flashcardFolderToCopy.getFlashcards().stream())
-            .collect(Collectors.toList()))
+  private Tuple2<String, FlashcardFolder> regenerateIds(Tuple2<String, FlashcardFolder> tuples) {
+    log.info("On copying {}'s {} - regenerating ids for user {}.", tuples.getT2().getOwner(),
+        tuples.getT2().getName(), tuples.getT1());
+    return Tuples.of(tuples.getT1(), tuples.getT2()
+        .toBuilder()
+        .id(idEncoderDecoder.encodeId(tuples.getT1(), tuples.getT2().getName()))
+        .owner(tuples.getT1())
+        .flashcards(tuples.getT2().getFlashcards().stream().map(
+            flashcard -> flashcard.toBuilder()
+                .id(idEncoderDecoder.encodeId(tuples.getT1(), flashcard.getQuestion()))
+                .build()
+        ).collect(Collectors.toList()))
         .build());
   }
 
-  private Mono<ServerResponse> saveFlashcardFolder(
-      final String userId,
-      final FlashcardFolder flashcardFolderToSave) {
-    return flashcardFolderService
-        .save(userId, flashcardFolderToSave
-            .toBuilder()
-            .flashcards(flashcardFolderToSave.getFlashcards().stream().map(
-                flashcard -> flashcard.toBuilder()
-                    .id(idEncoderDecoder.encodeId(userId, flashcard.getQuestion()))
-                    .build()
-            ).collect(Collectors.toList()))
-            .build())
-        .flatMap(p -> accepted().build())
-        .switchIfEmpty(status(HttpStatus.INTERNAL_SERVER_ERROR).build());
-  }
-
-  private Mono<ServerResponse> badRequestFolderToCopyNotFound(
-      final String ownerId,
-      final String folderIdToCopy) {
-    return badRequest().build().doOnNext(serverResponse -> log
-        .warn("Not found folder to copy with id {} owned by {}", folderIdToCopy, ownerId));
+  private Mono<FlashcardFolder> saveCopiedFolder(Tuple2<String, FlashcardFolder> tuples) {
+    return flashcardFolderService.save(tuples.getT1(), tuples.getT2());
   }
 }
