@@ -6,8 +6,10 @@ import static org.springframework.web.reactive.function.server.ServerResponse.st
 import com.github.damianszwed.fishky.flashcard.service.port.CommandQueryHandler;
 import com.github.damianszwed.fishky.flashcard.service.port.IdEncoderDecoder;
 import com.github.damianszwed.fishky.flashcard.service.port.OwnerProvider;
+import com.github.damianszwed.fishky.flashcard.service.port.flashcard.Flashcard;
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolder;
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderService;
+import io.vavr.collection.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +18,7 @@ import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple2;
+import reactor.util.function.Tuple3;
 import reactor.util.function.Tuples;
 
 @Slf4j
@@ -41,6 +44,7 @@ public class CopyFolderCommandHandler implements CommandQueryHandler {
     return flashcardFolderService.getById(ownerId, folderIdToCopy)
         .flatMap(flashcardFolderToCopy -> retrieveUserId(serverRequest, flashcardFolderToCopy))
         .flatMap(this::retrieveExistingFolder)
+        .map(this::mergeFolders)
         .map(this::regenerateIds)
         .flatMap(this::saveCopiedFolder)
         .flatMap(p -> accepted().build())
@@ -55,20 +59,35 @@ public class CopyFolderCommandHandler implements CommandQueryHandler {
         .map(userId -> Tuples.of(userId, flashcardFolderToCopy));
   }
 
-  private Mono<Tuple2<String, FlashcardFolder>> retrieveExistingFolder(
+  private Mono<Tuple3<String, FlashcardFolder, FlashcardFolder>> retrieveExistingFolder(
       Tuple2<String, FlashcardFolder> tuples) {
     log.info("On copying {}'s {} - trying to retrieve existing folder for user {}.",
         tuples.getT2().getOwner(), tuples.getT2().getName(), tuples.getT1());
     return flashcardFolderService
-        .get(tuples.getT1(), tuples.getT2().getName()).map(existingFolder -> {
-          final FlashcardFolder build = existingFolder.toBuilder()
-              .flashcards(Stream.concat(existingFolder.getFlashcards().stream(),
-                  tuples.getT2().getFlashcards().stream())
-                  .collect(Collectors.toList()))
-              .build();
-          return Tuples.of(tuples.getT1(), build);
-        })
-        .defaultIfEmpty(Tuples.of(tuples.getT1(), tuples.getT2()));
+        .get(tuples.getT1(), tuples.getT2().getName())
+        .map(existingFolder -> Tuples.of(tuples.getT1(), tuples.getT2(), existingFolder))
+        .defaultIfEmpty(
+            Tuples.of(tuples.getT1(), tuples.getT2(), FlashcardFolder.builder().build()));
+  }
+
+  private Tuple2<String, FlashcardFolder> mergeFolders(
+      Tuple3<String, FlashcardFolder, FlashcardFolder> tuples) {
+    final FlashcardFolder flashcardFolderToCopy = tuples.getT2();
+    final FlashcardFolder existingOrEmptyFlashcardFolder = tuples.getT3();
+    final FlashcardFolder mergedFlashcardFolder = flashcardFolderToCopy.toBuilder()
+        .flashcards(mergeFlashcards(flashcardFolderToCopy, existingOrEmptyFlashcardFolder))
+        .build();
+    return Tuples.of(tuples.getT1(), mergedFlashcardFolder);
+  }
+
+  private java.util.List<Flashcard> mergeFlashcards(FlashcardFolder flashcardFolderToCopy,
+      FlashcardFolder existingOrEmptyFlashcardFolder) {
+    return List.ofAll(Stream.concat(
+        existingOrEmptyFlashcardFolder.getFlashcards().stream(),
+        flashcardFolderToCopy.getFlashcards().stream())
+        .collect(Collectors.toList()))
+        .distinctBy(Flashcard::getQuestion)
+        .toJavaList();
   }
 
   private Tuple2<String, FlashcardFolder> regenerateIds(Tuple2<String, FlashcardFolder> tuples) {
