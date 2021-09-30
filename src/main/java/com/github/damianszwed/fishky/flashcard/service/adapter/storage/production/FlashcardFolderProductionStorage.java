@@ -23,7 +23,7 @@ public class FlashcardFolderProductionStorage implements FlashcardFolderService 
 
   @Override
   public Mono<FlashcardFolder> get(String owner, String flashcardFolderName) {
-    return flashcardFolderMongoRepository.findByName(flashcardFolderName);
+    return flashcardFolderMongoRepository.findByOwnerAndName(owner, flashcardFolderName);
   }
 
   @Override

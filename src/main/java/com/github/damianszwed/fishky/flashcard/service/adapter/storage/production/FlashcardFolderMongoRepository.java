@@ -8,7 +8,7 @@ import reactor.core.publisher.Mono;
 public interface FlashcardFolderMongoRepository extends
     ReactiveMongoRepository<FlashcardFolder, String> {
 
-  Mono<FlashcardFolder> findByName(String name);
+  Mono<FlashcardFolder> findByOwnerAndName(String owner, String name);
 
   Flux<FlashcardFolder> findAllByOwner(String owner);
 }
