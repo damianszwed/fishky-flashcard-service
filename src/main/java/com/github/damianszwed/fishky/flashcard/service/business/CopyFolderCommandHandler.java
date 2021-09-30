@@ -75,7 +75,14 @@ public class CopyFolderCommandHandler implements CommandQueryHandler {
       final String userId,
       final FlashcardFolder flashcardFolderToSave) {
     return flashcardFolderService
-        .save(userId, flashcardFolderToSave)
+        .save(userId, flashcardFolderToSave
+            .toBuilder()
+            .flashcards(flashcardFolderToSave.getFlashcards().stream().map(
+                flashcard -> flashcard.toBuilder()
+                    .id(idEncoderDecoder.encodeId(userId, flashcard.getQuestion()))
+                    .build()
+            ).collect(Collectors.toList()))
+            .build())
         .flatMap(p -> accepted().build())
         .switchIfEmpty(status(HttpStatus.INTERNAL_SERVER_ERROR).build());
   }

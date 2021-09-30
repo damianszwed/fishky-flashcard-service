@@ -159,7 +159,7 @@ interface OutputSamples {
       + "    \"owner\": \"user1@example.com\",\n"
       + "    \"flashcards\": [\n"
       + "      {\n"
-      + "        \"id\": \"YnJvdWdodGluLWV4Y3Vyc2lvbg==\",\n"
+      + "        \"id\": \"dXNlcjFAZXhhbXBsZS5jb20tZXhjdXJzaW9u\",\n"
       + "        \"question\": \"excursion\",\n"
       + "        \"answers\": [\n"
       +
@@ -208,7 +208,7 @@ interface OutputSamples {
       + "        \"answers\": [\"answerD\"]\n"
       + "      },\n"
       + "      {\n"
-      + "        \"id\": \"YnJvdWdodGluLWV4Y3Vyc2lvbg==\",\n"
+      + "        \"id\": \"dXNlcjFAZXhhbXBsZS5jb20tZXhjdXJzaW9u\",\n"
       + "        \"question\": \"excursion\",\n"
       + "        \"answers\": [\n"
       +
