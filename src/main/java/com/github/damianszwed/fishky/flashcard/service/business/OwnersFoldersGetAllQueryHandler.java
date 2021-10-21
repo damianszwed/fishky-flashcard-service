@@ -33,8 +33,8 @@ public class OwnersFoldersGetAllQueryHandler implements CommandQueryHandler {
   public Mono<ServerResponse> handle(ServerRequest serverRequest) {
 
     final String ownerId = serverRequest.pathVariable("ownerId");
-    if (securityProperties.getSystemUserId().equals(ownerId)) {
-      return getAllFlashcardsByOwnerId(ownerId);
+    if (securityProperties.getSystemUserExternalId().equals(ownerId)) {
+      return getAllFlashcardsByOwnerId(securityProperties.getSystemUserInternalId());
     }
 
     return ownerProvider.provide(serverRequest)

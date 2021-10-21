@@ -75,10 +75,12 @@ public class CommandQueryWebConfiguration {
 
   @Bean
   public CommandQueryHandler copyFolderCommandHandler(
+      SecurityProperties securityProperties,
       FlashcardFolderService flashcardFolderEmittingStorage,
       IdEncoderDecoder idEncoderDecoder,
       OwnerProvider ownerProvider) {
     return new CopyFolderCommandHandler(
+        securityProperties,
         flashcardFolderEmittingStorage,
         idEncoderDecoder,
         ownerProvider);

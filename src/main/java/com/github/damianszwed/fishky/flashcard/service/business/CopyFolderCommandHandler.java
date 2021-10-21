@@ -3,6 +3,7 @@ package com.github.damianszwed.fishky.flashcard.service.business;
 import static org.springframework.web.reactive.function.server.ServerResponse.accepted;
 import static org.springframework.web.reactive.function.server.ServerResponse.status;
 
+import com.github.damianszwed.fishky.flashcard.service.configuration.SecurityProperties;
 import com.github.damianszwed.fishky.flashcard.service.port.CommandQueryHandler;
 import com.github.damianszwed.fishky.flashcard.service.port.IdEncoderDecoder;
 import com.github.damianszwed.fishky.flashcard.service.port.OwnerProvider;
@@ -24,14 +25,17 @@ import reactor.util.function.Tuples;
 @Slf4j
 public class CopyFolderCommandHandler implements CommandQueryHandler {
 
+  private final SecurityProperties securityProperties;
   private final FlashcardFolderService flashcardFolderService;
   private final IdEncoderDecoder idEncoderDecoder;
   private final OwnerProvider ownerProvider;
 
   public CopyFolderCommandHandler(
+      SecurityProperties securityProperties,
       FlashcardFolderService flashcardFolderService,
       IdEncoderDecoder idEncoderDecoder,
       OwnerProvider ownerProvider) {
+    this.securityProperties = securityProperties;
     this.flashcardFolderService = flashcardFolderService;
     this.idEncoderDecoder = idEncoderDecoder;
     this.ownerProvider = ownerProvider;
@@ -39,7 +43,8 @@ public class CopyFolderCommandHandler implements CommandQueryHandler {
 
   @Override
   public Mono<ServerResponse> handle(final ServerRequest serverRequest) {
-    final String ownerId = serverRequest.pathVariable("ownerId");
+    final String ownerId = switchIfBroughtInOwner(serverRequest.pathVariable("ownerId"),
+        securityProperties);
     final String folderIdToCopy = serverRequest.pathVariable("folderId");
     return flashcardFolderService.getById(ownerId, folderIdToCopy)
         .flatMap(flashcardFolderToCopy -> retrieveUserId(serverRequest, flashcardFolderToCopy))
@@ -49,6 +54,18 @@ public class CopyFolderCommandHandler implements CommandQueryHandler {
         .flatMap(this::saveCopiedFolder)
         .flatMap(p -> accepted().build())
         .switchIfEmpty(status(HttpStatus.BAD_REQUEST).build());
+  }
+
+  /**
+   * If user wants to copy brought in folder, service switches external id with internal id.
+   *
+   * @param ownerId            String
+   * @param securityProperties SecurityProperties
+   * @return switchedOwnerId
+   */
+  private String switchIfBroughtInOwner(String ownerId, SecurityProperties securityProperties) {
+    return securityProperties.getSystemUserExternalId().equals(ownerId) ? securityProperties
+        .getSystemUserInternalId() : ownerId;
   }
 
   private Mono<Tuple2<String, FlashcardFolder>> retrieveUserId(ServerRequest serverRequest,
