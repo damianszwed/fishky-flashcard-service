@@ -15,6 +15,11 @@ import org.springframework.context.annotation.Configuration;
 public class BusinessConfiguration {
 
   @Bean
+  SecurityProperties securityProperties() {
+    return new SecurityProperties();
+  }
+
+  @Bean
   FlashcardFolderProviderFlow flashcardFolderProviderFlow(
       FlashcardFolderService flashcardFolderStorage) {
     return new FlashcardFolderProviderFlow(flashcardFolderStorage);

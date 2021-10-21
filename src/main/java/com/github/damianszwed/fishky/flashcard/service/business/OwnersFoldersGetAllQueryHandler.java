@@ -3,7 +3,7 @@ package com.github.damianszwed.fishky.flashcard.service.business;
 import static org.springframework.web.reactive.function.server.ServerResponse.badRequest;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 
-import com.github.damianszwed.fishky.flashcard.service.configuration.BusinessProperties;
+import com.github.damianszwed.fishky.flashcard.service.configuration.SecurityProperties;
 import com.github.damianszwed.fishky.flashcard.service.port.CommandQueryHandler;
 import com.github.damianszwed.fishky.flashcard.service.port.OwnerProvider;
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolder;
@@ -16,12 +16,15 @@ import reactor.core.publisher.Mono;
 @Slf4j
 public class OwnersFoldersGetAllQueryHandler implements CommandQueryHandler {
 
+  private final SecurityProperties securityProperties;
   private final FlashcardFolderService flashcardFolderService;
   private final OwnerProvider ownerProvider;
 
   public OwnersFoldersGetAllQueryHandler(
+      SecurityProperties securityProperties,
       FlashcardFolderService flashcardFolderService,
       OwnerProvider ownerProvider) {
+    this.securityProperties = securityProperties;
     this.flashcardFolderService = flashcardFolderService;
     this.ownerProvider = ownerProvider;
   }
@@ -30,7 +33,7 @@ public class OwnersFoldersGetAllQueryHandler implements CommandQueryHandler {
   public Mono<ServerResponse> handle(ServerRequest serverRequest) {
 
     final String ownerId = serverRequest.pathVariable("ownerId");
-    if (BusinessProperties.SYSTEM_USER_ID.equals(ownerId)) {
+    if (securityProperties.getSystemUserId().equals(ownerId)) {
       return getAllFlashcardsByOwnerId(ownerId);
     }
 

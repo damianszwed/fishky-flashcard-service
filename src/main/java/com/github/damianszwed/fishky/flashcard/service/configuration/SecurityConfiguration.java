@@ -15,14 +15,15 @@ public class SecurityConfiguration {
   @Bean
   public SecurityWebFilterChain springSecurityFilterChain(
       final ServerHttpSecurity http,
-      final CorsWebFilter corsWebFilter) {
+      final CorsWebFilter corsWebFilter,
+      final SecurityProperties securityProperties) {
     http
         .addFilterAt(corsWebFilter, SecurityWebFiltersOrder.CORS)
         .csrf().disable()
         .authorizeExchange()
         .pathMatchers(
             "/healthCheck",
-            "/owners/" + BusinessProperties.SYSTEM_USER_ID + "/flashcardFolders")
+            "/owners/" + securityProperties.getSystemUserId() + "/flashcardFolders")
         .permitAll()
         .anyExchange()
         .authenticated()

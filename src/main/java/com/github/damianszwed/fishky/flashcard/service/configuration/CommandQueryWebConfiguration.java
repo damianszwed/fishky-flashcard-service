@@ -60,14 +60,17 @@ public class CommandQueryWebConfiguration {
 
   @Bean
   public CommandQueryHandler flashcardFolderGetAllQueryHandler(
-          FlashcardFolderService flashcardFolderEmittingStorage, OwnerProvider ownerProvider) {
+      FlashcardFolderService flashcardFolderEmittingStorage, OwnerProvider ownerProvider) {
     return new FlashcardFolderGetAllQueryHandler(flashcardFolderEmittingStorage, ownerProvider);
   }
 
   @Bean
   public CommandQueryHandler ownersFoldersGetAllQueryHandler(
-      FlashcardFolderService flashcardFolderEmittingStorage, OwnerProvider ownerProvider) {
-    return new OwnersFoldersGetAllQueryHandler(flashcardFolderEmittingStorage, ownerProvider);
+      SecurityProperties securityProperties,
+      FlashcardFolderService flashcardFolderEmittingStorage,
+      OwnerProvider ownerProvider) {
+    return new OwnersFoldersGetAllQueryHandler(securityProperties, flashcardFolderEmittingStorage,
+        ownerProvider);
   }
 
   @Bean
