@@ -59,6 +59,7 @@ public class FlashcardFolderSaveCommandHandler implements CommandQueryHandler {
         .id(idEncoderDecoder.encodeId(ownerId, flashcardFolder.getName()))
         .owner(ownerId)
         .flashcards(
+            //TODO(Damian.Szwed) generating id of the flashcards!!!
             Optional.ofNullable(flashcardFolder.getFlashcards()).orElse(Collections.emptyList()))
         .build();
   }

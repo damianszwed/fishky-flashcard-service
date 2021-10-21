@@ -5,7 +5,6 @@ import com.github.damianszwed.fishky.flashcard.service.component.driver.SpringTe
 import com.github.damianszwed.fishky.flashcard.service.configuration.BusinessConfiguration;
 import com.github.damianszwed.fishky.flashcard.service.configuration.CommandQueryWebConfiguration;
 import com.github.damianszwed.fishky.flashcard.service.configuration.DevelopmentSpecificConfiguration;
-import com.github.damianszwed.fishky.flashcard.service.configuration.SecurityProperties;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -51,6 +50,8 @@ class FishkyFlashcardServiceTest {
       );
     });
   }
+
+  //TODO(Damian.Szwed) save folder with flashcards two times.
 
   @Test
   @DisplayName("Service should save flashcard in particular folder on demand.")

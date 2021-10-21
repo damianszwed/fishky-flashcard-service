@@ -65,7 +65,7 @@ public class CopyFolderCommandHandler implements CommandQueryHandler {
    */
   private String switchIfBroughtInOwner(String ownerId, SecurityProperties securityProperties) {
     return securityProperties.getSystemUserExternalId().equals(ownerId) ? securityProperties
-        .getSystemUserInternalId() : ownerId;
+        .getSystemUserLowerCasedInternalId() : ownerId;
   }
 
   private Mono<Tuple2<String, FlashcardFolder>> retrieveUserId(ServerRequest serverRequest,

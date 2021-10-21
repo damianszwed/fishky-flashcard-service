@@ -34,7 +34,7 @@ public class OwnersFoldersGetAllQueryHandler implements CommandQueryHandler {
 
     final String ownerId = serverRequest.pathVariable("ownerId");
     if (securityProperties.getSystemUserExternalId().equals(ownerId)) {
-      return getAllFlashcardsByOwnerId(securityProperties.getSystemUserInternalId());
+      return getAllFlashcardsByOwnerId(securityProperties.getSystemUserLowerCasedInternalId());
     }
 
     return ownerProvider.provide(serverRequest)
