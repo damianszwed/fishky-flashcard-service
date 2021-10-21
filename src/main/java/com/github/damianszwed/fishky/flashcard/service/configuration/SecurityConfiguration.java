@@ -23,7 +23,7 @@ public class SecurityConfiguration {
         .authorizeExchange()
         .pathMatchers(
             "/healthCheck",
-            "/owners/" + securityProperties.getSystemUserId() + "/flashcardFolders")
+            "/owners/" + securityProperties.getSystemUserExternalId() + "/flashcardFolders")
         .permitAll()
         .anyExchange()
         .authenticated()

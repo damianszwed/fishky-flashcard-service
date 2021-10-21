@@ -9,7 +9,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Data
 public class SecurityProperties {
 
-  private String systemUserId = "broughtin";
+  private String systemUserExternalId = "broughtin";
+  private String systemUserInternalId = "broughtin";
 
   private Cors cors = new Cors();
 
