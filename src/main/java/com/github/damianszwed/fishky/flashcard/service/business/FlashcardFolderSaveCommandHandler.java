@@ -10,6 +10,7 @@ import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardF
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderService;
 import java.util.Collections;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -61,18 +62,16 @@ public class FlashcardFolderSaveCommandHandler implements CommandQueryHandler {
    * Returns flashcard folder from request if it has any flashcards. Otherwise returns existing
    * flashcard folder if it exists.
    *
-   * @param tuples Tuple2<FlashcardFolder, Mono<FlashcardFolder>>
-   * @return Mono<FlashcardFolder>
+   * @param tuples Tuple2
+   * @return FlashcardFolder
    */
   private Mono<FlashcardFolder> promoteFolderWithFlashcards(
       Tuple2<FlashcardFolder, Mono<FlashcardFolder>> tuples) {
     return tuples.getT2()
-        .map(existingFlashcardFolder -> {
-          return Optional.ofNullable(tuples.getT1().getFlashcards())
-              .filter(flashcards -> !flashcards.isEmpty())
-              .map(flashcards -> tuples.getT1())
-              .orElse(existingFlashcardFolder);
-        }).defaultIfEmpty(tuples.getT1());
+        .map(existingFlashcardFolder -> Optional.ofNullable(tuples.getT1().getFlashcards())
+            .filter(flashcards -> !flashcards.isEmpty())
+            .map(flashcards -> tuples.getT1())
+            .orElse(existingFlashcardFolder)).defaultIfEmpty(tuples.getT1());
   }
 
   private FlashcardFolder withIdAndOwner(FlashcardFolder flashcardFolder, String ownerId) {
@@ -80,8 +79,13 @@ public class FlashcardFolderSaveCommandHandler implements CommandQueryHandler {
         .id(idEncoderDecoder.encodeId(ownerId, flashcardFolder.getName()))
         .owner(ownerId)
         .flashcards(
-            //TODO(Damian.Szwed) generating id of the flashcards!!!
-            Optional.ofNullable(flashcardFolder.getFlashcards()).orElse(Collections.emptyList()))
+            Optional.ofNullable(flashcardFolder.getFlashcards())
+                .map(flashcards -> flashcards.stream()
+                    .map(flashcard -> flashcard.toBuilder()
+                        .id(idEncoderDecoder.encodeId(ownerId, flashcard.getQuestion()))
+                        .build())
+                    .collect(Collectors.toList()))
+                .orElse(Collections.emptyList()))
         .build();
   }
 }
