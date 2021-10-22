@@ -28,8 +28,13 @@ interface InputSamples {
   //language=JSON
   String TURISM_FLASHCARD_FOLDER = "{\n"
       + "  \"name\": \"Turism\",\n"
-      + "  \"flashcards\": [],\n"
+      + "  \"flashcards\": [{\"question\":  \"questionD\", \"answers\":  [\"answerD\"]}],\n"
       + "  \"id\": \"placeholder\"\n"
       + "}";
 
+  //language=JSON
+  String DEFAULT_FLASHCARD_FOLDER = "{\n"
+      + "  \"name\": \"Default\",\n"
+      + "  \"flashcards\": []\n"
+      + "}";
 }

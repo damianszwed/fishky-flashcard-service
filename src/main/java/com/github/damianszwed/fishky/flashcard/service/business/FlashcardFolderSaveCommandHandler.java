@@ -14,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
+import reactor.util.function.Tuple2;
+import reactor.util.function.Tuples;
 
 @Slf4j
 public class FlashcardFolderSaveCommandHandler implements CommandQueryHandler {
@@ -40,18 +42,37 @@ public class FlashcardFolderSaveCommandHandler implements CommandQueryHandler {
         .map(ownerId ->
             validatorRequestHandler.requireValidBody(
                 mono ->
-                    mono.doOnNext(
-                        flashcardFolder ->
-                            flashcardFolderService
-                                .save(ownerId, withIdAndOwner(flashcardFolder, ownerId))
-                                .subscribe(newFlashcardFolder ->
-                                    log.info("FlashcardFolder {} has been saved.",
-                                        newFlashcardFolder.getId())))
-                        .flatMap(flashcard -> accepted().build()),
+                    mono
+                        .map(flashcardFolder -> Tuples.of(flashcardFolder,
+                            flashcardFolderService.get(ownerId, flashcardFolder.getName())))
+                        .flatMap(this::promoteFolderWithFlashcards)
+                        .flatMap(flashcardFolder -> flashcardFolderService
+                            .save(ownerId, withIdAndOwner(flashcardFolder, ownerId)))
+                        .doOnNext(flashcardFolder -> log.info("FlashcardFolder {} has been saved.",
+                            flashcardFolder.getId()))
+                        .flatMap(flashcardFolder -> accepted().build()),
                 serverRequest,
                 FlashcardFolder.class
             ))
         .orElse(badRequest().build());
+  }
+
+  /**
+   * Returns flashcard folder from request if it has any flashcards. Otherwise returns existing
+   * flashcard folder if it exists.
+   *
+   * @param tuples Tuple2<FlashcardFolder, Mono<FlashcardFolder>>
+   * @return Mono<FlashcardFolder>
+   */
+  private Mono<FlashcardFolder> promoteFolderWithFlashcards(
+      Tuple2<FlashcardFolder, Mono<FlashcardFolder>> tuples) {
+    return tuples.getT2()
+        .map(existingFlashcardFolder -> {
+          return Optional.ofNullable(tuples.getT1().getFlashcards())
+              .filter(flashcards -> !flashcards.isEmpty())
+              .map(flashcards -> tuples.getT1())
+              .orElse(existingFlashcardFolder);
+        }).defaultIfEmpty(tuples.getT1());
   }
 
   private FlashcardFolder withIdAndOwner(FlashcardFolder flashcardFolder, String ownerId) {
