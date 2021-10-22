@@ -32,7 +32,8 @@ public class ValidatorRequestHandler {
                   ? block.apply(Mono.just(body))
                   : badRequest(constraintViolations);
             }
-        );
+        )
+        .doOnError(throwable -> log.warn("An error occurred.", throwable));
   }
 
   private <T> Mono<? extends ServerResponse> badRequest(

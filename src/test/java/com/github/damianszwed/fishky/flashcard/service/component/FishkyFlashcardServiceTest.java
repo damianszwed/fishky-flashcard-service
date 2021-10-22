@@ -51,7 +51,17 @@ class FishkyFlashcardServiceTest {
     });
   }
 
-  //TODO(Damian.Szwed) save folder with flashcards two times.
+  @Test
+  @DisplayName("Service should retain all flashcards on creating folder with the same name.")
+  void shouldRetainAllFlashcardsOnCreatingFolderWithTheSameName() {
+    fishkyFlashcardServiceDriver.with(context -> {
+      context.when().student().createsFolder(InputSamples.DEFAULT_FLASHCARD_FOLDER);
+      context.when().student().queriesForFlashcardFolders();
+      context.then().student().receivesFlashcardFolders(
+          OutputSamples.FLASHCARD_FOLDERS
+      );
+    });
+  }
 
   @Test
   @DisplayName("Service should save flashcard in particular folder on demand.")
@@ -170,10 +180,7 @@ class FishkyFlashcardServiceTest {
   void shouldMergeFoldersOnCopy() {
     fishkyFlashcardServiceDriver.with(context -> {
       context.given().student().createsFolder(InputSamples.TURISM_FLASHCARD_FOLDER);
-      context.given().student()
-          .savesFlashcardInFolder(
-              InputSamples.NEW_FLASHCARD,
-              InputSamples.FLASHCARD_TURISM_FOLDER_ID);
+      context.then().student().receives(HttpStatus.ACCEPTED);
       context.given().student()
           .copiesFlashcardFolder(InputSamples.SYSTEM_USER_FOLDER_ID, "broughtin");
       context.when().student().queriesForFlashcardFoldersByOwner("user1@example.com");
