@@ -1,4 +1,4 @@
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: fishky-flashcard-service-ingress
@@ -7,7 +7,10 @@ metadata:
     #gcloud compute addresses describe api-fishky-pl --global
     kubernetes.io/ingress.global-static-ip-name: api-fishky-pl
     networking.gke.io/managed-certificates: fishky-managed-certificate
+    kubernetes.io/ingress.class: "gce"
 spec:
-  backend:
-    serviceName: fishky-flashcard-service
-    servicePort: 30508
+  defaultBackend:
+    service:
+      name: fishky-flashcard-service
+      port:
+        number: 30508
