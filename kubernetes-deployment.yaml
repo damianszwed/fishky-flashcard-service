@@ -40,6 +40,6 @@ spec:
             path: /healthCheck
             port: 8080
           initialDelaySeconds: 90
-          timeoutSeconds: 2
-          periodSeconds: 8
-          failureThreshold: 1
+          timeoutSeconds: 3
+          periodSeconds: 15
+          failureThreshold: 4
