@@ -14,8 +14,12 @@ interface InputSamples {
       + "  \"answers\": [\"answerDD\"]\n"
       +
       "}";
+  //user1@example.com-questionb
   String EXISTING_FLASHCARD_ID = "dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25i";
-  String FLASHCARD_FIRST_FOLDER_ID = "dXNlcjFAZXhhbXBsZS5jb20tZGVmYXVsdA==";
+  //user1@example.com-default
+  String FLASHCARD_USER_1_FIRST_FOLDER_ID = "dXNlcjFAZXhhbXBsZS5jb20tZGVmYXVsdA==";
+  //user2@example.com-folder a
+  String FLASHCARD_USER_2_FIRST_FOLDER_ID = "dXNlcjJAZXhhbXBsZS5jb20tZm9sZGVyIGE=";
   String SYSTEM_USER_FOLDER_ID = "YnJvdWdodGluLXR1cmlzbQ==";
   String FLASHCARD_TURISM_FOLDER_ID = "dXNlcjFAZXhhbXBsZS5jb20tdHVyaXNt";
   //language=JSON

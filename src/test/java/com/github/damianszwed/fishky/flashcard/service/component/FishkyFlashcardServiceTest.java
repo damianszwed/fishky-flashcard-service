@@ -69,7 +69,7 @@ class FishkyFlashcardServiceTest {
     fishkyFlashcardServiceDriver.with(context -> {
       context.when().student()
           .savesFlashcardInFolder(InputSamples.NEW_FLASHCARD,
-              InputSamples.FLASHCARD_FIRST_FOLDER_ID);
+              InputSamples.FLASHCARD_USER_1_FIRST_FOLDER_ID);
       context.when().student().queriesForFlashcardFolders();
       context.then().student().receivesFlashcardFolders(
           OutputSamples.FLASHCARD_FOLDERS_WITH_NEW_FLASHCARD
@@ -84,7 +84,7 @@ class FishkyFlashcardServiceTest {
       context.when().student()
           .modifiesFlashcardInFolder(
               InputSamples.MODIFIED_FLASHCARD,
-              InputSamples.FLASHCARD_FIRST_FOLDER_ID);
+              InputSamples.FLASHCARD_USER_1_FIRST_FOLDER_ID);
       context.when().student().queriesForFlashcardFolders();
       context.then().student().receivesFlashcardFolders(
           OutputSamples.FLASHCARD_FOLDERS_WITH_ONE_FLASHCARD_MODIFIED
@@ -99,7 +99,7 @@ class FishkyFlashcardServiceTest {
       context.when().student()
           .deletesFlashcardFromFolder(
               InputSamples.EXISTING_FLASHCARD_ID,
-              InputSamples.FLASHCARD_FIRST_FOLDER_ID);
+              InputSamples.FLASHCARD_USER_1_FIRST_FOLDER_ID);
       context.when().student().queriesForFlashcardFolders();
       context.then().student().receivesFlashcardFolders(
           OutputSamples.FLASHCARD_FOLDERS_WITHOUT_ONE_FLASHCARD
@@ -111,8 +111,17 @@ class FishkyFlashcardServiceTest {
   @DisplayName("Service should allow to delete owned folder.")
   void shouldAllowToDeleteOwnedFolder() {
     fishkyFlashcardServiceDriver.with(context -> {
-      context.when().student().deletesFolder(InputSamples.FLASHCARD_FIRST_FOLDER_ID);
+      context.when().student().deletesFolder(InputSamples.FLASHCARD_USER_1_FIRST_FOLDER_ID);
       context.then().student().receives(HttpStatus.ACCEPTED);
+    });
+  }
+
+  @Test
+  @DisplayName("Service should not allow to delete folder owned by someone else.")
+  void shouldNotAllowToDeleteFolderOwnedBySomeoneElse() {
+    fishkyFlashcardServiceDriver.with(context -> {
+      context.when().student().deletesFolder(InputSamples.FLASHCARD_USER_2_FIRST_FOLDER_ID);
+      context.then().student().receives(HttpStatus.BAD_REQUEST);
     });
   }
 
@@ -214,7 +223,7 @@ class FishkyFlashcardServiceTest {
   @DisplayName("Service should delete folder on demand.")
   void shouldDeleteFolderOnDemand() {
     fishkyFlashcardServiceDriver.with(context -> {
-      context.when().student().deletesFolder(InputSamples.FLASHCARD_FIRST_FOLDER_ID);
+      context.when().student().deletesFolder(InputSamples.FLASHCARD_USER_1_FIRST_FOLDER_ID);
       context.when().student().queriesForFlashcardFolders();
       context.then().student().receivesFlashcardFolders(
           OutputSamples.EMPTY_FLASHCARD_FOLDERS

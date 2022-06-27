@@ -1,6 +1,7 @@
 package com.github.damianszwed.fishky.flashcard.service.adapter.storage.development;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.Flashcard;
@@ -38,6 +39,13 @@ public class FlashcardFolderDevelopmentStorage implements FlashcardFolderService
       ))
       .build();
 
+  private final FlashcardFolder user2Folder = FlashcardFolder.builder()
+      .id("dXNlcjJAZXhhbXBsZS5jb20tZm9sZGVyIGE=")//user2@example.com-folder a
+      .owner("user2@example.com")
+      .name("Folder A")
+      .flashcards(emptyList())
+      .build();
+
   @SuppressWarnings("FieldCanBeLocal")
   private final FlashcardFolder broughtInFolder = FlashcardFolder.builder()
       .id("YnJvdWdodGluLXR1cmlzbQ==")//broughtin-turism
@@ -53,6 +61,7 @@ public class FlashcardFolderDevelopmentStorage implements FlashcardFolderService
 
   public FlashcardFolderDevelopmentStorage() {
     flashcardFolders.add(user1Folder);
+    flashcardFolders.add(user2Folder);
     flashcardFolders.add(broughtInFolder);
   }
 
@@ -75,7 +84,7 @@ public class FlashcardFolderDevelopmentStorage implements FlashcardFolderService
     return Mono
         .justOrEmpty(
             flashcardFolders.stream().filter(flashcardFolder -> flashcardFolder.getId().equals(
-                flashcardFolderId))
+                    flashcardFolderId))
                 .findFirst());
   }
 
