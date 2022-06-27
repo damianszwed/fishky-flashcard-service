@@ -1,7 +1,7 @@
 package com.github.damianszwed.fishky.flashcard.service.business;
 
 import static org.springframework.web.reactive.function.server.ServerResponse.accepted;
-import static org.springframework.web.reactive.function.server.ServerResponse.status;
+import static org.springframework.web.reactive.function.server.ServerResponse.badRequest;
 
 import com.github.damianszwed.fishky.flashcard.service.configuration.SecurityProperties;
 import com.github.damianszwed.fishky.flashcard.service.port.CommandQueryHandler;
@@ -14,7 +14,6 @@ import io.vavr.collection.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
@@ -53,7 +52,7 @@ public class CopyFolderCommandHandler implements CommandQueryHandler {
         .map(this::regenerateIds)
         .flatMap(this::saveCopiedFolder)
         .flatMap(p -> accepted().build())
-        .switchIfEmpty(status(HttpStatus.BAD_REQUEST).build());
+        .switchIfEmpty(badRequest().build());
   }
 
   /**
@@ -100,9 +99,9 @@ public class CopyFolderCommandHandler implements CommandQueryHandler {
   private java.util.List<Flashcard> mergeFlashcards(FlashcardFolder flashcardFolderToCopy,
       FlashcardFolder existingOrEmptyFlashcardFolder) {
     return List.ofAll(Stream.concat(
-        existingOrEmptyFlashcardFolder.getFlashcards().stream(),
-        flashcardFolderToCopy.getFlashcards().stream())
-        .collect(Collectors.toList()))
+                existingOrEmptyFlashcardFolder.getFlashcards().stream(),
+                flashcardFolderToCopy.getFlashcards().stream())
+            .collect(Collectors.toList()))
         .distinctBy(Flashcard::getQuestion)
         .toJavaList();
   }
