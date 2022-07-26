@@ -9,18 +9,18 @@ plugins {
     id 'idea'
     id 'eclipse'
     id 'checkstyle'
-    id 'net.ltgt.apt' version '0.10'
-    id 'com.github.spotbugs' version '4.0.8'
+    id 'net.ltgt.apt' version '0.21'
+    id 'com.github.spotbugs' version '4.7.1'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'org.springframework.boot' version '2.5.2'
-    id 'info.solidsoft.pitest' version '1.4.0'
-    id 'com.palantir.docker' version '0.26.0'
+    id 'info.solidsoft.pitest' version '1.7.4'
+    id 'com.palantir.docker' version '0.34.0'
 }
 
 ext {
     //TODO(Damian.Szwed) Should I use set()?
-    junitPlatformVersion = '1.6.2'
-    junitJupiterVersion = '5.6.2'
+    junitPlatformVersion = '1.8.2'
+    junitJupiterVersion = '5.8.2'
     mockitoVersion = '3.3.3'
     sleuthVersion = '2.0.1.RELEASE'
     zipkinVersion = '2.0.1.RELEASE'
@@ -36,7 +36,7 @@ jar {
 }
 
 checkstyle {
-    toolVersion = '8.14'
+    toolVersion = '10.3.1'
 }
 
 test {
@@ -56,6 +56,10 @@ docker {
     name "${jar.archiveBaseName.get()}:${version}"
     files jar.archiveFile
     buildArgs(['JAR_FILE': "${jar.archiveFileName.get()}"])
+}
+
+pitest {
+    junit5PluginVersion = '0.16'
 }
 
 repositories {
@@ -82,6 +86,7 @@ dependencies {
     testImplementation 'io.projectreactor:reactor-test'
     testImplementation "org.junit.platform:junit-platform-engine:${junitPlatformVersion}"
     testImplementation "org.junit.platform:junit-platform-runner:${junitPlatformVersion}"
+    testImplementation "org.junit.platform:junit-platform-commons:${junitPlatformVersion}"
     testImplementation "org.junit.jupiter:junit-jupiter-api:${junitJupiterVersion}"
     testImplementation "org.junit.jupiter:junit-jupiter-params:${junitJupiterVersion}"
     testImplementation "org.junit.jupiter:junit-jupiter-api:${junitJupiterVersion}"
