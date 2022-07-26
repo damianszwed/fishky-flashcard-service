@@ -41,7 +41,7 @@ public class FlashcardFolderEmittingStorage implements FlashcardFolderService {
   public Mono<FlashcardFolder> save(String owner, FlashcardFolder flashcardFolder) {
     log.info("Owner {} saves flashcardFolder {}.", owner, flashcardFolder);
     return flashcardFolderStorage.save(owner, flashcardFolder)
-        .doOnNext(o_O -> {
+        .doOnNext(folder -> {
           log.info("save folder - doOnNext -> getAllFoldersEventTrigger.fireUp(owner)");
           getAllFoldersEventTrigger.fireUp(owner);
         });

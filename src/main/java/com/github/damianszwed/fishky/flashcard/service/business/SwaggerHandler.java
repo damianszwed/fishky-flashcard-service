@@ -4,7 +4,6 @@ import static org.springframework.web.reactive.function.server.ServerResponse.pe
 import static org.springframework.web.reactive.function.server.ServerResponse.status;
 
 import com.github.damianszwed.fishky.flashcard.service.port.CommandQueryHandler;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +15,6 @@ import reactor.core.publisher.Mono;
 
 /**
  * TODO(Damian.Szwed) swagger for WebFlux
- *
  */
 @Slf4j
 public class SwaggerHandler implements CommandQueryHandler {
