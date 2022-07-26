@@ -245,7 +245,7 @@ class FishkyFlashcardServiceTest {
   @Test
   @Tag("Validation")
   @DisplayName("Service should not allow to create a folder with empty name.")
-  void shouldNotAllowToCreateAFolderWithEmptyName() {
+  void shouldNotAllowToCreateTheFolderWithEmptyName() {
     fishkyFlashcardServiceDriver.with(context -> {
       context.when().student().createsFolder(InputSamples.FLASHCARD_FOLDER_WITH_EMPTY_NAME);
       context.then().student().receives(HttpStatus.BAD_REQUEST);
