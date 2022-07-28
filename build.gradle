@@ -93,9 +93,16 @@ task pushDockerImage(type: Exec) {
     commandLine 'docker', 'push', "damianiero/fishky-flashcard-service:${version}"
 }
 
+/**
+ * To check the order of the tasks you should invoke:
+ * ./gradlew deployByKubernetes --dry-run
+ */
 task deployByKubernetes {
     dependsOn kubernetesService, kubernetesDeployment, pushDockerImage, 'docker', build, updateVersion
     build.mustRunAfter updateVersion
+    tasks.docker.mustRunAfter build
+    pushDockerImage.mustRunAfter tasks.docker
+    kubernetesDeployment.mustRunAfter pushDockerImage
 }
 
 task deployByLocalKubernetes {
