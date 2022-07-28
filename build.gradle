@@ -37,6 +37,11 @@ spotbugs {
     excludeFilter = file("$rootProject.projectDir/config/spotbugs/excludeFilter.xml")
 }
 
+jar {
+    enabled = false
+    archiveClassifier.set('')
+}
+
 docker {
     name "${jar.archiveBaseName.get()}:${version}"
     files jar.archiveFile
