@@ -10,29 +10,15 @@ plugins {
     id 'eclipse'
     id 'checkstyle'
     id 'com.github.spotbugs' version '4.7.1'
-    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-    id 'org.springframework.boot' version '2.5.2'
+    id 'io.spring.dependency-management' version '1.0.12.RELEASE'
+    id 'org.springframework.boot' version '2.7.2'
     id 'info.solidsoft.pitest' version '1.7.4'
     id 'com.palantir.docker' version '0.34.0'
 }
 
-ext {
-    //TODO(Damian.Szwed) Should I use set()?
-    junitPlatformVersion = '1.8.2'
-    junitJupiterVersion = '5.8.2'
-    mockitoVersion = '3.3.3'
-    sleuthVersion = '2.0.1.RELEASE'
-    zipkinVersion = '2.0.1.RELEASE'
-}
-
 group = 'com.github.damianszwed'
-
-jar {
-    //TODO(Damian.Szwed) Is below line needed at all?
-    archiveBaseName.set('fishky-flashcard-service')
-    enabled = false
-    archiveClassifier.set('')
-}
+sourceCompatibility = 1.11
+targetCompatibility = 1.11
 
 checkstyle {
     toolVersion = '10.3.1'
@@ -65,35 +51,21 @@ repositories {
     mavenCentral()
 }
 
-sourceCompatibility = 1.11
-targetCompatibility = 1.11
-
 dependencies {
     implementation "org.springframework.boot:spring-boot-configuration-processor"
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
-    implementation'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
     implementation 'org.springframework.security:spring-security-config'
     implementation 'org.springframework.security:spring-security-oauth2-jose'
     implementation 'org.springframework.security:spring-security-oauth2-resource-server'
 
-    implementation 'io.vavr:vavr:0.10.3'
-    compileOnly 'org.projectlombok:lombok:1.18.24'
-    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+    implementation 'io.vavr:vavr:0.10.4'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.projectreactor:reactor-test'
-    testImplementation "org.junit.platform:junit-platform-engine:${junitPlatformVersion}"
-    testImplementation "org.junit.platform:junit-platform-runner:${junitPlatformVersion}"
-    testImplementation "org.junit.platform:junit-platform-commons:${junitPlatformVersion}"
-    testImplementation "org.junit.jupiter:junit-jupiter-api:${junitJupiterVersion}"
-    testImplementation "org.junit.jupiter:junit-jupiter-params:${junitJupiterVersion}"
-    testImplementation "org.junit.jupiter:junit-jupiter-api:${junitJupiterVersion}"
-    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitJupiterVersion}"
-    testImplementation "org.mockito:mockito-core:${mockitoVersion}"
-    testImplementation "org.mockito:mockito-junit-jupiter:${mockitoVersion}"
-    testCompileOnly 'org.projectlombok:lombok:1.18.24'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
 }
 
 task updateVersion {
