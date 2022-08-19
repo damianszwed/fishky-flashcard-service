@@ -7,16 +7,16 @@ import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardF
 import java.util.HashMap;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
-import reactor.core.publisher.EmitterProcessor;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.FluxSink;
+import reactor.core.publisher.Sinks;
+import reactor.core.publisher.Sinks.Many;
+import reactor.util.concurrent.Queues;
 
 @Slf4j
 public class FlashcardFolderProviderFlow implements EventSource<FlashcardFolder>, EventTrigger {
 
   private final FlashcardFolderService flashcardFolderService;
-  private final Map<String, EmitterProcessor<FlashcardFolder>> emittersByOwners = new HashMap<>();
-  private final Map<String, FluxSink<FlashcardFolder>> sinksByOwners = new HashMap<>();
+  private final Map<String, Sinks.Many<FlashcardFolder>> emittersByOwners = new HashMap<>();
 
   public FlashcardFolderProviderFlow(FlashcardFolderService flashcardFolderService) {
     this.flashcardFolderService = flashcardFolderService;
@@ -24,28 +24,24 @@ public class FlashcardFolderProviderFlow implements EventSource<FlashcardFolder>
 
   @Override
   public void fireUp(String owner) {
-    final FluxSink<FlashcardFolder> sink = getSink(owner);
-    flashcardFolderService.get(owner).subscribe(sink::next);
-  }
-
-  private FluxSink<FlashcardFolder> getSink(String owner) {
-    final EmitterProcessor<FlashcardFolder> processor = getProcessor(owner);
-    return sinksByOwners.computeIfAbsent(owner, o_O -> processor.sink());
+    final Many<FlashcardFolder> flashcardFolderMany = getFlashcardFolderMany(owner);
+    flashcardFolderService.get(owner).subscribe(flashcardFolderMany::tryEmitNext);
   }
 
   @Override
   public Flux<FlashcardFolder> getFlux(String owner) {
     log.info("Owner {} gets SSE.", owner);
-    return getProcessor(owner);
+    return getFlashcardFolderMany(owner).asFlux();
   }
 
-  private EmitterProcessor<FlashcardFolder> getProcessor(String owner) {
+  private Many<FlashcardFolder> getFlashcardFolderMany(String owner) {
     return emittersByOwners
-        .computeIfAbsent(owner, FlashcardFolderProviderFlow::createEmitterProcessor);
-  }
-
-  private static EmitterProcessor<FlashcardFolder> createEmitterProcessor(String o_O) {
-    return EmitterProcessor.create(false);
+        .computeIfAbsent(owner, s -> {
+          log.info("Building Sinks.Many for owner {}.", owner);
+          return Sinks.many()
+              .multicast().onBackpressureBuffer(
+                  Queues.SMALL_BUFFER_SIZE, false);
+        });
   }
 
 }
