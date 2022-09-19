@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: fishky-flashcard-service
-        image: damianiero/fishky-flashcard-service:0.15.7
+        image: damianiero/fishky-flashcard-service:0.16.0
         env:
         - name: GET_HOSTS_FROM
           value: dns
