@@ -17,6 +17,7 @@ import com.github.damianszwed.fishky.flashcard.service.business.FlashcardFolderM
 import com.github.damianszwed.fishky.flashcard.service.business.FlashcardFolderProviderFlow;
 import com.github.damianszwed.fishky.flashcard.service.business.FlashcardFolderSaveCommandHandler;
 import com.github.damianszwed.fishky.flashcard.service.business.FlashcardFolderSaveFlashcardCommandHandler;
+import com.github.damianszwed.fishky.flashcard.service.business.FlashcardFolderSearchQueryHandler;
 import com.github.damianszwed.fishky.flashcard.service.business.FlashcardFolderServerSentEventHandler;
 import com.github.damianszwed.fishky.flashcard.service.business.HealthCheckHandler;
 import com.github.damianszwed.fishky.flashcard.service.business.OwnersFoldersGetAllQueryHandler;
@@ -28,6 +29,7 @@ import com.github.damianszwed.fishky.flashcard.service.port.OwnerProvider;
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.EventSource;
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolder;
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderService;
+import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardSearchService;
 import javax.validation.Validator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -62,6 +64,12 @@ public class CommandQueryWebConfiguration {
   public CommandQueryHandler flashcardFolderGetAllQueryHandler(
       FlashcardFolderService flashcardFolderEmittingStorage, OwnerProvider ownerProvider) {
     return new FlashcardFolderGetAllQueryHandler(flashcardFolderEmittingStorage, ownerProvider);
+  }
+
+  @Bean
+  public CommandQueryHandler flashcardFolderSearchQueryHandler(
+      FlashcardSearchService flashcardSearchService, OwnerProvider ownerProvider) {
+    return new FlashcardFolderSearchQueryHandler(flashcardSearchService, ownerProvider);
   }
 
   @Bean
@@ -165,6 +173,7 @@ public class CommandQueryWebConfiguration {
   @Bean
   public RouterFunction<ServerResponse> flashcardFolderRoutes(
       CommandQueryHandler flashcardFolderGetAllQueryHandler,
+      CommandQueryHandler flashcardFolderSearchQueryHandler,
       CommandQueryHandler flashcardFolderSaveCommandHandler,
       CommandQueryHandler flashcardFolderDeleteCommandHandler,
       CommandQueryHandler flashcardFolderGetAllFlashcardsQueryHandler,
@@ -172,6 +181,7 @@ public class CommandQueryWebConfiguration {
       CommandQueryHandler flashcardFolderModifyFlashcardCommandHandler,
       CommandQueryHandler flashcardFolderDeleteFlashcardCommandHandler) {
     return route(GET("/flashcardFolders"), flashcardFolderGetAllQueryHandler::handle)
+        .andRoute(GET("/flashcardFolders/search"), flashcardFolderSearchQueryHandler::handle)
         .andRoute(POST("/flashcardFolders"), flashcardFolderSaveCommandHandler::handle)
         .andRoute(DELETE("/flashcardFolders/{id}"), flashcardFolderDeleteCommandHandler::handle)
         .andRoute(GET("/flashcardFolders/{id}/flashcards"),
