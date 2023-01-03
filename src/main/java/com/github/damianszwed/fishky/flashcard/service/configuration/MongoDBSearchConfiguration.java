@@ -12,6 +12,7 @@ public class MongoDBSearchConfiguration {
 
   @Bean
   FlashcardSearchService flashcardSearchService() {
+    //TODO(Damian.Szwed) MongoDB search
     return (owner, text) -> Flux.empty();
   }
 }
