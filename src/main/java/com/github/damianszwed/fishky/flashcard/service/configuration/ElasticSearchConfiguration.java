@@ -20,7 +20,7 @@ public class ElasticSearchConfiguration {
   @Bean
   ElasticSearchRename elasticSearchRename(
       @Value("${fishky.elasticsearch.uri}") String elasticSearchUri,
-      @Value("${fishky.elasticsearch.index:flashcards-000001") String index) {
+      @Value("${fishky.elasticsearch.index:flashcards-000001}") String index) {
     final BasicCredentialsProvider credentialsProvider = new BasicCredentialsProvider();
     final URI connUri = URI.create(elasticSearchUri);
     final String[] auth = connUri.getUserInfo().split(":");

@@ -8,7 +8,7 @@ import reactor.core.publisher.Flux;
 
 @Configuration
 @Profile("!elasticsearch")
-public class MongoDBSearchConfiguration {
+public class MongoSearchConfiguration {
 
   @Bean
   FlashcardSearchService flashcardSearchService() {

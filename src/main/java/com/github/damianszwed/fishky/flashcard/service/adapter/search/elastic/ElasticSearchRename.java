@@ -2,6 +2,9 @@ package com.github.damianszwed.fishky.flashcard.service.adapter.search.elastic;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHost;
 import org.apache.http.client.CredentialsProvider;
@@ -15,10 +18,9 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.unit.Fuzziness;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.rest.RestStatus;
-import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
-import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple2;
 import reactor.util.function.Tuples;
 
@@ -35,7 +37,7 @@ public class ElasticSearchRename {
     this.connUri = connUri;
   }
 
-  public Flux<Tuple2<String, String>> search(String owner, String text) {
+  public Mono<List<Tuple2<String, String>>> search(String owner, String text) {
     SearchRequest searchRequest = new SearchRequest(index);
     SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
     searchSourceBuilder.query(QueryBuilders.boolQuery()
@@ -52,18 +54,19 @@ public class ElasticSearchRename {
                         credentialsProvider)
                     .setKeepAliveStrategy(new DefaultConnectionKeepAliveStrategy())));
     //TODO(Damian.Szwed) refactor this ugly code
-    return Flux.create(sink -> {
+    return Mono.create(sink -> {
       restHighLevelClient.searchAsync(searchRequest, RequestOptions.DEFAULT,
           new ActionListener<>() {
             @Override
             public void onResponse(SearchResponse searchResponse) {
               if (RestStatus.OK.equals(searchResponse.status())) {
                 final SearchHits hits = searchResponse.getHits();
-                for (SearchHit hit : hits.getHits()) {
-                  sink.next(
-                      Tuples.of(hit.getId(), String.valueOf(hit.getSourceAsMap().get("folderId"))));
-                }
-
+                log.info("User {} looked for {} and found {} hits.", owner, text,
+                    hits.getHits().length);
+                sink.success(Arrays.stream(hits.getHits()).map(
+                        documentFields -> Tuples.of(documentFields.getId(),
+                            String.valueOf(documentFields.getSourceAsMap().get("folderId"))))
+                    .collect(Collectors.toList()));
               } else {
                 sink.error(new RuntimeException("Wrong search status: " + searchResponse.status()));
               }
