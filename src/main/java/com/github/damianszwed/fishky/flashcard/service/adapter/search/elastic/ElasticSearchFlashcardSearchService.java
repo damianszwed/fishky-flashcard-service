@@ -5,7 +5,6 @@ import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardF
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderService;
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardSearchService;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -26,37 +25,44 @@ public class ElasticSearchFlashcardSearchService implements FlashcardSearchServi
 
   @Override
   public Flux<Flashcard> search(String owner, String text) {
-    Mono<List<Tuple2<String, String>>> search = elasticSearchRename.search(owner, text);
-    Flux<Tuple2<String, String>> tuple2Flux = search.flatMapIterable(s -> s);
-    Flux<Tuple2<String, Mono<FlashcardFolder>>> map1 = tuple2Flux.map(s -> {
-      final String flashcardId = s.getT1();
-      final String flashcardFolderId = s.getT2();
-      log.info("Will take flashcard with id: {} from folder: {} for user {}", flashcardId,
-          flashcardFolderId, owner);
-      Mono<FlashcardFolder> byId = flashcardFolderStorage.getById(owner, flashcardFolderId);
-      return Tuples.of(flashcardId, byId);
-    });
-    Flux<Tuple2<String, Mono<FlashcardFolder>>> map = map1.map(abc -> {
-      return Tuples.of(abc.getT1(), abc.getT2().doOnSuccess(flashcardFolder -> {
-        if (flashcardFolder == null) {
-          log.info(
-              "Synchronization issue - flashcard folder mentioned earlier doesn't exist in main database.");
-        } else {
-          log.info("Got {} folder from main database.", flashcardFolder.getId());
-        }
-      }));
-    });
-    Flux<Tuple2<String, Mono<List<Flashcard>>>> map2 = map.map(abc -> {
-      return Tuples.of(abc.getT1(), abc.getT2().map(FlashcardFolder::getFlashcards));
-    });
+    return elasticSearchRename.search(owner, text)
+        .map(tuples1 -> getFolderFromMainDatabase(owner, tuples1))
+        .map(this::logFlashcardFolder)
+        .flatMap(this::withFlashcards)
+        .flatMap(this::filteredFlashcardFlux);
+  }
 
-    Flux<Flux<Flashcard>> map3 = map2.map(tuplesWithListMono -> {
-      return tuplesWithListMono.getT2().flatMapIterable(flashcards -> flashcards.stream()
-          .filter(flashcard -> tuplesWithListMono.getT1().equals(flashcard.getId()))
-          .collect(
-              Collectors.toList()));
-    });
-    Flux<Flashcard> flashcardFlux = map3.flatMap(s -> s);
-    return flashcardFlux;
+  private Tuple2<String, Mono<FlashcardFolder>> getFolderFromMainDatabase(
+      String owner,
+      Tuple2<String, String> flashcardIdAndFolder) {
+    final String flashcardId = flashcardIdAndFolder.getT1();
+    final String flashcardFolderId = flashcardIdAndFolder.getT2();
+    log.info("Will take from main database flashcard with id: {} from folder: {} for user {}",
+        flashcardId, flashcardFolderId, owner);
+    return Tuples.of(flashcardId, flashcardFolderStorage.getById(owner, flashcardFolderId));
+  }
+
+  private Tuple2<String, Mono<FlashcardFolder>> logFlashcardFolder(
+      Tuple2<String, Mono<FlashcardFolder>> tuples1) {
+    return Tuples.of(tuples1.getT1(), tuples1.getT2()
+        .doOnSuccess(flashcardFolder -> {
+          if (flashcardFolder == null) {
+            log.info("Synchronization issue - flashcard folder mentioned earlier "
+                + "doesn't exist in the main database.");
+          } else {
+            log.info("Got {} folder from main database.", flashcardFolder.getId());
+          }
+        }));
+  }
+
+  private Mono<Tuple2<String, List<Flashcard>>> withFlashcards(
+      Tuple2<String, Mono<FlashcardFolder>> tuples1) {
+    return tuples1.getT2().map(
+        flashcardFolder -> Tuples.of(tuples1.getT1(), flashcardFolder.getFlashcards()));
+  }
+
+  private Flux<Flashcard> filteredFlashcardFlux(Tuple2<String, List<Flashcard>> tuples) {
+    return Flux.fromStream(tuples.getT2().stream()
+        .filter(flashcard -> tuples.getT1().equals(flashcard.getId())));
   }
 }
