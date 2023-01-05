@@ -15,17 +15,17 @@ import reactor.util.function.Tuples;
 public class ElasticSearchFlashcardSearchService implements FlashcardSearchService {
 
   private final FlashcardFolderService flashcardFolderStorage;
-  private final ElasticSearchRename elasticSearchRename;
+  private final ElasticSearchFlashcardRestHighLevelClient elasticSearchFlashcardRestHighLevelClient;
 
   public ElasticSearchFlashcardSearchService(FlashcardFolderService flashcardFolderStorage,
-      ElasticSearchRename elasticSearchRename) {
+      ElasticSearchFlashcardRestHighLevelClient elasticSearchFlashcardRestHighLevelClient) {
     this.flashcardFolderStorage = flashcardFolderStorage;
-    this.elasticSearchRename = elasticSearchRename;
+    this.elasticSearchFlashcardRestHighLevelClient = elasticSearchFlashcardRestHighLevelClient;
   }
 
   @Override
   public Flux<Flashcard> search(String owner, String text) {
-    return elasticSearchRename.search(owner, text)
+    return elasticSearchFlashcardRestHighLevelClient.search(owner, text)
         .map(tuples1 -> getFolderFromMainDatabase(owner, tuples1))
         .map(this::logFlashcardFolder)
         .flatMap(this::withFlashcards)
@@ -34,17 +34,17 @@ public class ElasticSearchFlashcardSearchService implements FlashcardSearchServi
 
   private Tuple2<String, Mono<FlashcardFolder>> getFolderFromMainDatabase(
       String owner,
-      Tuple2<String, String> flashcardIdAndFolder) {
-    final String flashcardId = flashcardIdAndFolder.getT1();
-    final String flashcardFolderId = flashcardIdAndFolder.getT2();
+      Tuple2<String, String> flashcardIdAndFlashcardFolder) {
+    final String flashcardId = flashcardIdAndFlashcardFolder.getT1();
+    final String flashcardFolderId = flashcardIdAndFlashcardFolder.getT2();
     log.info("Will take from main database flashcard with id: {} from folder: {} for user {}",
         flashcardId, flashcardFolderId, owner);
     return Tuples.of(flashcardId, flashcardFolderStorage.getById(owner, flashcardFolderId));
   }
 
   private Tuple2<String, Mono<FlashcardFolder>> logFlashcardFolder(
-      Tuple2<String, Mono<FlashcardFolder>> tuples1) {
-    return Tuples.of(tuples1.getT1(), tuples1.getT2()
+      Tuple2<String, Mono<FlashcardFolder>> flashcardIdAndFlashcardFolder) {
+    return Tuples.of(flashcardIdAndFlashcardFolder.getT1(), flashcardIdAndFlashcardFolder.getT2()
         .doOnSuccess(flashcardFolder -> {
           if (flashcardFolder == null) {
             log.info("Synchronization issue - flashcard folder mentioned earlier "
@@ -56,13 +56,15 @@ public class ElasticSearchFlashcardSearchService implements FlashcardSearchServi
   }
 
   private Mono<Tuple2<String, List<Flashcard>>> withFlashcards(
-      Tuple2<String, Mono<FlashcardFolder>> tuples1) {
-    return tuples1.getT2().map(
-        flashcardFolder -> Tuples.of(tuples1.getT1(), flashcardFolder.getFlashcards()));
+      Tuple2<String, Mono<FlashcardFolder>> flashcardIdAndFlashcardFolder) {
+    return flashcardIdAndFlashcardFolder.getT2().map(
+        flashcardFolder -> Tuples.of(flashcardIdAndFlashcardFolder.getT1(),
+            flashcardFolder.getFlashcards()));
   }
 
-  private Flux<Flashcard> filteredFlashcardFlux(Tuple2<String, List<Flashcard>> tuples) {
-    return Flux.fromStream(tuples.getT2().stream()
-        .filter(flashcard -> tuples.getT1().equals(flashcard.getId())));
+  private Flux<Flashcard> filteredFlashcardFlux(
+      Tuple2<String, List<Flashcard>> flashcardIdAndFlashcards) {
+    return Flux.fromStream(flashcardIdAndFlashcards.getT2().stream()
+        .filter(flashcard -> flashcardIdAndFlashcards.getT1().equals(flashcard.getId())));
   }
 }
