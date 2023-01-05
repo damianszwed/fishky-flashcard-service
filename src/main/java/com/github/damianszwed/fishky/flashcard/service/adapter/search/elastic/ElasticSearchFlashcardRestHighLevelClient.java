@@ -16,6 +16,7 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.unit.Fuzziness;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.rest.RestStatus;
+import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import reactor.core.publisher.Flux;
@@ -23,36 +24,24 @@ import reactor.util.function.Tuple2;
 import reactor.util.function.Tuples;
 
 @Slf4j
-public class ElasticSearchRename {
+public class ElasticSearchFlashcardRestHighLevelClient {
 
   private final CredentialsProvider credentialsProvider;
   private final String index;
   private final URI connUri;
 
-  public ElasticSearchRename(String index, CredentialsProvider credentialsProvider, URI connUri) {
+  public ElasticSearchFlashcardRestHighLevelClient(
+      String index, CredentialsProvider credentialsProvider, URI connUri) {
     this.credentialsProvider = credentialsProvider;
     this.index = index;
     this.connUri = connUri;
   }
 
   public Flux<Tuple2<String, String>> search(String owner, String text) {
-    SearchRequest searchRequest = new SearchRequest(index);
-    SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-    searchSourceBuilder.query(QueryBuilders.boolQuery()
-        .must(
-            QueryBuilders.multiMatchQuery(text, "folderName", "question", "answers").fuzziness(
-                Fuzziness.AUTO))
-        .filter(QueryBuilders.termQuery("owner", owner)));
-    searchRequest.source(searchSourceBuilder);
-    //TODO(Damian.Szwed) refactor this ugly code
-    RestHighLevelClient restHighLevelClient = new RestHighLevelClient(
-        RestClient.builder(new HttpHost(connUri.getHost(), connUri.getPort(), connUri.getScheme()))
-            .setHttpClientConfigCallback(
-                httpAsyncClientBuilder -> httpAsyncClientBuilder.setDefaultCredentialsProvider(
-                        credentialsProvider)
-                    .setKeepAliveStrategy(new DefaultConnectionKeepAliveStrategy())));
-    //TODO(Damian.Szwed) refactor this ugly code
+    final SearchRequest searchRequest = getSearchRequest(owner, text);
+
     return Flux.create(sink -> {
+      final RestHighLevelClient restHighLevelClient = getRestHighLevelClient();
       restHighLevelClient.searchAsync(searchRequest, RequestOptions.DEFAULT,
           new ActionListener<>() {
             @Override
@@ -61,13 +50,13 @@ public class ElasticSearchRename {
                 final SearchHits hits = searchResponse.getHits();
                 log.info("User {} looked for {} and found {} hits.", owner, text,
                     hits.getHits().length);
-                Arrays.stream(hits.getHits()).forEach(
-                    documentFields -> sink.next(Tuples.of(documentFields.getId(),
-                        String.valueOf(documentFields.getSourceAsMap().get("folderId"))))
+                Arrays.stream(hits.getHits()).forEach(documentFields ->
+                    sink.next(getFlashcardIdAndFolderId(documentFields))
                 );
                 sink.complete();
               } else {
-                sink.error(new RuntimeException("Wrong search status: " + searchResponse.status()));
+                sink.error(
+                    new RuntimeException("Wrong search status: " + searchResponse.status()));
               }
               try {
                 restHighLevelClient.close();
@@ -84,5 +73,31 @@ public class ElasticSearchRename {
             }
           });
     });
+  }
+
+  private static Tuple2<String, String> getFlashcardIdAndFolderId(SearchHit searchHit) {
+    return Tuples.of(searchHit.getId(),
+        String.valueOf(searchHit.getSourceAsMap().get("folderId")));
+  }
+
+  private RestHighLevelClient getRestHighLevelClient() {
+    return new RestHighLevelClient(
+        RestClient.builder(new HttpHost(connUri.getHost(), connUri.getPort(), connUri.getScheme()))
+            .setHttpClientConfigCallback(
+                httpAsyncClientBuilder -> httpAsyncClientBuilder.setDefaultCredentialsProvider(
+                        credentialsProvider)
+                    .setKeepAliveStrategy(new DefaultConnectionKeepAliveStrategy())));
+  }
+
+  private SearchRequest getSearchRequest(String owner, String text) {
+    final SearchRequest searchRequest = new SearchRequest(index);
+    SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+    searchSourceBuilder.query(QueryBuilders.boolQuery()
+        .must(
+            QueryBuilders.multiMatchQuery(text, "folderName", "question", "answers").fuzziness(
+                Fuzziness.AUTO))
+        .filter(QueryBuilders.termQuery("owner", owner)));
+    searchRequest.source(searchSourceBuilder);
+    return searchRequest;
   }
 }
