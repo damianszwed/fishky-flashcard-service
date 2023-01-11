@@ -20,6 +20,7 @@ import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.FluxSink;
 import reactor.util.function.Tuple2;
 import reactor.util.function.Tuples;
 
@@ -43,41 +44,8 @@ public class ElasticSearchFlashcardRestHighLevelClient {
     return Flux.create(sink -> {
       final RestHighLevelClient restHighLevelClient = getRestHighLevelClient();
       restHighLevelClient.searchAsync(searchRequest, RequestOptions.DEFAULT,
-          new ActionListener<>() {
-            @Override
-            public void onResponse(SearchResponse searchResponse) {
-              if (RestStatus.OK.equals(searchResponse.status())) {
-                final SearchHits hits = searchResponse.getHits();
-                log.info("User {} looked for {} and found {} hits.", owner, text,
-                    hits.getHits().length);
-                Arrays.stream(hits.getHits()).forEach(documentFields ->
-                    sink.next(getFlashcardIdAndFolderId(documentFields))
-                );
-                sink.complete();
-              } else {
-                sink.error(
-                    new RuntimeException("Wrong search status: " + searchResponse.status()));
-              }
-              try {
-                restHighLevelClient.close();
-              } catch (IOException e) {
-                log.error("On close", e);
-                sink.error(e);
-              }
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-              log.error("On failure", e);
-              sink.error(e);
-            }
-          });
+          getSearchListener(owner, text, sink, restHighLevelClient));
     });
-  }
-
-  private static Tuple2<String, String> getFlashcardIdAndFolderId(SearchHit searchHit) {
-    return Tuples.of(searchHit.getId(),
-        String.valueOf(searchHit.getSourceAsMap().get("folderId")));
   }
 
   private RestHighLevelClient getRestHighLevelClient() {
@@ -99,5 +67,44 @@ public class ElasticSearchFlashcardRestHighLevelClient {
         .filter(QueryBuilders.termQuery("owner", owner)));
     searchRequest.source(searchSourceBuilder);
     return searchRequest;
+  }
+
+  private static ActionListener<SearchResponse> getSearchListener(
+      String owner, String text, FluxSink<Tuple2<String, String>> sink,
+      RestHighLevelClient restHighLevelClient) {
+    return new ActionListener<>() {
+      @Override
+      public void onResponse(SearchResponse searchResponse) {
+        if (RestStatus.OK.equals(searchResponse.status())) {
+          final SearchHits hits = searchResponse.getHits();
+          log.info("User {} looked for {} and found {} hits.", owner, text,
+              hits.getHits().length);
+          Arrays.stream(hits.getHits()).forEach(documentFields ->
+              sink.next(getFlashcardIdAndFolderId(documentFields))
+          );
+          sink.complete();
+        } else {
+          sink.error(
+              new RuntimeException("Wrong search status: " + searchResponse.status()));
+        }
+        try {
+          restHighLevelClient.close();
+        } catch (IOException e) {
+          log.error("On close", e);
+          sink.error(e);
+        }
+      }
+
+      @Override
+      public void onFailure(Exception e) {
+        log.error("On failure", e);
+        sink.error(e);
+      }
+    };
+  }
+
+  private static Tuple2<String, String> getFlashcardIdAndFolderId(SearchHit searchHit) {
+    return Tuples.of(searchHit.getId(),
+        String.valueOf(searchHit.getSourceAsMap().get("folderId")));
   }
 }

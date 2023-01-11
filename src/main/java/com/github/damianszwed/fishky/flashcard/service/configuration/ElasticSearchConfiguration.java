@@ -1,7 +1,7 @@
 package com.github.damianszwed.fishky.flashcard.service.configuration;
 
-import com.github.damianszwed.fishky.flashcard.service.adapter.search.elastic.ElasticSearchFlashcardSearchService;
 import com.github.damianszwed.fishky.flashcard.service.adapter.search.elastic.ElasticSearchFlashcardRestHighLevelClient;
+import com.github.damianszwed.fishky.flashcard.service.adapter.search.elastic.ElasticSearchFlashcardSearchService;
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderService;
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardSearchService;
 import java.net.URI;
@@ -18,7 +18,7 @@ import org.springframework.context.annotation.Profile;
 public class ElasticSearchConfiguration {
 
   @Bean
-  ElasticSearchFlashcardRestHighLevelClient elasticSearchRename(
+  ElasticSearchFlashcardRestHighLevelClient elasticSearchFlashcardRestHighLevelClient(
       @Value("${fishky.elasticsearch.uri}") String elasticSearchUri,
       @Value("${fishky.elasticsearch.index:flashcards-000001}") String index) {
     final BasicCredentialsProvider credentialsProvider = new BasicCredentialsProvider();
