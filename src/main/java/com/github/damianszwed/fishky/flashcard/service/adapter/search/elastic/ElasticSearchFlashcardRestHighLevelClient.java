@@ -21,11 +21,11 @@ import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.FluxSink;
+import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple2;
 import reactor.util.function.Tuples;
 
 @Slf4j
-//TODO(Damian.Szwed) provide an interface
 public class ElasticSearchFlashcardRestHighLevelClient {
 
   private final CredentialsProvider credentialsProvider;
@@ -47,6 +47,10 @@ public class ElasticSearchFlashcardRestHighLevelClient {
       restHighLevelClient.searchAsync(searchRequest, RequestOptions.DEFAULT,
           getSearchListener(owner, text, sink, restHighLevelClient));
     });
+  }
+
+  public Mono<Boolean> reindex() {
+    return Mono.just(true);
   }
 
   private RestHighLevelClient getRestHighLevelClient() {

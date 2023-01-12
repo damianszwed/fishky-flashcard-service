@@ -17,6 +17,11 @@ public class FlashcardFolderProductionStorage implements FlashcardFolderService 
   }
 
   @Override
+  public Flux<FlashcardFolder> get() {
+    return flashcardFolderMongoRepository.findAll();
+  }
+
+  @Override
   public Flux<FlashcardFolder> get(String owner) {
     return flashcardFolderMongoRepository.findAllByOwner(owner);
   }

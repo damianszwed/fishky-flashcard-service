@@ -32,6 +32,13 @@ public class ElasticSearchFlashcardSearchService implements FlashcardSearchServi
         .flatMap(this::filteredFlashcardById);
   }
 
+  @Override
+  public Mono<Boolean> reindex() {
+    final Flux<FlashcardFolder> flashcardFolderFlux = flashcardFolderStorage.get();
+    //TODO(Damian.Szwed) impl
+    return elasticSearchFlashcardRestHighLevelClient.reindex();
+  }
+
   private Tuple2<String, Mono<FlashcardFolder>> getFolderFromMainDatabase(
       String owner,
       Tuple2<String, String> flashcardIdAndFlashcardFolder) {
