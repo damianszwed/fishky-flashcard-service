@@ -29,7 +29,7 @@ public class ElasticSearchFlashcardSearchService implements FlashcardSearchServi
         .map(tuples1 -> getFolderFromMainDatabase(owner, tuples1))
         .map(this::logFlashcardFolder)
         .flatMap(this::withFlashcards)
-        .flatMap(this::filteredFlashcardFlux);
+        .flatMap(this::filteredFlashcardById);
   }
 
   private Tuple2<String, Mono<FlashcardFolder>> getFolderFromMainDatabase(
@@ -62,7 +62,7 @@ public class ElasticSearchFlashcardSearchService implements FlashcardSearchServi
             flashcardFolder.getFlashcards()));
   }
 
-  private Flux<Flashcard> filteredFlashcardFlux(
+  private Flux<Flashcard> filteredFlashcardById(
       Tuple2<String, List<Flashcard>> flashcardIdAndFlashcards) {
     return Flux.fromStream(flashcardIdAndFlashcards.getT2().stream()
         .filter(flashcard -> flashcardIdAndFlashcards.getT1().equals(flashcard.getId())));

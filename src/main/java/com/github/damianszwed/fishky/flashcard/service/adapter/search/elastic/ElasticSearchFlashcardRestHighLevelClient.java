@@ -25,6 +25,7 @@ import reactor.util.function.Tuple2;
 import reactor.util.function.Tuples;
 
 @Slf4j
+//TODO(Damian.Szwed) provide an interface
 public class ElasticSearchFlashcardRestHighLevelClient {
 
   private final CredentialsProvider credentialsProvider;
