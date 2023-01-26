@@ -12,6 +12,9 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 import reactor.util.function.Tuples;
 
+/**
+ * TODO rename to FlashcardSearchQueryHandler
+ */
 public class FlashcardFolderSearchQueryHandler implements CommandQueryHandler {
 
   private final FlashcardSearchService flashcardSearchService;

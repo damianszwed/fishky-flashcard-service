@@ -1,5 +1,6 @@
 package com.github.damianszwed.fishky.flashcard.service.adapter.search.elastic;
 
+import com.github.damianszwed.fishky.flashcard.service.port.flashcard.Flashcard;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Arrays;
@@ -14,7 +15,10 @@ import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.unit.Fuzziness;
+import org.elasticsearch.index.query.MatchAllQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.reindex.BulkByScrollResponse;
+import org.elasticsearch.index.reindex.DeleteByQueryRequest;
 import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
@@ -49,8 +53,39 @@ public class ElasticSearchFlashcardRestHighLevelClient {
     });
   }
 
-  public Mono<Boolean> reindex() {
-    return Mono.just(true);
+  public Mono<Boolean> erase() {
+    final DeleteByQueryRequest deleteByQueryRequest = getDeleteByQueryRequest();
+
+    return Mono.create(booleanMonoSink -> {
+      final RestHighLevelClient restHighLevelClient = getRestHighLevelClient();
+
+      restHighLevelClient.deleteByQueryAsync(deleteByQueryRequest, RequestOptions.DEFAULT,
+          new ActionListener<>() {
+            @Override
+            public void onResponse(BulkByScrollResponse bulkByScrollResponse) {
+              try {
+                log.info("Erased {} with status {}.", index, bulkByScrollResponse.getStatus());
+                restHighLevelClient.close();
+                booleanMonoSink.success(Boolean.TRUE);
+              } catch (IOException e) {
+                log.error("On close after erasing.", e);
+                booleanMonoSink.error(e);
+              }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+              log.error("An error occurred on erasing. ", e);
+              booleanMonoSink.error(e);
+            }
+          });
+    });
+  }
+
+  public Mono<Void> indexFlashcard(String flashcardFolderId, Flashcard flashcard) {
+    log.info("indexFlashcard({}, {})", flashcardFolderId, flashcard);
+    //TODO(Damian.Szwed) implementation
+    return Mono.empty();
   }
 
   private RestHighLevelClient getRestHighLevelClient() {
@@ -72,6 +107,24 @@ public class ElasticSearchFlashcardRestHighLevelClient {
         .filter(QueryBuilders.termQuery("owner", owner)));
     searchRequest.source(searchSourceBuilder);
     return searchRequest;
+  }
+
+  /**
+   * Represents:
+   * POST /flashcards-000001/_delete_by_query?conflicts=proceed
+   * {
+   *   "query": {
+   *     "match_all": {}
+   *   }
+   * }
+   *
+   * @return DeleteByQueryRequest
+   */
+  private DeleteByQueryRequest getDeleteByQueryRequest() {
+    final DeleteByQueryRequest deleteByQueryRequest = new DeleteByQueryRequest(index);
+    deleteByQueryRequest.setQuery(new MatchAllQueryBuilder());
+    deleteByQueryRequest.setConflicts("proceed");
+    return deleteByQueryRequest;
   }
 
   private static ActionListener<SearchResponse> getSearchListener(

@@ -4,11 +4,12 @@ import static org.springframework.web.reactive.function.server.ServerResponse.ok
 
 import com.github.damianszwed.fishky.flashcard.service.port.CommandQueryHandler;
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardSearchService;
-import org.springframework.http.HttpStatus;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
+@Slf4j
 public class FlashcardFolderReindexQueryHandler implements CommandQueryHandler {
 
   private final FlashcardSearchService flashcardSearchService;
@@ -20,12 +21,7 @@ public class FlashcardFolderReindexQueryHandler implements CommandQueryHandler {
   @Override
   public Mono<ServerResponse> handle(ServerRequest serverRequest) {
     return flashcardSearchService.reindex()
-        .flatMap(aBoolean -> {
-          if (aBoolean) {
-            return ok().build();
-          } else {
-            return ServerResponse.status(HttpStatus.FAILED_DEPENDENCY).build();
-          }
-        });
+        .thenReturn(ok().build())
+        .flatMap(serverResponseMono -> serverResponseMono);
   }
 }
