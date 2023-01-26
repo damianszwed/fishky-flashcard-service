@@ -24,7 +24,7 @@ public class MongoSearchConfiguration {
       }
 
       @Override
-      public Mono<Boolean> reindex() {
+      public Mono<Void> reindex() {
         log.warn("Reindex for MongoDB is not needed.");
         return Mono.empty();
       }

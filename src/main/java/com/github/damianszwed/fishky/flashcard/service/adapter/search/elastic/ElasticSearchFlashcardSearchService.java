@@ -33,10 +33,32 @@ public class ElasticSearchFlashcardSearchService implements FlashcardSearchServi
   }
 
   @Override
-  public Mono<Boolean> reindex() {
-    final Flux<FlashcardFolder> flashcardFolderFlux = flashcardFolderStorage.get();
-    //TODO(Damian.Szwed) impl
-    return elasticSearchFlashcardRestHighLevelClient.reindex();
+  public Mono<Void> reindex() {
+    log.info("Invoked reindex().");
+    //TODO(Damian.Szwed) refactor
+    final Mono<Boolean> result = elasticSearchFlashcardRestHighLevelClient.erase();
+    Flux<FlashcardFolder> flashcardFolderFlux = result.flatMapMany(unused -> {
+      return flashcardFolderStorage.get();
+    });
+
+    Flux<Tuple2<String, Flashcard>> tuple2Flux = flashcardFolderFlux.flatMap(flashcardFolder -> {
+      log.info("Incoming folder {} from main database.", flashcardFolder);
+      return Flux.fromStream(
+      flashcardFolder.getFlashcards()
+          .stream().map(flashcard -> {
+            return Tuples.of(flashcardFolder.getId(), flashcard);
+          }));
+    });
+
+    Flux<Void> abc = tuple2Flux.flatMap(objects -> {
+      String flashcardFolderId = objects.getT1();
+      Flashcard flashcard = objects.getT2();
+      log.info("Will index following flashcard {}", flashcard);
+      return elasticSearchFlashcardRestHighLevelClient.indexFlashcard(flashcardFolderId, flashcard);
+    });
+
+
+    return abc.then();
   }
 
   private Tuple2<String, Mono<FlashcardFolder>> getFolderFromMainDatabase(

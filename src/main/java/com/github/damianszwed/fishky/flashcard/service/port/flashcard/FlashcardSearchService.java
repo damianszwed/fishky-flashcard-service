@@ -7,5 +7,5 @@ public interface FlashcardSearchService {
 
   Flux<Flashcard> search(String owner, String text);
 
-  Mono<Boolean> reindex();
+  Mono<Void> reindex();
 }
