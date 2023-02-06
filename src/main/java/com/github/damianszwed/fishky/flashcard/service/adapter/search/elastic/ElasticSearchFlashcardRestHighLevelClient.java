@@ -155,7 +155,7 @@ public class ElasticSearchFlashcardRestHighLevelClient {
         builder.field("folderName", flashcardFolder.getName());
         builder.field("owner", flashcardFolder.getOwner());
         builder.field("question", flashcard.getQuestion());
-        builder.array("answers", flashcard.getAnswers().toArray());//TODO(is toArray() needed?)
+        builder.array("answers", flashcard.getAnswers().toArray());
       }
       builder.endObject();
       indexRequest.id(flashcard.getId()).source(builder);
