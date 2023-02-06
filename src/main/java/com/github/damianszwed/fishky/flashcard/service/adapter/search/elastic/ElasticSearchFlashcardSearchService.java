@@ -14,6 +14,11 @@ import reactor.util.function.Tuples;
 @Slf4j
 public class ElasticSearchFlashcardSearchService implements FlashcardSearchService {
 
+  /**
+   * By this field messages are indexing one by one.
+   * More information: <a href="https://stackoverflow.com/questions/62837058/can-flux-of-project-reactor-process-messages-one-by-one">stackoverflow</a>
+   */
+  private static final int CONCURRENCY = 1;
   private final FlashcardFolderService flashcardFolderStorage;
   private final ElasticSearchFlashcardRestHighLevelClient elasticSearchFlashcardRestHighLevelClient;
 
@@ -35,30 +40,25 @@ public class ElasticSearchFlashcardSearchService implements FlashcardSearchServi
   @Override
   public Mono<Void> reindex() {
     log.info("Invoked reindex().");
-    //TODO(Damian.Szwed) refactor
-    final Mono<Boolean> result = elasticSearchFlashcardRestHighLevelClient.erase();
-    Flux<FlashcardFolder> flashcardFolderFlux = result.flatMapMany(unused -> {
-      return flashcardFolderStorage.get();
-    });
-
-    Flux<Tuple2<String, Flashcard>> tuple2Flux = flashcardFolderFlux.flatMap(flashcardFolder -> {
-      log.info("Incoming folder {} from main database.", flashcardFolder);
-      return Flux.fromStream(
-      flashcardFolder.getFlashcards()
-          .stream().map(flashcard -> {
-            return Tuples.of(flashcardFolder.getId(), flashcard);
-          }));
-    });
-
-    Flux<Void> abc = tuple2Flux.flatMap(objects -> {
-      String flashcardFolderId = objects.getT1();
-      Flashcard flashcard = objects.getT2();
-      log.info("Will index following flashcard {}", flashcard);
-      return elasticSearchFlashcardRestHighLevelClient.indexFlashcard(flashcardFolderId, flashcard);
-    });
-
-
-    return abc.then();
+    return elasticSearchFlashcardRestHighLevelClient
+        .erase()
+        .flatMapMany(unused -> flashcardFolderStorage.get())
+        .flatMap(flashcardFolder -> {
+          log.info("Incoming folder {} from main database.", flashcardFolder);
+          return Flux.fromStream(
+              flashcardFolder.getFlashcards()
+                  .stream()
+                  .map(flashcard -> Tuples.of(flashcardFolder, flashcard)));
+        })
+        .flatMap(objects -> {
+          final FlashcardFolder flashcardFolder = objects.getT1();
+          final Flashcard flashcard = objects.getT2();
+          log.info("Will index following flashcard {}", flashcard);
+          return elasticSearchFlashcardRestHighLevelClient.indexFlashcard(
+              flashcardFolder,
+              flashcard);
+        }, CONCURRENCY)
+        .then();
   }
 
   private Tuple2<String, Mono<FlashcardFolder>> getFolderFromMainDatabase(
