@@ -1,6 +1,7 @@
 package com.github.damianszwed.fishky.flashcard.service.adapter.search.elastic;
 
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.Flashcard;
+import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolder;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Arrays;
@@ -9,12 +10,17 @@ import org.apache.http.HttpHost;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.impl.client.DefaultConnectionKeepAliveStrategy;
 import org.elasticsearch.action.ActionListener;
+import org.elasticsearch.action.DocWriteRequest.OpType;
+import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.unit.Fuzziness;
+import org.elasticsearch.common.xcontent.XContentBuilder;
+import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.index.query.MatchAllQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.reindex.BulkByScrollResponse;
@@ -55,10 +61,9 @@ public class ElasticSearchFlashcardRestHighLevelClient {
 
   public Mono<Boolean> erase() {
     final DeleteByQueryRequest deleteByQueryRequest = getDeleteByQueryRequest();
+    final RestHighLevelClient restHighLevelClient = getRestHighLevelClient();
 
     return Mono.create(booleanMonoSink -> {
-      final RestHighLevelClient restHighLevelClient = getRestHighLevelClient();
-
       restHighLevelClient.deleteByQueryAsync(deleteByQueryRequest, RequestOptions.DEFAULT,
           new ActionListener<>() {
             @Override
@@ -82,10 +87,38 @@ public class ElasticSearchFlashcardRestHighLevelClient {
     });
   }
 
-  public Mono<Void> indexFlashcard(String flashcardFolderId, Flashcard flashcard) {
-    log.info("indexFlashcard({}, {})", flashcardFolderId, flashcard);
-    //TODO(Damian.Szwed) implementation
-    return Mono.empty();
+  public Mono<Boolean> indexFlashcard(FlashcardFolder flashcardFolder, Flashcard flashcard) {
+    final RestHighLevelClient restHighLevelClient = getRestHighLevelClient();
+    return Mono.create(sink -> {
+      log.info("indexFlashcard({}, {})", flashcardFolder, flashcard);
+      try {
+        restHighLevelClient.indexAsync(getIndexRequest(flashcardFolder, flashcard),
+            RequestOptions.DEFAULT, new ActionListener<>() {
+              @Override
+              public void onResponse(IndexResponse indexResponse) {
+                try {
+                  restHighLevelClient.close();
+                  log.info("Indexed flashcard {} belonging to folder {}.",
+                      flashcard.getId(),
+                      flashcardFolder.getId());
+                  sink.success(Boolean.TRUE);
+                } catch (IOException e) {
+                  log.error("On close after indexing.", e);
+                  sink.error(e);
+                }
+              }
+
+              @Override
+              public void onFailure(Exception e) {
+                log.error("An error occurred on indexing. ", e);
+                sink.error(e);
+              }
+            });
+      } catch (IOException e) {
+        log.error("An error occurred on building indexRequest.", e);
+        sink.error(e);
+      }
+    });
   }
 
   private RestHighLevelClient getRestHighLevelClient() {
@@ -95,6 +128,41 @@ public class ElasticSearchFlashcardRestHighLevelClient {
                 httpAsyncClientBuilder -> httpAsyncClientBuilder.setDefaultCredentialsProvider(
                         credentialsProvider)
                     .setKeepAliveStrategy(new DefaultConnectionKeepAliveStrategy())));
+  }
+
+  /**
+   * Represents: POST flashcards-000001/_doc/asdhbdsfcGxSewB23CsadC1adssadA==
+   * {
+   *   "folderId": "asdkaksdi2nsadASAd2ASDasd929DA==",
+   *   "folderName": "Garden",
+   *   "owner": "user1@example.com",
+   *   "question": "Kopać dół",
+   *   "answers": [ "Dig a hole", "Dig down" ]
+   * }
+   *
+   * @param flashcardFolder
+   * @param flashcard
+   * @return IndexRequest
+   * @throws IOException
+   */
+  private IndexRequest getIndexRequest(FlashcardFolder flashcardFolder, Flashcard flashcard)
+      throws IOException {
+    final IndexRequest indexRequest = new IndexRequest(index);
+    try (XContentBuilder builder = XContentFactory.jsonBuilder()) {
+      builder.startObject();
+      {
+        builder.field("folderId", flashcardFolder.getId());
+        builder.field("folderName", flashcardFolder.getName());
+        builder.field("owner", flashcardFolder.getOwner());
+        builder.field("question", flashcard.getQuestion());
+        builder.array("answers", flashcard.getAnswers().toArray());//TODO(is toArray() needed?)
+      }
+      builder.endObject();
+      indexRequest.id(flashcard.getId()).source(builder);
+      indexRequest.opType(OpType.INDEX);
+
+      return indexRequest;
+    }
   }
 
   private SearchRequest getSearchRequest(String owner, String text) {
@@ -110,13 +178,8 @@ public class ElasticSearchFlashcardRestHighLevelClient {
   }
 
   /**
-   * Represents:
-   * POST /flashcards-000001/_delete_by_query?conflicts=proceed
-   * {
-   *   "query": {
-   *     "match_all": {}
-   *   }
-   * }
+   * Represents: POST /flashcards-000001/_delete_by_query?conflicts=proceed { "query": {
+   * "match_all": {} } }
    *
    * @return DeleteByQueryRequest
    */
