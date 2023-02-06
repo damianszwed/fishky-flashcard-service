@@ -140,10 +140,10 @@ public class ElasticSearchFlashcardRestHighLevelClient {
    *   "answers": [ "Dig a hole", "Dig down" ]
    * }
    *
-   * @param flashcardFolder
-   * @param flashcard
+   * @param flashcardFolder FlashcardFolder
+   * @param flashcard Flashcard
    * @return IndexRequest
-   * @throws IOException
+   * @throws IOException exception
    */
   private IndexRequest getIndexRequest(FlashcardFolder flashcardFolder, Flashcard flashcard)
       throws IOException {
