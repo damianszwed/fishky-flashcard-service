@@ -5,6 +5,7 @@ import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardF
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderService;
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardSearchService;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -15,8 +16,8 @@ import reactor.util.function.Tuples;
 public class ElasticSearchFlashcardSearchService implements FlashcardSearchService {
 
   /**
-   * By this field messages are indexing one by one.
-   * More information: <a href="https://stackoverflow.com/questions/62837058/can-flux-of-project-reactor-process-messages-one-by-one">stackoverflow</a>
+   * By this field messages are indexing one by one. More information: <a
+   * href="https://stackoverflow.com/questions/62837058/can-flux-of-project-reactor-process-messages-one-by-one">stackoverflow</a>
    */
   private static final int CONCURRENCY = 1;
   private final FlashcardFolderService flashcardFolderStorage;
@@ -29,11 +30,10 @@ public class ElasticSearchFlashcardSearchService implements FlashcardSearchServi
   }
 
   @Override
-  public Flux<Flashcard> search(String owner, String text) {
+  public Flux<FlashcardFolder> search(String owner, String text) {
     return elasticSearchFlashcardRestHighLevelClient.search(owner, text)
         .map(tuples1 -> getFolderFromMainDatabase(owner, tuples1))
         .map(this::logFlashcardFolder)
-        .flatMap(this::withFlashcards)
         .flatMap(this::filteredFlashcardById);
   }
 
@@ -84,16 +84,22 @@ public class ElasticSearchFlashcardSearchService implements FlashcardSearchServi
         }));
   }
 
-  private Mono<Tuple2<String, List<Flashcard>>> withFlashcards(
+  private Mono<FlashcardFolder> filteredFlashcardById(
       Tuple2<String, Mono<FlashcardFolder>> flashcardIdAndFlashcardFolder) {
-    return flashcardIdAndFlashcardFolder.getT2().map(
-        flashcardFolder -> Tuples.of(flashcardIdAndFlashcardFolder.getT1(),
-            flashcardFolder.getFlashcards()));
+    return flashcardIdAndFlashcardFolder
+        .getT2()
+        .map(flashcardFolder -> flashcardFolder
+            .toBuilder()
+            .flashcards(getFilteredFlashcards(flashcardIdAndFlashcardFolder, flashcardFolder))
+            .build());
   }
 
-  private Flux<Flashcard> filteredFlashcardById(
-      Tuple2<String, List<Flashcard>> flashcardIdAndFlashcards) {
-    return Flux.fromStream(flashcardIdAndFlashcards.getT2().stream()
-        .filter(flashcard -> flashcardIdAndFlashcards.getT1().equals(flashcard.getId())));
+  private static List<Flashcard> getFilteredFlashcards(
+      Tuple2<String, Mono<FlashcardFolder>> flashcardIdAndFlashcardFolder,
+      FlashcardFolder flashcardFolder) {
+    return flashcardFolder.getFlashcards().stream()
+        .filter(flashcard -> flashcardIdAndFlashcardFolder.getT1().equals(flashcard.getId()))
+        .collect(
+            Collectors.toList());
   }
 }

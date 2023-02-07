@@ -131,17 +131,12 @@ public class ElasticSearchFlashcardRestHighLevelClient {
   }
 
   /**
-   * Represents: POST flashcards-000001/_doc/asdhbdsfcGxSewB23CsadC1adssadA==
-   * {
-   *   "folderId": "asdkaksdi2nsadASAd2ASDasd929DA==",
-   *   "folderName": "Garden",
-   *   "owner": "user1@example.com",
-   *   "question": "Kopać dół",
-   *   "answers": [ "Dig a hole", "Dig down" ]
-   * }
+   * Represents: POST flashcards-000001/_doc/asdhbdsfcGxSewB23CsadC1adssadA== { "folderId":
+   * "asdkaksdi2nsadASAd2ASDasd929DA==", "folderName": "Garden", "owner": "user1@example.com",
+   * "question": "Kopać dół", "answers": [ "Dig a hole", "Dig down" ] }
    *
    * @param flashcardFolder FlashcardFolder
-   * @param flashcard Flashcard
+   * @param flashcard       Flashcard
    * @return IndexRequest
    * @throws IOException exception
    */
@@ -179,7 +174,7 @@ public class ElasticSearchFlashcardRestHighLevelClient {
 
   /**
    * Represents: POST /flashcards-000001/_delete_by_query?conflicts=proceed { "query": {
-   * "match_all": {} } }
+   * "match_all": {} } }.
    *
    * @return DeleteByQueryRequest
    */

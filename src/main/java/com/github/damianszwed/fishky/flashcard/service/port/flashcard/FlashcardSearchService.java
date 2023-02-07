@@ -5,7 +5,7 @@ import reactor.core.publisher.Mono;
 
 public interface FlashcardSearchService {
 
-  Flux<Flashcard> search(String owner, String text);
+  Flux<FlashcardFolder> search(String owner, String text);
 
   Mono<Void> reindex();
 }
