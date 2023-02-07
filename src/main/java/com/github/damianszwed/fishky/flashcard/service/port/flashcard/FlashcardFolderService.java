@@ -7,6 +7,7 @@ public interface FlashcardFolderService {
 
   /**
    * Used only for search reindexing.
+   *
    * @return FlashcardFolders
    */
   Flux<FlashcardFolder> get();

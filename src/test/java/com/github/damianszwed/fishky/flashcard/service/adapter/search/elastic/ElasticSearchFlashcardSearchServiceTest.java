@@ -1,5 +1,6 @@
 package com.github.damianszwed.fishky.flashcard.service.adapter.search.elastic;
 
+import static java.util.Collections.singletonList;
 import static org.mockito.BDDMockito.given;
 
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.Flashcard;
@@ -67,11 +68,18 @@ class ElasticSearchFlashcardSearchServiceTest {
         Mono.just(flashcardFolder2));
 
     //when
-    final Flux<Flashcard> searchResult = underTest.search(OWNER, TEXT);
+    final Flux<FlashcardFolder> searchResult = underTest.search(OWNER, TEXT);
+
+    final FlashcardFolder expectedFolder1 = flashcardFolder1.toBuilder()
+        .flashcards(singletonList(flashcard1)).build();
+    final FlashcardFolder expectedFolder2 = flashcardFolder2.toBuilder()
+        .flashcards(singletonList(flashcard2)).build();
+    final FlashcardFolder expectedFolder3 = flashcardFolder2.toBuilder()
+        .flashcards(singletonList(flashcard3)).build();
 
     //then
     StepVerifier.create(searchResult)
-        .expectNext(flashcard1, flashcard2, flashcard3)
+        .expectNext(expectedFolder1, expectedFolder2, expectedFolder3)
         .expectComplete()
         .verify();
   }
@@ -82,7 +90,7 @@ class ElasticSearchFlashcardSearchServiceTest {
     given(elasticSearchFlashcardRestHighLevelClient.search(OWNER, TEXT)).willReturn(Flux.empty());
 
     //when
-    final Flux<Flashcard> searchResult = underTest.search(OWNER, TEXT);
+    final Flux<FlashcardFolder> searchResult = underTest.search(OWNER, TEXT);
 
     //then
     StepVerifier.create(searchResult)
@@ -107,7 +115,7 @@ class ElasticSearchFlashcardSearchServiceTest {
         Mono.error(new RuntimeException("Mocked exception")));
 
     //when
-    final Flux<Flashcard> searchResult = underTest.search(OWNER, TEXT);
+    final Flux<FlashcardFolder> searchResult = underTest.search(OWNER, TEXT);
 
     //then
     StepVerifier.create(searchResult)
@@ -138,11 +146,11 @@ class ElasticSearchFlashcardSearchServiceTest {
         Mono.error(new RuntimeException("Mocked exception")));
 
     //when
-    final Flux<Flashcard> searchResult = underTest.search(OWNER, TEXT);
+    final Flux<FlashcardFolder> searchResult = underTest.search(OWNER, TEXT);
 
     //then
     StepVerifier.create(searchResult)
-        .expectNext(flashcard1)
+        .expectNext(flashcardFolder1)
         .expectError()
         .verify();
   }

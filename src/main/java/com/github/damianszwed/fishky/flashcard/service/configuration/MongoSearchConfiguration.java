@@ -1,6 +1,6 @@
 package com.github.damianszwed.fishky.flashcard.service.configuration;
 
-import com.github.damianszwed.fishky.flashcard.service.port.flashcard.Flashcard;
+import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolder;
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardSearchService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -18,7 +18,7 @@ public class MongoSearchConfiguration {
   FlashcardSearchService flashcardSearchService() {
     return new FlashcardSearchService() {
       @Override
-      public Flux<Flashcard> search(String owner, String text) {
+      public Flux<FlashcardFolder> search(String owner, String text) {
         //TODO(Damian.Szwed) MongoDB search
         return Flux.empty();
       }
