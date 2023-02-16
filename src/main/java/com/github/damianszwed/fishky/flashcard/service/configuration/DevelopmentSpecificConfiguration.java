@@ -9,10 +9,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 @Configuration
-@Profile("development")
+@Profile({"development", "mongo-development"})//TODO(Damian.Szwed)After search dev remove mongo-development entry
 public class DevelopmentSpecificConfiguration {
 
   @Bean
+  @Profile("!mongo-development")//TODO(Damian.Szwed)After search dev remove this line.
   FlashcardFolderService flashcardFolderStorage() {
     return new FlashcardFolderDevelopmentStorage();
   }
