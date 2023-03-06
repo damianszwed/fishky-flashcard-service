@@ -18,5 +18,5 @@ public interface FlashcardFolderMongoRepository extends
       + "{'flashcards.question': {$regex:  ?1, $options:  'i'}}, "
       + "{'flashcards.answers': {$regex:  ?1, $options:  'i'}}"
       + "]}")
-  Flux<FlashcardFolder> findAllByCustomQuery(String owner, String text);
+  Flux<FlashcardFolder> findAllByNameQuestionsOrAnswersIncludingText(String owner, String text);
 }
