@@ -10,11 +10,7 @@ import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardS
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
-import reactor.util.function.Tuples;
 
-/**
- * TODO rename to FlashcardSearchQueryHandler.
- */
 public class FlashcardFolderSearchQueryHandler implements CommandQueryHandler {
 
   private final FlashcardSearchService flashcardSearchService;
@@ -30,11 +26,11 @@ public class FlashcardFolderSearchQueryHandler implements CommandQueryHandler {
   @Override
   public Mono<ServerResponse> handle(ServerRequest serverRequest) {
     return Mono.justOrEmpty(ownerProvider.provide(serverRequest))
-        .flatMap(ownerId -> Mono.justOrEmpty(serverRequest.queryParam("q"))
-            .map(q -> Tuples.of(ownerId, q)))
-        .flatMap(tuple -> ok().body(
-            flashcardSearchService.search(tuple.getT1(), tuple.getT2()),
-            FlashcardFolder.class))
+        .zipWith(Mono.justOrEmpty(serverRequest.queryParam("q")))
+        .flatMap(objects -> ok()
+            .body(
+                flashcardSearchService.search(objects.getT1(), objects.getT2()),
+                FlashcardFolder.class))
         .switchIfEmpty(badRequest().build());
   }
 }
