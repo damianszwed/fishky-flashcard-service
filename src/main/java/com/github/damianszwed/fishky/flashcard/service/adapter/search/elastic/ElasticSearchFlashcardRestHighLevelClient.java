@@ -145,13 +145,13 @@ public class ElasticSearchFlashcardRestHighLevelClient {
     final IndexRequest indexRequest = new IndexRequest(index);
     try (XContentBuilder builder = XContentFactory.jsonBuilder()) {
       builder.startObject();
-      {
+        {
         builder.field("folderId", flashcardFolder.getId());
         builder.field("folderName", flashcardFolder.getName());
         builder.field("owner", flashcardFolder.getOwner());
         builder.field("question", flashcard.getQuestion());
         builder.array("answers", flashcard.getAnswers().toArray());
-      }
+        }
       builder.endObject();
       indexRequest.id(flashcard.getId()).source(builder);
       indexRequest.opType(OpType.INDEX);

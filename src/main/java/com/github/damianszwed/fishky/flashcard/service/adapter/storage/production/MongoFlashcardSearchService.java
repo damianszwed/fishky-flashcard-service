@@ -11,7 +11,8 @@ public class MongoFlashcardSearchService implements FlashcardSearchService {
 
   private final FlashcardFolderMongoRepository flashcardFolderMongoRepository;
 
-  public MongoFlashcardSearchService(FlashcardFolderMongoRepository flashcardFolderMongoRepository) {
+  public MongoFlashcardSearchService(
+      FlashcardFolderMongoRepository flashcardFolderMongoRepository) {
     this.flashcardFolderMongoRepository = flashcardFolderMongoRepository;
   }
 

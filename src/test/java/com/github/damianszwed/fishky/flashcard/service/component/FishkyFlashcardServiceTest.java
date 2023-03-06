@@ -26,8 +26,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
     SpringTestConfiguration.class,
     DevelopmentSpecificConfiguration.class,
     BusinessConfiguration.class,
-    CommandQueryWebConfiguration.class,
-    MongoSearchConfiguration.class
+    CommandQueryWebConfiguration.class
 })
 @WebFluxTest(excludeAutoConfiguration = {
     ReactiveSecurityAutoConfiguration.class,
