@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Profile;
 
 @Configuration
 @Profile({"production", "mongo-development"})
-//TODO(Damian.Szwed)After search dev remove mongo-development entry
 public class ProductionSpecificConfiguration {
 
   @Bean
