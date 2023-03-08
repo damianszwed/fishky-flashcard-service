@@ -61,12 +61,10 @@ public class MongoFlashcardSearchService implements FlashcardSearchService {
 
   private static Stream<FlashcardFolder> filteredByFoldersName(String lowerCaseText,
       FlashcardFolder flashcardFolder) {
-    return flashcardFolder.getName().toLowerCase().contains(lowerCaseText) ?
-        flashcardFolder.getFlashcards()
-            .stream()
-            .map(flashcard -> flashcardFolder.toBuilder()
-                .flashcards(singletonList(flashcard))
-                .build()) : Stream.empty();
+    return flashcardFolder.getName().toLowerCase().contains(lowerCaseText)
+        ? flashcardFolder.getFlashcards().stream()
+        .map(flashcard -> flashcardFolder.toBuilder().flashcards(singletonList(flashcard)).build())
+        : Stream.empty();
   }
 
   @Override
