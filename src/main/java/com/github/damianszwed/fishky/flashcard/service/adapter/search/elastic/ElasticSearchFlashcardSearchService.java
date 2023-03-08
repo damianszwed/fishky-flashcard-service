@@ -32,8 +32,8 @@ public class ElasticSearchFlashcardSearchService implements FlashcardSearchServi
   @Override
   public Flux<FlashcardFolder> search(String owner, String text) {
     return elasticSearchFlashcardRestHighLevelClient.search(owner, text)
-        .map(tuples1 -> getFolderFromMainDatabase(owner, tuples1))
-        .map(this::logFlashcardFolder)//TODO(Damian.Szwed) try with zipWith
+        .map(tuples -> getFolderFromMainDatabase(owner, tuples))
+        .map(this::logFlashcardFolder)
         .flatMap(this::filteredFlashcardById);
   }
 
