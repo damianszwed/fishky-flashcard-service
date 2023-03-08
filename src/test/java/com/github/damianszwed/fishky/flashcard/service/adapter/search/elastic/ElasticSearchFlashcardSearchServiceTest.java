@@ -56,19 +56,14 @@ class ElasticSearchFlashcardSearchServiceTest {
         });
     given(elasticSearchFlashcardRestHighLevelClient.search(OWNER, TEXT)).willReturn(
         flashcardIdAndFlashcardFolderTuples);
-
     final FlashcardFolder flashcardFolder1 = FlashcardFolder.builder()
         .flashcards(List.of(flashcard1)).build();
     given(flashcardFolderService.getById(OWNER, FLASHCARD_FOLDER_ID_1)).willReturn(
         Mono.just(flashcardFolder1));
-
     final FlashcardFolder flashcardFolder2 = FlashcardFolder.builder()
         .flashcards(List.of(flashcard2, flashcard3)).build();
     given(flashcardFolderService.getById(OWNER, FLASHCARD_FOLDER_ID_2)).willReturn(
         Mono.just(flashcardFolder2));
-
-    //when
-    final Flux<FlashcardFolder> searchResult = underTest.search(OWNER, TEXT);
 
     final FlashcardFolder expectedFolder1 = flashcardFolder1.toBuilder()
         .flashcards(singletonList(flashcard1)).build();
@@ -76,6 +71,9 @@ class ElasticSearchFlashcardSearchServiceTest {
         .flashcards(singletonList(flashcard2)).build();
     final FlashcardFolder expectedFolder3 = flashcardFolder2.toBuilder()
         .flashcards(singletonList(flashcard3)).build();
+
+    //when
+    final Flux<FlashcardFolder> searchResult = underTest.search(OWNER, TEXT);
 
     //then
     StepVerifier.create(searchResult)
