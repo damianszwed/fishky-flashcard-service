@@ -1,20 +1,19 @@
 package com.github.damianszwed.fishky.flashcard.service.configuration;
 
 import com.github.damianszwed.fishky.flashcard.service.adapter.storage.production.FlashcardFolderMongoRepository;
-import com.github.damianszwed.fishky.flashcard.service.adapter.storage.production.FlashcardFolderProductionStorage;
-import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderService;
+import com.github.damianszwed.fishky.flashcard.service.adapter.storage.production.MongoFlashcardSearchService;
+import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardSearchService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 @Configuration
-@Profile({"production", "mongo-development"})
-public class ProductionSpecificConfiguration {
+@Profile("!elasticsearch")
+public class MongoSearchConfiguration {
 
   @Bean
-  FlashcardFolderService flashcardFolderStorage(
+  FlashcardSearchService flashcardSearchService(
       FlashcardFolderMongoRepository flashcardFolderMongoRepository) {
-    return new FlashcardFolderProductionStorage(flashcardFolderMongoRepository);
+    return new MongoFlashcardSearchService(flashcardFolderMongoRepository);
   }
-
 }

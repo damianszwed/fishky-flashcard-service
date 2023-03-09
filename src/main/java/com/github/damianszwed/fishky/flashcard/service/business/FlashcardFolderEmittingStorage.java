@@ -20,6 +20,12 @@ public class FlashcardFolderEmittingStorage implements FlashcardFolderService {
   }
 
   @Override
+  public Flux<FlashcardFolder> get() {
+    log.info("Getting all folders for search reindexing purposes..");
+    return flashcardFolderStorage.get();
+  }
+
+  @Override
   public Flux<FlashcardFolder> get(String owner) {
     log.info("User {} gets folders.", owner);
     return flashcardFolderStorage.get(owner);

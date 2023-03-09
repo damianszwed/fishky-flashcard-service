@@ -66,6 +66,11 @@ public class FlashcardFolderDevelopmentStorage implements FlashcardFolderService
   }
 
   @Override
+  public Flux<FlashcardFolder> get() {
+    return Flux.fromIterable(flashcardFolders);
+  }
+
+  @Override
   public Flux<FlashcardFolder> get(String owner) {
     return Flux.fromIterable(flashcardFolders)
         .filter(flashcardFolder -> owner.equals(flashcardFolder.getOwner()));
