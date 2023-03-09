@@ -7,7 +7,7 @@ spec:
     matchLabels:
       app: fishky-flashcard-service
       tier: backend
-  replicas: 3
+  replicas: 1
   template:
     metadata:
       labels:
@@ -43,3 +43,10 @@ spec:
           timeoutSeconds: 3
           periodSeconds: 15
           failureThreshold: 4
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"

@@ -65,6 +65,10 @@ dependencies {
     implementation 'org.springframework.security:spring-security-oauth2-jose'
     implementation 'org.springframework.security:spring-security-oauth2-resource-server'
 
+    implementation 'org.elasticsearch.client:elasticsearch-rest-client:7.10.2'
+    implementation 'org.elasticsearch:elasticsearch:7.10.2'
+    implementation 'org.elasticsearch.client:elasticsearch-rest-high-level-client:7.10.2'
+
     implementation 'io.vavr:vavr:0.10.4'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
