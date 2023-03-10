@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: fishky-flashcard-service
-        image: damianiero/fishky-flashcard-service:0.16.0
+        image: damianiero/fishky-flashcard-service:1.0.1
         env:
         - name: GET_HOSTS_FROM
           value: dns
@@ -27,6 +27,11 @@ spec:
               key: mongodb.uri
         ports:
         - containerPort: 8080
+        volumeMounts:
+          - name: fishky-flashcard-service-secret
+            mountPath: "/app/application.yml"
+            readOnly: true
+            subPath: application.yml
         readinessProbe:
           httpGet:
             path: /healthCheck
