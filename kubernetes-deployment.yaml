@@ -51,7 +51,11 @@ spec:
         resources:
           requests:
             memory: "512Mi"
-            cpu: "500m"
+            cpu: "300m"
           limits:
             memory: "512Mi"
-            cpu: "500m"
+            cpu: "320m"
+      volumes:
+        - name: fishky-flashcard-service-secret
+          secret:
+            secretName: fishky-flashcard-service-secret
