@@ -20,6 +20,8 @@ spec:
         env:
         - name: GET_HOSTS_FROM
           value: dns
+        - name: SPRING_PROFILES_ACTIVE
+          value: production,elasticsearch
         - name: MONGODB-URI
           valueFrom:
             secretKeyRef:
