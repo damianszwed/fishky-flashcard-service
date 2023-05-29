@@ -1,9 +1,0 @@
-apiVersion: cloud.google.com/v1beta1
-kind: BackendConfig
-metadata:
-  name: fishky-flashcard-service-backend-config
-spec:
-  #This config has to be applied so GCP will not interrupt SSE connections.
-  timeoutSec: 215999
-  sessionAffinity:
-    affinityType: "CLIENT_IP"

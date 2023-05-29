@@ -3,14 +3,15 @@ kind: Ingress
 metadata:
   name: fishky-flashcard-service-ingress
   annotations:
-    #gcloud compute addresses create api-fishky-pl --global
-    #gcloud compute addresses describe api-fishky-pl --global
-    kubernetes.io/ingress.global-static-ip-name: api-fishky-pl
-    networking.gke.io/managed-certificates: fishky-managed-certificate
-    kubernetes.io/ingress.class: "gce"
+    dev.okteto.com/generate-host: fishky
 spec:
-  defaultBackend:
-    service:
-      name: fishky-flashcard-service
-      port:
-        number: 30508
+  rules:
+    - http:
+        paths:
+          - backend:
+              service:
+                name: fishky-flashcard-service
+                port:
+                  number: 30508
+            path: /
+            pathType: ImplementationSpecific
