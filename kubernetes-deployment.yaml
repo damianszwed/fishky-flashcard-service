@@ -55,7 +55,7 @@ spec:
             memory: "512Mi"
             cpu: "300m"
           limits:
-            memory: "512Mi"
+            memory: "712Mi"
             cpu: "320m"
       volumes:
         - name: fishky-flashcard-service-secret
