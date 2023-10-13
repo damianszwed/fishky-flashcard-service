@@ -1,8 +1,8 @@
 package com.github.damianszwed.fishky.flashcard.service.port.flashcard;
 
+import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
-import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Value;
 

@@ -1,10 +1,10 @@
 package com.github.damianszwed.fishky.flashcard.service.business;
 
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;

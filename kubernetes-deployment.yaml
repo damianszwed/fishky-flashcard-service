@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: fishky-flashcard-service
-        image: damianiero/fishky-flashcard-service:1.0.2
+        image: damianiero/fishky-flashcard-service:1.1.2
         env:
         - name: GET_HOSTS_FROM
           value: dns
@@ -55,8 +55,8 @@ spec:
             memory: "512Mi"
             cpu: "300m"
           limits:
-            memory: "812Mi"
-            cpu: "500m"
+            memory: "999Mi"
+            cpu: "600m"
       volumes:
         - name: fishky-flashcard-service-secret
           secret:

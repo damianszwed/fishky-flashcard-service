@@ -1,4 +1,4 @@
-FROM openjdk:11.0.9-jdk
+FROM eclipse-temurin:17.0.8.1_1-jdk
 VOLUME /tmp
 # Set the working directory in the container to /app
 WORKDIR /app

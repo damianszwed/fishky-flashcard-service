@@ -31,7 +31,7 @@ import com.github.damianszwed.fishky.flashcard.service.port.flashcard.EventSourc
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolder;
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderService;
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardSearchService;
-import javax.validation.Validator;
+import jakarta.validation.Validator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
