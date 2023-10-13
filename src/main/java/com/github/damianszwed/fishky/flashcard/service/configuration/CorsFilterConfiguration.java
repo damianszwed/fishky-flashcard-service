@@ -1,7 +1,9 @@
 package com.github.damianszwed.fishky.flashcard.service.configuration;
 
+import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -17,9 +19,10 @@ public class CorsFilterConfiguration {
     CorsConfiguration corsConfig = new CorsConfiguration();
     corsConfig.setAllowedHeaders(securityProperties.getCors().getAllowedHeaders());
     corsConfig.setAllowedOriginPatterns(securityProperties.getCors().getAllowedOrigins());
+
     corsConfig
         .setAllowedMethods(
-            EnumSet.allOf(HttpMethod.class).stream().map(Enum::name).collect(Collectors.toList()));
+            Stream.of(HttpMethod.values()).map(HttpMethod::name).collect(Collectors.toList()));
     corsConfig.setAllowCredentials(securityProperties.getCors().getAllowCredentials());
 
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
