@@ -3,225 +3,236 @@ package com.github.damianszwed.fishky.flashcard.service.component;
 interface OutputSamples {
 
   //language=JSON
-  String FLASHCARD_FOLDERS = "[\n"
-      + "  {\n"
-      + "    \"id\": \"dXNlcjFAZXhhbXBsZS5jb20tZGVmYXVsdA==\",\n"
-      + "    \"name\": \"Default\",\n"
-      + "    \"owner\": \"user1@example.com\",\n"
-      + "    \"flashcards\": [\n"
-      + "      {\n"
-      + "        \"id\": \"dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25h\",\n"
-      + "        \"question\": \"questionA\",\n"
-      + "        \"answers\": [\"answerA\"]\n"
-      + "      },\n"
-      + "      {\n"
-      + "        \"id\": \"dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25i\",\n"
-      + "        \"question\": \"questionB\",\n"
-      + "        \"answers\": [\"answerB\"]\n"
-      + "      },\n"
-      + "      {\n"
-      + "        \"id\": \"dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25j\",\n"
-      + "        \"question\": \"questionC\",\n"
-      + "        \"answers\": [\"answerC\"]\n"
-      + "      }\n"
-      + "    ]\n"
-      + "  }\n"
-      + "]";
+  String FLASHCARD_FOLDERS =
+      """
+          [
+            {
+              "id": "dXNlcjFAZXhhbXBsZS5jb20tZGVmYXVsdA==",
+              "name": "Default",
+              "owner": "user1@example.com",
+              "flashcards": [
+                {
+                  "id": "dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25h",
+                  "question": "questionA",
+                  "answers": ["answerA"]
+                },
+                {
+                  "id": "dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25i",
+                  "question": "questionB",
+                  "answers": ["answerB"]
+                },
+                {
+                  "id": "dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25j",
+                  "question": "questionC",
+                  "answers": ["answerC"]
+                }
+              ]
+            }
+          ]
+          """;
 
   //language=JSON
-  String FLASHCARD_FOLDERS_WITH_NEW_FLASHCARD = "[\n"
-      + "  {\n"
-      + "    \"id\": \"dXNlcjFAZXhhbXBsZS5jb20tZGVmYXVsdA==\",\n"
-      + "    \"name\": \"Default\",\n"
-      + "    \"owner\": \"user1@example.com\",\n"
-      + "    \"flashcards\": [\n"
-      + "      {\n"
-      + "        \"id\": \"dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25h\",\n"
-      + "        \"question\": \"questionA\",\n"
-      + "        \"answers\": [\"answerA\"]\n"
-      + "      },\n"
-      + "      {\n"
-      + "        \"id\": \"dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25i\",\n"
-      + "        \"question\": \"questionB\",\n"
-      + "        \"answers\": [\"answerB\"]\n"
-      + "      },\n"
-      + "      {\n"
-      + "        \"id\": \"dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25j\",\n"
-      + "        \"question\": \"questionC\",\n"
-      + "        \"answers\": [\"answerC\"]\n"
-      + "      },\n"
-      + "      {\n"
-      + "        \"id\": \"dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25k\",\n"
-      + "        \"question\": \"questionD\",\n"
-      + "        \"answers\": [\"answerD\"]\n"
-      + "      }\n"
-      + "    ]\n"
-      + "  }\n"
-      + "]";
+  String FLASHCARD_FOLDERS_WITH_NEW_FLASHCARD =
+      """
+          [
+            {
+              "id": "dXNlcjFAZXhhbXBsZS5jb20tZGVmYXVsdA==",
+              "name": "Default",
+              "owner": "user1@example.com",
+              "flashcards": [
+                {
+                  "id": "dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25h",
+                  "question": "questionA",
+                  "answers": ["answerA"]
+                },
+                {
+                  "id": "dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25i",
+                  "question": "questionB",
+                  "answers": ["answerB"]
+                },
+                {
+                  "id": "dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25j",
+                  "question": "questionC",
+                  "answers": ["answerC"]
+                },
+                {
+                  "id": "dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25k",
+                  "question": "questionD",
+                  "answers": ["answerD"]
+                }
+              ]
+            }
+          ]
+          """;
 
   //language=JSON
   String EMPTY_FLASHCARD_FOLDERS = "[]";
 
   //language=JSON
-  String FLASHCARD_FOLDERS_WITHOUT_ONE_FLASHCARD = "[\n"
-      + "  {\n"
-      + "    \"id\": \"dXNlcjFAZXhhbXBsZS5jb20tZGVmYXVsdA==\",\n"
-      + "    \"name\": \"Default\",\n"
-      + "    \"owner\": \"user1@example.com\",\n"
-      + "    \"flashcards\": [\n"
-      + "      {\n"
-      + "        \"id\": \"dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25h\",\n"
-      + "        \"question\": \"questionA\",\n"
-      + "        \"answers\": [\"answerA\"]\n"
-      + "      },\n"
-      + "      {\n"
-      + "        \"id\": \"dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25j\",\n"
-      + "        \"question\": \"questionC\",\n"
-      + "        \"answers\": [\"answerC\"]\n"
-      + "      }\n"
-      + "    ]\n"
-      + "  }\n"
-      + "]";
+  String FLASHCARD_FOLDERS_WITHOUT_ONE_FLASHCARD =
+      """
+          [
+            {
+              "id": "dXNlcjFAZXhhbXBsZS5jb20tZGVmYXVsdA==",
+              "name": "Default",
+              "owner": "user1@example.com",
+              "flashcards": [
+                {
+                  "id": "dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25h",
+                  "question": "questionA",
+                  "answers": ["answerA"]
+                },
+                {
+                  "id": "dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25j",
+                  "question": "questionC",
+                  "answers": ["answerC"]
+                }
+              ]
+            }
+          ]
+          """;
 
   //language=JSON
-  String FLASHCARD_FOLDERS_WITH_ONE_FLASHCARD_MODIFIED = "[\n"
-      + "  {\n"
-      + "    \"id\": \"dXNlcjFAZXhhbXBsZS5jb20tZGVmYXVsdA==\",\n"
-      + "    \"name\": \"Default\",\n"
-      + "    \"owner\": \"user1@example.com\",\n"
-      + "    \"flashcards\": [\n"
-      + "      {\n"
-      + "        \"id\": \"dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25h\",\n"
-      + "        \"question\": \"questionA\",\n"
-      + "        \"answers\": [\"answerA\"]\n"
-      + "      },\n"
-      + "      {\n"
-      + "        \"id\": \"dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25i\",\n"
-      + "        \"question\": \"questionDD\",\n"
-      + "        \"answers\": [\"answerDD\"]\n"
-      + "      },\n"
-      + "      {\n"
-      + "        \"id\": \"dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25j\",\n"
-      + "        \"question\": \"questionC\",\n"
-      + "        \"answers\": [\"answerC\"]\n"
-      + "      }\n"
-      + "    ]\n"
-      + "  }\n"
-      + "]";
+  String FLASHCARD_FOLDERS_WITH_ONE_FLASHCARD_MODIFIED =
+      """
+          [
+            {
+              "id": "dXNlcjFAZXhhbXBsZS5jb20tZGVmYXVsdA==",
+              "name": "Default",
+              "owner": "user1@example.com",
+              "flashcards": [
+                {
+                  "id": "dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25h",
+                  "question": "questionA",
+                  "answers": ["answerA"]
+                },
+                {
+                  "id": "dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25i",
+                  "question": "questionDD",
+                  "answers": ["answerDD"]
+                },
+                {
+                  "id": "dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25j",
+                  "question": "questionC",
+                  "answers": ["answerC"]
+                }
+              ]
+            }
+          ]
+          """;
 
   //language=JSON
-  String SYSTEM_USER_FOLDERS = "[\n"
-      + "  {\n"
-      + "    \"id\": \"YnJvdWdodGluLXR1cmlzbQ==\",\n"
-      + "    \"name\": \"Turism\",\n"
-      + "    \"owner\": \"broughtin\",\n"
-      + "    \"flashcards\": [\n"
-      + "      {\n"
-      + "        \"id\": \"YnJvdWdodGluLWV4Y3Vyc2lvbg==\",\n"
-      + "        \"question\": \"excursion\",\n"
-      + "        \"answers\": [\n"
-      + "          \"wycieczka\",\n"
-      + "          \"wyprawa\",\n"
-      + "          \"wypad\"\n"
-      + "        ]\n"
-      + "      }\n"
-      + "    ]\n"
-      + "  }\n"
-      + "]";
+  String SYSTEM_USER_FOLDERS = """
+      [
+        {
+          "id": "YnJvdWdodGluLXR1cmlzbQ==",
+          "name": "Turism",
+          "owner": "broughtin",
+          "flashcards": [
+            {
+              "id": "YnJvdWdodGluLWV4Y3Vyc2lvbg==",
+              "question": "excursion",
+              "answers": [
+                "wycieczka",
+                "wyprawa",
+                "wypad"
+              ]
+            }
+          ]
+        }
+      ]
+      """;
 
   //language=JSON
-  String FLASHCARD_FOLDERS_WITH_COPIED_FOLDER = "[\n"
-      + "  {\n"
-      + "    \"id\": \"dXNlcjFAZXhhbXBsZS5jb20tZGVmYXVsdA==\",\n"
-      + "    \"name\": \"Default\",\n"
-      + "    \"owner\": \"user1@example.com\",\n"
-      + "    \"flashcards\": [\n"
-      + "      {\n"
-      + "        \"id\": \"dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25h\",\n"
-      + "        \"question\": \"questionA\",\n"
-      + "        \"answers\": [\"answerA\"]\n"
-      + "      },\n"
-      + "      {\n"
-      + "        \"id\": \"dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25i\",\n"
-      + "        \"question\": \"questionB\",\n"
-      + "        \"answers\": [\"answerB\"]\n"
-      + "      },\n"
-      + "      {\n"
-      + "        \"id\": \"dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25j\",\n"
-      + "        \"question\": \"questionC\",\n"
-      + "        \"answers\": [\"answerC\"]\n"
-      + "      }\n"
-      + "    ]\n"
-      + "  },\n"
-      + "  {\n"
-      + "    \"id\": \"dXNlcjFAZXhhbXBsZS5jb20tdHVyaXNt\",\n"
-      + "    \"name\": \"Turism\",\n"
-      + "    \"owner\": \"user1@example.com\",\n"
-      + "    \"flashcards\": [\n"
-      + "      {\n"
-      + "        \"id\": \"dXNlcjFAZXhhbXBsZS5jb20tZXhjdXJzaW9u\",\n"
-      + "        \"question\": \"excursion\",\n"
-      + "        \"answers\": [\n"
-      +
-      "          \"wycieczka\",\n"
-      + "          \"wyprawa\",\n"
-      + "\n"
-      + "          \"wypad\"\n"
-      + "        ]\n"
-      + "      }\n"
-      + "    ]\n"
-      + "  }\n"
-      +
-      "]";
+  String FLASHCARD_FOLDERS_WITH_COPIED_FOLDER = """
+      [
+        {
+          "id": "dXNlcjFAZXhhbXBsZS5jb20tZGVmYXVsdA==",
+          "name": "Default",
+          "owner": "user1@example.com",
+          "flashcards": [
+            {
+              "id": "dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25h",
+              "question": "questionA",
+              "answers": ["answerA"]
+            },
+            {
+              "id": "dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25i",
+              "question": "questionB",
+              "answers": ["answerB"]
+            },
+            {
+              "id": "dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25j",
+              "question": "questionC",
+              "answers": ["answerC"]
+            }
+          ]
+        },
+        {
+          "id": "dXNlcjFAZXhhbXBsZS5jb20tdHVyaXNt",
+          "name": "Turism",
+          "owner": "user1@example.com",
+          "flashcards": [
+            {
+              "id": "dXNlcjFAZXhhbXBsZS5jb20tZXhjdXJzaW9u",
+              "question": "excursion",
+              "answers": [
+                "wycieczka",
+                "wyprawa",
+
+                "wypad"
+              ]
+            }
+          ]
+        }
+      ]""";
 
   //language=JSON
-  String FLASHCARD_FOLDERS_WITH_TURISM_FOLDER_WITH_COPIED_FOLDER = "[\n"
-      + "  {\n"
-      + "    \"id\": \"dXNlcjFAZXhhbXBsZS5jb20tZGVmYXVsdA==\",\n"
-      + "    \"name\": \"Default\",\n"
-      + "    \"owner\": \"user1@example.com\",\n"
-      + "    \"flashcards\": [\n"
-      + "      {\n"
-      + "        \"id\": \"dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25h\",\n"
-      + "        \"question\": \"questionA\",\n"
-      + "        \"answers\": [\"answerA\"]\n"
-      + "      },\n"
-      + "      {\n"
-      + "        \"id\": \"dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25i\",\n"
-      + "        \"question\": \"questionB\",\n"
-      + "        \"answers\": [\"answerB\"]\n"
-      + "      },\n"
-      + "      {\n"
-      + "        \"id\": \"dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25j\",\n"
-      + "        \"question\": \"questionC\",\n"
-      + "        \"answers\": [\"answerC\"]\n"
-      + "      }\n"
-      + "    ]\n"
-      + "  },\n"
-      + "  {\n"
-      + "    \"id\": \"dXNlcjFAZXhhbXBsZS5jb20tdHVyaXNt\",\n"
-      + "    \"name\": \"Turism\",\n"
-      + "    \"owner\": \"user1@example.com\",\n"
-      + "    \"flashcards\": [\n"
-      + "      {\n"
-      + "        \"id\": \"dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25k\",\n"
-      + "        \"question\": \"questionD\",\n"
-      + "        \"answers\": [\"answerD\"]\n"
-      + "      },\n"
-      + "      {\n"
-      + "        \"id\": \"dXNlcjFAZXhhbXBsZS5jb20tZXhjdXJzaW9u\",\n"
-      + "        \"question\": \"excursion\",\n"
-      + "        \"answers\": [\n"
-      +
-      "          \"wycieczka\",\n"
-      + "          \"wyprawa\",\n"
-      +
-      "          \"wypad\"\n"
-      + "        ]\n"
-      + "      }\n"
-      + "    ]\n"
-      + "  }\n"
-      +
-      "]";
+  String FLASHCARD_FOLDERS_WITH_TURISM_FOLDER_WITH_COPIED_FOLDER = """
+      [
+        {
+          "id": "dXNlcjFAZXhhbXBsZS5jb20tZGVmYXVsdA==",
+          "name": "Default",
+          "owner": "user1@example.com",
+          "flashcards": [
+            {
+              "id": "dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25h",
+              "question": "questionA",
+              "answers": ["answerA"]
+            },
+            {
+              "id": "dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25i",
+              "question": "questionB",
+              "answers": ["answerB"]
+            },
+            {
+              "id": "dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25j",
+              "question": "questionC",
+              "answers": ["answerC"]
+            }
+          ]
+        },
+        {
+          "id": "dXNlcjFAZXhhbXBsZS5jb20tdHVyaXNt",
+          "name": "Turism",
+          "owner": "user1@example.com",
+          "flashcards": [
+            {
+              "id": "dXNlcjFAZXhhbXBsZS5jb20tcXVlc3Rpb25k",
+              "question": "questionD",
+              "answers": ["answerD"]
+            },
+            {
+              "id": "dXNlcjFAZXhhbXBsZS5jb20tZXhjdXJzaW9u",
+              "question": "excursion",
+              "answers": [
+                "wycieczka",
+                "wyprawa",
+                "wypad"
+              ]
+            }
+          ]
+        }
+      ]""";
 
 }

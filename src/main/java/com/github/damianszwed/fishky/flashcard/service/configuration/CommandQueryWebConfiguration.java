@@ -206,9 +206,13 @@ public class CommandQueryWebConfiguration {
   public RouterFunction<ServerResponse> sseRoutes(
       CommandQueryHandler flashcardFolderGetAllCommandHandler,
       CommandQueryHandler flashcardFolderServerSentEventHandler) {
-    return route(GET("/getAllFlashcardFoldersCommand"),
+    return route(GET("/getAllFlashcardFoldersCommand"), //TODO deprecated, use below endpoint
         flashcardFolderGetAllCommandHandler::handle)
-        .andRoute(GET("/flashcardFoldersEventStream"),
+        .andRoute(POST("/flashcardFolders/sse/getAllTrigger"),
+            flashcardFolderGetAllCommandHandler::handle)
+        .andRoute(GET("/flashcardFoldersEventStream"), //TODO deprecated, use below endpoint
+            flashcardFolderServerSentEventHandler::handle)
+        .andRoute(GET("/flashcardFolders/sse/stream"),
             flashcardFolderServerSentEventHandler::handle);
   }
 

@@ -1,7 +1,5 @@
 package com.github.damianszwed.fishky.flashcard.service.configuration;
 
-import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.springframework.context.annotation.Bean;
