@@ -35,7 +35,7 @@ public class SecurityConfiguration {
                 .anyExchange()
                 .authenticated())
         .oauth2ResourceServer(
-            oAuth2ResourceServerSpec -> oAuth2ResourceServerSpec.jwt(Customizer.withDefaults()));
+            resourceServerSpec -> resourceServerSpec.jwt(Customizer.withDefaults()));
 
     return http.build();
   }
