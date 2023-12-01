@@ -26,9 +26,13 @@ public class FlashcardFolderGetAllQueryHandler implements CommandQueryHandler {
   @Override
   public Mono<ServerResponse> handle(ServerRequest serverRequest) {
     return ownerProvider.provide(serverRequest)
-        .map(ownerId -> ok().body(
-            flashcardFolderService.get(ownerId),
-            FlashcardFolder.class))
+        .map(owner -> flashcardFolderService.get(owner)
+            .map(FlashcardFolderGetAllQueryHandler::asOwner))
+        .map(flashcardFolderFlux -> ok().body(flashcardFolderFlux, FlashcardFolder.class))
         .orElse(badRequest().build());
+  }
+
+  private static FlashcardFolder asOwner(FlashcardFolder flashcardFolder) {
+    return flashcardFolder.toBuilder().isOwner(true).build();
   }
 }

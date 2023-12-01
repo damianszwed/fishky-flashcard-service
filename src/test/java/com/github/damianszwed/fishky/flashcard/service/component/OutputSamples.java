@@ -26,7 +26,9 @@ interface OutputSamples {
                   "question": "questionC",
                   "answers": ["answerC"]
                 }
-              ]
+              ],
+              "isOwner": true
+              
             }
           ]
           """;
@@ -60,7 +62,8 @@ interface OutputSamples {
                   "question": "questionD",
                   "answers": ["answerD"]
                 }
-              ]
+              ],
+              "isOwner": true
             }
           ]
           """;
@@ -87,7 +90,8 @@ interface OutputSamples {
                   "question": "questionC",
                   "answers": ["answerC"]
                 }
-              ]
+              ],
+              "isOwner": true
             }
           ]
           """;
@@ -116,7 +120,8 @@ interface OutputSamples {
                   "question": "questionC",
                   "answers": ["answerC"]
                 }
-              ]
+              ],
+              "isOwner": true
             }
           ]
           """;
@@ -138,7 +143,8 @@ interface OutputSamples {
                 "wypad"
               ]
             }
-          ]
+          ],
+          "isOwner": false
         }
       ]
       """;
@@ -166,7 +172,8 @@ interface OutputSamples {
               "question": "questionC",
               "answers": ["answerC"]
             }
-          ]
+          ],
+          "isOwner": true
         },
         {
           "id": "dXNlcjFAZXhhbXBsZS5jb20tdHVyaXNt",
@@ -183,7 +190,8 @@ interface OutputSamples {
                 "wypad"
               ]
             }
-          ]
+          ],
+          "isOwner": true
         }
       ]""";
 
@@ -210,7 +218,8 @@ interface OutputSamples {
               "question": "questionC",
               "answers": ["answerC"]
             }
-          ]
+          ],
+          "isOwner": true
         },
         {
           "id": "dXNlcjFAZXhhbXBsZS5jb20tdHVyaXNt",
@@ -231,7 +240,8 @@ interface OutputSamples {
                 "wypad"
               ]
             }
-          ]
+          ],
+          "isOwner": true
         }
       ]""";
 
