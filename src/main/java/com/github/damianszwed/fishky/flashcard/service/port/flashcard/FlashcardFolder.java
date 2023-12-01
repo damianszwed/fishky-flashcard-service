@@ -7,6 +7,7 @@ import java.util.List;
 import lombok.Builder;
 import lombok.Value;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Value
@@ -25,4 +26,11 @@ public class FlashcardFolder {
 
   @Builder.Default
   List<Flashcard> flashcards = new ArrayList<>();
+
+  @Builder.Default
+  List<Share> shares = new ArrayList<>();
+
+  @Transient
+  @Builder.Default
+  Boolean isOwner = false;
 }

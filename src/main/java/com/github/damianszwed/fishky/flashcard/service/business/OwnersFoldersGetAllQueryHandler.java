@@ -39,7 +39,10 @@ public class OwnersFoldersGetAllQueryHandler implements CommandQueryHandler {
 
     return ownerProvider.provide(serverRequest)
         .filter(ownerIdFromToken -> areTheSame(ownerId, ownerIdFromToken))
-        .map(ownerIdFromToken -> getAllFlashcardsByOwnerId(ownerId))
+        .map(flashcardFolderService::get)
+        .map(flashcardFolderFlux -> flashcardFolderFlux.map(
+            OwnersFoldersGetAllQueryHandler::asOwner))
+        .map(flashcardFolderFlux -> ok().body(flashcardFolderFlux, FlashcardFolder.class))
         .orElseGet(() -> badRequest().build());
   }
 
@@ -57,5 +60,9 @@ public class OwnersFoldersGetAllQueryHandler implements CommandQueryHandler {
     return ok().body(
         flashcardFolderService.get(ownerId),
         FlashcardFolder.class);
+  }
+
+  private static FlashcardFolder asOwner(FlashcardFolder flashcardFolder) {
+    return flashcardFolder.toBuilder().isOwner(true).build();
   }
 }
