@@ -1,4 +1,4 @@
-package com.github.damianszwed.fishky.flashcard.service.port.flashcard;
+package com.github.damianszwed.fishky.flashcard.service.adapter.storage.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

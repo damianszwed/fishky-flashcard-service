@@ -1,7 +1,7 @@
 package com.github.damianszwed.fishky.flashcard.service.component.driver;
 
+import com.github.damianszwed.fishky.flashcard.service.adapter.storage.entity.FlashcardFolder;
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.EventSource;
-import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolder;
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardSearchService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

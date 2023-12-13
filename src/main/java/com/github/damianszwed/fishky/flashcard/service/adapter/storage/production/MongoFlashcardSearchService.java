@@ -2,7 +2,7 @@ package com.github.damianszwed.fishky.flashcard.service.adapter.storage.producti
 
 import static java.util.Collections.singletonList;
 
-import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolder;
+import com.github.damianszwed.fishky.flashcard.service.adapter.storage.entity.FlashcardFolder;
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardSearchService;
 import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;

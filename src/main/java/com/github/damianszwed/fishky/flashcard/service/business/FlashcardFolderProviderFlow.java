@@ -1,8 +1,8 @@
 package com.github.damianszwed.fishky.flashcard.service.business;
 
+import com.github.damianszwed.fishky.flashcard.service.adapter.storage.entity.FlashcardFolder;
 import com.github.damianszwed.fishky.flashcard.service.port.EventTrigger;
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.EventSource;
-import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolder;
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderService;
 import java.util.HashMap;
 import java.util.Map;
