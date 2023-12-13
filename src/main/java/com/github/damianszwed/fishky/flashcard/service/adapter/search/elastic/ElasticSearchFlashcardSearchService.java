@@ -2,7 +2,7 @@ package com.github.damianszwed.fishky.flashcard.service.adapter.search.elastic;
 
 import com.github.damianszwed.fishky.flashcard.service.adapter.storage.entity.Flashcard;
 import com.github.damianszwed.fishky.flashcard.service.adapter.storage.entity.FlashcardFolder;
-import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderService;
+import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderStorage;
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardSearchService;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,10 +20,10 @@ public class ElasticSearchFlashcardSearchService implements FlashcardSearchServi
    * href="https://stackoverflow.com/questions/62837058/can-flux-of-project-reactor-process-messages-one-by-one">stackoverflow</a>
    */
   private static final int CONCURRENCY = 1;
-  private final FlashcardFolderService flashcardFolderStorage;
+  private final FlashcardFolderStorage flashcardFolderStorage;
   private final ElasticSearchFlashcardRestHighLevelClient elasticSearchFlashcardRestHighLevelClient;
 
-  public ElasticSearchFlashcardSearchService(FlashcardFolderService flashcardFolderStorage,
+  public ElasticSearchFlashcardSearchService(FlashcardFolderStorage flashcardFolderStorage,
       ElasticSearchFlashcardRestHighLevelClient elasticSearchFlashcardRestHighLevelClient) {
     this.flashcardFolderStorage = flashcardFolderStorage;
     this.elasticSearchFlashcardRestHighLevelClient = elasticSearchFlashcardRestHighLevelClient;

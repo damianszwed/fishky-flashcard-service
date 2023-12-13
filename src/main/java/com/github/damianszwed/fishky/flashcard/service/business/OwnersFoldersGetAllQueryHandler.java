@@ -7,7 +7,7 @@ import com.github.damianszwed.fishky.flashcard.service.adapter.storage.entity.Fl
 import com.github.damianszwed.fishky.flashcard.service.configuration.SecurityProperties;
 import com.github.damianszwed.fishky.flashcard.service.port.CommandQueryHandler;
 import com.github.damianszwed.fishky.flashcard.service.port.OwnerProvider;
-import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderService;
+import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderStorage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -17,15 +17,15 @@ import reactor.core.publisher.Mono;
 public class OwnersFoldersGetAllQueryHandler implements CommandQueryHandler {
 
   private final SecurityProperties securityProperties;
-  private final FlashcardFolderService flashcardFolderService;
+  private final FlashcardFolderStorage flashcardFolderStorage;
   private final OwnerProvider ownerProvider;
 
   public OwnersFoldersGetAllQueryHandler(
       SecurityProperties securityProperties,
-      FlashcardFolderService flashcardFolderService,
+      FlashcardFolderStorage flashcardFolderStorage,
       OwnerProvider ownerProvider) {
     this.securityProperties = securityProperties;
-    this.flashcardFolderService = flashcardFolderService;
+    this.flashcardFolderStorage = flashcardFolderStorage;
     this.ownerProvider = ownerProvider;
   }
 
@@ -39,7 +39,7 @@ public class OwnersFoldersGetAllQueryHandler implements CommandQueryHandler {
 
     return ownerProvider.provide(serverRequest)
         .filter(ownerIdFromToken -> areTheSame(ownerId, ownerIdFromToken))
-        .map(flashcardFolderService::get)
+        .map(flashcardFolderStorage::get)
         .map(flashcardFolderFlux -> flashcardFolderFlux.map(
             OwnersFoldersGetAllQueryHandler::asOwner))
         .map(flashcardFolderFlux -> ok().body(flashcardFolderFlux, FlashcardFolder.class))
@@ -58,7 +58,7 @@ public class OwnersFoldersGetAllQueryHandler implements CommandQueryHandler {
 
   private Mono<ServerResponse> getAllFlashcardsByOwnerId(String ownerId) {
     return ok().body(
-        flashcardFolderService.get(ownerId),
+        flashcardFolderStorage.get(ownerId),
         FlashcardFolder.class);
   }
 

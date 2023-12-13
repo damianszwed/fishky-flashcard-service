@@ -3,7 +3,7 @@ package com.github.damianszwed.fishky.flashcard.service.business;
 import com.github.damianszwed.fishky.flashcard.service.adapter.storage.entity.FlashcardFolder;
 import com.github.damianszwed.fishky.flashcard.service.port.EventTrigger;
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.EventSource;
-import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderService;
+import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderStorage;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
@@ -15,17 +15,17 @@ import reactor.util.concurrent.Queues;
 @Slf4j
 public class FlashcardFolderProviderFlow implements EventSource<FlashcardFolder>, EventTrigger {
 
-  private final FlashcardFolderService flashcardFolderService;
+  private final FlashcardFolderStorage flashcardFolderStorage;
   private final Map<String, Sinks.Many<FlashcardFolder>> emittersByOwners = new HashMap<>();
 
-  public FlashcardFolderProviderFlow(FlashcardFolderService flashcardFolderService) {
-    this.flashcardFolderService = flashcardFolderService;
+  public FlashcardFolderProviderFlow(FlashcardFolderStorage flashcardFolderStorage) {
+    this.flashcardFolderStorage = flashcardFolderStorage;
   }
 
   @Override
   public void fireUp(String owner) {
     final Many<FlashcardFolder> flashcardFolderMany = getFlashcardFolderMany(owner);
-    flashcardFolderService.get(owner).subscribe(flashcardFolderMany::tryEmitNext);
+    flashcardFolderStorage.get(owner).subscribe(flashcardFolderMany::tryEmitNext);
   }
 
   @Override

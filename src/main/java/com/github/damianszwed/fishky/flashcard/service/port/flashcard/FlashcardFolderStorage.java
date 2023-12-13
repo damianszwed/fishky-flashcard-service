@@ -4,7 +4,7 @@ import com.github.damianszwed.fishky.flashcard.service.adapter.storage.entity.Fl
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-public interface FlashcardFolderService {
+public interface FlashcardFolderStorage {
 
   /**
    * Used only for search reindexing.

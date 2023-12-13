@@ -5,7 +5,7 @@ import static org.mockito.BDDMockito.given;
 
 import com.github.damianszwed.fishky.flashcard.service.adapter.storage.entity.Flashcard;
 import com.github.damianszwed.fishky.flashcard.service.adapter.storage.entity.FlashcardFolder;
-import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderService;
+import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderStorage;
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardSearchService;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,7 +30,7 @@ class ElasticSearchFlashcardSearchServiceTest {
   private static final String FLASHCARD_FOLDER_ID_1 = "flashcardFolderId1";
   private static final String FLASHCARD_FOLDER_ID_2 = "flashcardFolderId2";
   @Mock
-  private FlashcardFolderService flashcardFolderService;
+  private FlashcardFolderStorage flashcardFolderStorage;
   @Mock
   private ElasticSearchFlashcardRestHighLevelClient elasticSearchFlashcardRestHighLevelClient;
   private FlashcardSearchService underTest;
@@ -38,7 +38,7 @@ class ElasticSearchFlashcardSearchServiceTest {
   @BeforeEach
   void setUp() {
     underTest = new ElasticSearchFlashcardSearchService(
-        flashcardFolderService, elasticSearchFlashcardRestHighLevelClient);
+        flashcardFolderStorage, elasticSearchFlashcardRestHighLevelClient);
   }
 
   @Test
@@ -58,11 +58,11 @@ class ElasticSearchFlashcardSearchServiceTest {
         flashcardIdAndFlashcardFolderTuples);
     final FlashcardFolder flashcardFolder1 = FlashcardFolder.builder()
         .flashcards(List.of(flashcard1)).build();
-    given(flashcardFolderService.getById(OWNER, FLASHCARD_FOLDER_ID_1)).willReturn(
+    given(flashcardFolderStorage.getById(OWNER, FLASHCARD_FOLDER_ID_1)).willReturn(
         Mono.just(flashcardFolder1));
     final FlashcardFolder flashcardFolder2 = FlashcardFolder.builder()
         .flashcards(List.of(flashcard2, flashcard3)).build();
-    given(flashcardFolderService.getById(OWNER, FLASHCARD_FOLDER_ID_2)).willReturn(
+    given(flashcardFolderStorage.getById(OWNER, FLASHCARD_FOLDER_ID_2)).willReturn(
         Mono.just(flashcardFolder2));
 
     final FlashcardFolder expectedFolder1 = flashcardFolder1.toBuilder()
@@ -109,7 +109,7 @@ class ElasticSearchFlashcardSearchServiceTest {
     given(elasticSearchFlashcardRestHighLevelClient.search(OWNER, TEXT)).willReturn(
         flashcardIdAndFlashcardFolderTuples);
 
-    given(flashcardFolderService.getById(OWNER, FLASHCARD_FOLDER_ID_1)).willReturn(
+    given(flashcardFolderStorage.getById(OWNER, FLASHCARD_FOLDER_ID_1)).willReturn(
         Mono.error(new RuntimeException("Mocked exception")));
 
     //when
@@ -137,10 +137,10 @@ class ElasticSearchFlashcardSearchServiceTest {
 
     final FlashcardFolder flashcardFolder1 = FlashcardFolder.builder()
         .flashcards(List.of(flashcard1)).build();
-    given(flashcardFolderService.getById(OWNER, FLASHCARD_FOLDER_ID_1)).willReturn(
+    given(flashcardFolderStorage.getById(OWNER, FLASHCARD_FOLDER_ID_1)).willReturn(
         Mono.just(flashcardFolder1));
 
-    given(flashcardFolderService.getById(OWNER, FLASHCARD_FOLDER_ID_2)).willReturn(
+    given(flashcardFolderStorage.getById(OWNER, FLASHCARD_FOLDER_ID_2)).willReturn(
         Mono.error(new RuntimeException("Mocked exception")));
 
     //when

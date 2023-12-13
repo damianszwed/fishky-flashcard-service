@@ -7,7 +7,7 @@ import com.github.damianszwed.fishky.flashcard.service.business.FlashcardFolderP
 import com.github.damianszwed.fishky.flashcard.service.port.EventTrigger;
 import com.github.damianszwed.fishky.flashcard.service.port.IdEncoderDecoder;
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.EventSource;
-import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderService;
+import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderStorage;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -21,7 +21,7 @@ public class BusinessConfiguration {
 
   @Bean
   FlashcardFolderProviderFlow flashcardFolderProviderFlow(
-      FlashcardFolderService flashcardFolderStorage) {
+      FlashcardFolderStorage flashcardFolderStorage) {
     return new FlashcardFolderProviderFlow(flashcardFolderStorage);
   }
 
@@ -42,8 +42,8 @@ public class BusinessConfiguration {
   }
 
   @Bean
-  FlashcardFolderService flashcardFolderEmittingStorage(
-      FlashcardFolderService flashcardFolderStorage,
+  FlashcardFolderStorage flashcardFolderEmittingStorage(
+      FlashcardFolderStorage flashcardFolderStorage,
       EventTrigger getAllFoldersEventTrigger) {
     return new FlashcardFolderEmittingStorage(flashcardFolderStorage, getAllFoldersEventTrigger);
   }
