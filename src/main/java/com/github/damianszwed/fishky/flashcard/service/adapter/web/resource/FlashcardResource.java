@@ -1,6 +1,5 @@
-package com.github.damianszwed.fishky.flashcard.service.adapter.storage.entity;
+package com.github.damianszwed.fishky.flashcard.service.adapter.web.resource;
 
-import com.github.damianszwed.fishky.flashcard.service.adapter.web.resource.FlashcardResource;
 import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,15 +8,11 @@ import lombok.Value;
 
 @Value
 @Builder(toBuilder = true)
-public class Flashcard {
+public class FlashcardResource {
 
   String id;
   @NotNull
   String question;
   @Builder.Default
   List<String> answers = new ArrayList<>();
-
-  public FlashcardResource toResource() {
-    return null;
-  }
 }

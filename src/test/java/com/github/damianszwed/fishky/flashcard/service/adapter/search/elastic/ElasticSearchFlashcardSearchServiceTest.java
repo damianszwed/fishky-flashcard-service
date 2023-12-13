@@ -3,6 +3,8 @@ package com.github.damianszwed.fishky.flashcard.service.adapter.search.elastic;
 import static java.util.Collections.singletonList;
 import static org.mockito.BDDMockito.given;
 
+import com.github.damianszwed.fishky.flashcard.service.adapter.storage.elastic.ElasticSearchFlashcardRestHighLevelClient;
+import com.github.damianszwed.fishky.flashcard.service.adapter.storage.elastic.ElasticSearchFlashcardSearchService;
 import com.github.damianszwed.fishky.flashcard.service.adapter.storage.entity.Flashcard;
 import com.github.damianszwed.fishky.flashcard.service.adapter.storage.entity.FlashcardFolder;
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderStorage;

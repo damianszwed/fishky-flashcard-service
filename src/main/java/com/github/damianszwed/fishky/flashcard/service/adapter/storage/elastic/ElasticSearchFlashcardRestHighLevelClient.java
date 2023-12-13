@@ -1,4 +1,4 @@
-package com.github.damianszwed.fishky.flashcard.service.adapter.search.elastic;
+package com.github.damianszwed.fishky.flashcard.service.adapter.storage.elastic;
 
 import com.github.damianszwed.fishky.flashcard.service.adapter.storage.entity.Flashcard;
 import com.github.damianszwed.fishky.flashcard.service.adapter.storage.entity.FlashcardFolder;

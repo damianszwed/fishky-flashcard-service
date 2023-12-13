@@ -1,5 +1,6 @@
 package com.github.damianszwed.fishky.flashcard.service.adapter.storage.entity;
 
+import com.github.damianszwed.fishky.flashcard.service.adapter.web.resource.FlashcardFolderResource;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -34,4 +35,15 @@ public class FlashcardFolder {
   @Builder.Default
   @Deprecated(forRemoval = true, since = "1.2.3")
   Boolean isOwner = false;
+
+  public FlashcardFolderResource toResource() {
+    return FlashcardFolderResource
+        .builder()
+        .id(id)
+        .name(name)
+        .owner(owner)
+        .flashcards(flashcards.stream().map(Flashcard::toResource).toList())
+        .shares(shares.stream().map(Share::toResource).toList())
+        .build();
+  }
 }

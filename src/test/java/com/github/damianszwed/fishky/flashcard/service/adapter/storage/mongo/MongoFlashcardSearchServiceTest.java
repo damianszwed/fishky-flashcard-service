@@ -1,4 +1,4 @@
-package com.github.damianszwed.fishky.flashcard.service.adapter.storage.production;
+package com.github.damianszwed.fishky.flashcard.service.adapter.storage.mongo;
 
 import static java.util.Collections.singletonList;
 import static org.mockito.BDDMockito.given;

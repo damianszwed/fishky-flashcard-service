@@ -1,6 +1,7 @@
 package com.github.damianszwed.fishky.flashcard.service.component.driver;
 
 import com.github.damianszwed.fishky.flashcard.service.adapter.storage.entity.FlashcardFolder;
+import com.github.damianszwed.fishky.flashcard.service.adapter.web.resource.FlashcardFolderResource;
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.EventSource;
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardSearchService;
 import org.springframework.context.annotation.Bean;
@@ -15,7 +16,7 @@ public class SpringTestConfiguration {
   @Bean
   FishkyFlashcardServiceDriver fishkyFlashcardServiceDriver(
       WebTestClient webTestClient,
-      EventSource<FlashcardFolder> flashcardFoldersEventSource) {
+      EventSource<FlashcardFolderResource> flashcardFoldersEventSource) {
     return new FishkyFlashcardServiceDriver(webTestClient, flashcardFoldersEventSource);
   }
 

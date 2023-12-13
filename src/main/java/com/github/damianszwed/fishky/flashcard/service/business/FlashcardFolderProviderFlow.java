@@ -1,6 +1,7 @@
 package com.github.damianszwed.fishky.flashcard.service.business;
 
 import com.github.damianszwed.fishky.flashcard.service.adapter.storage.entity.FlashcardFolder;
+import com.github.damianszwed.fishky.flashcard.service.adapter.web.resource.FlashcardFolderResource;
 import com.github.damianszwed.fishky.flashcard.service.port.EventTrigger;
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.EventSource;
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderStorage;
@@ -13,10 +14,11 @@ import reactor.core.publisher.Sinks.Many;
 import reactor.util.concurrent.Queues;
 
 @Slf4j
-public class FlashcardFolderProviderFlow implements EventSource<FlashcardFolder>, EventTrigger {
+public class FlashcardFolderProviderFlow implements EventSource<FlashcardFolderResource>,
+    EventTrigger {
 
   private final FlashcardFolderStorage flashcardFolderStorage;
-  private final Map<String, Sinks.Many<FlashcardFolder>> emittersByOwners = new HashMap<>();
+  private final Map<String, Sinks.Many<FlashcardFolderResource>> emittersByOwners = new HashMap<>();
 
   public FlashcardFolderProviderFlow(FlashcardFolderStorage flashcardFolderStorage) {
     this.flashcardFolderStorage = flashcardFolderStorage;
@@ -24,17 +26,19 @@ public class FlashcardFolderProviderFlow implements EventSource<FlashcardFolder>
 
   @Override
   public void fireUp(String owner) {
-    final Many<FlashcardFolder> flashcardFolderMany = getFlashcardFolderMany(owner);
-    flashcardFolderStorage.get(owner).subscribe(flashcardFolderMany::tryEmitNext);
+    final Many<FlashcardFolderResource> flashcardFolderMany = getFlashcardFolderMany(owner);
+    flashcardFolderStorage.get(owner)
+        .map(FlashcardFolder::toResource)
+        .subscribe(flashcardFolderMany::tryEmitNext);
   }
 
   @Override
-  public Flux<FlashcardFolder> getFlux(String owner) {
+  public Flux<FlashcardFolderResource> getFlux(String owner) {
     log.info("Owner {} gets SSE.", owner);
     return getFlashcardFolderMany(owner).asFlux();
   }
 
-  private Many<FlashcardFolder> getFlashcardFolderMany(String owner) {
+  private Many<FlashcardFolderResource> getFlashcardFolderMany(String owner) {
     return emittersByOwners
         .computeIfAbsent(owner, s -> {
           log.info("Building Sinks.Many for owner {}.", owner);

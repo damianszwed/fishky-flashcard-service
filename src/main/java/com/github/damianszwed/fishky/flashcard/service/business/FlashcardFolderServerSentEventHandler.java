@@ -3,6 +3,7 @@ package com.github.damianszwed.fishky.flashcard.service.business;
 import static org.springframework.web.reactive.function.server.ServerResponse.badRequest;
 
 import com.github.damianszwed.fishky.flashcard.service.adapter.storage.entity.FlashcardFolder;
+import com.github.damianszwed.fishky.flashcard.service.adapter.web.resource.FlashcardFolderResource;
 import com.github.damianszwed.fishky.flashcard.service.port.CommandQueryHandler;
 import com.github.damianszwed.fishky.flashcard.service.port.OwnerProvider;
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.EventSource;
@@ -14,11 +15,11 @@ import reactor.core.publisher.Mono;
 
 public class FlashcardFolderServerSentEventHandler implements CommandQueryHandler {
 
-  private final EventSource<FlashcardFolder> flashcardFoldersEventSource;
+  private final EventSource<FlashcardFolderResource> flashcardFoldersEventSource;
   private final OwnerProvider ownerProvider;
 
   public FlashcardFolderServerSentEventHandler(
-      EventSource<FlashcardFolder> flashcardFoldersEventSource,
+      EventSource<FlashcardFolderResource> flashcardFoldersEventSource,
       OwnerProvider ownerProvider) {
     this.flashcardFoldersEventSource = flashcardFoldersEventSource;
     this.ownerProvider = ownerProvider;
