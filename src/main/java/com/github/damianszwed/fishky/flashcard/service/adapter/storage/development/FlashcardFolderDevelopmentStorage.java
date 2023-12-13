@@ -6,7 +6,7 @@ import static java.util.Collections.singletonList;
 
 import com.github.damianszwed.fishky.flashcard.service.adapter.storage.entity.Flashcard;
 import com.github.damianszwed.fishky.flashcard.service.adapter.storage.entity.FlashcardFolder;
-import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderService;
+import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderStorage;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +14,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Slf4j
-public class FlashcardFolderDevelopmentStorage implements FlashcardFolderService {
+public class FlashcardFolderDevelopmentStorage implements FlashcardFolderStorage {
 
   private final List<FlashcardFolder> flashcardFolders = new ArrayList<>();
 

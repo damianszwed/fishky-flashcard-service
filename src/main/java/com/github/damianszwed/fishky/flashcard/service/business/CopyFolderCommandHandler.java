@@ -9,7 +9,7 @@ import com.github.damianszwed.fishky.flashcard.service.configuration.SecurityPro
 import com.github.damianszwed.fishky.flashcard.service.port.CommandQueryHandler;
 import com.github.damianszwed.fishky.flashcard.service.port.IdEncoderDecoder;
 import com.github.damianszwed.fishky.flashcard.service.port.OwnerProvider;
-import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderService;
+import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderStorage;
 import io.vavr.collection.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -25,17 +25,17 @@ import reactor.util.function.Tuples;
 public class CopyFolderCommandHandler implements CommandQueryHandler {
 
   private final SecurityProperties securityProperties;
-  private final FlashcardFolderService flashcardFolderService;
+  private final FlashcardFolderStorage flashcardFolderStorage;
   private final IdEncoderDecoder idEncoderDecoder;
   private final OwnerProvider ownerProvider;
 
   public CopyFolderCommandHandler(
       SecurityProperties securityProperties,
-      FlashcardFolderService flashcardFolderService,
+      FlashcardFolderStorage flashcardFolderStorage,
       IdEncoderDecoder idEncoderDecoder,
       OwnerProvider ownerProvider) {
     this.securityProperties = securityProperties;
-    this.flashcardFolderService = flashcardFolderService;
+    this.flashcardFolderStorage = flashcardFolderStorage;
     this.idEncoderDecoder = idEncoderDecoder;
     this.ownerProvider = ownerProvider;
   }
@@ -45,7 +45,7 @@ public class CopyFolderCommandHandler implements CommandQueryHandler {
     final String ownerId = switchIfBroughtInOwner(serverRequest.pathVariable("ownerId"),
         securityProperties);
     final String folderIdToCopy = serverRequest.pathVariable("folderId");
-    return flashcardFolderService.getById(ownerId, folderIdToCopy)
+    return flashcardFolderStorage.getById(ownerId, folderIdToCopy)
         .flatMap(flashcardFolderToCopy -> retrieveUserId(serverRequest, flashcardFolderToCopy))
         .flatMap(this::retrieveExistingFolder)
         .map(this::mergeFolders)
@@ -79,7 +79,7 @@ public class CopyFolderCommandHandler implements CommandQueryHandler {
       Tuple2<String, FlashcardFolder> tuples) {
     log.info("On copying {}'s {} - trying to retrieve existing folder for user {}.",
         tuples.getT2().getOwner(), tuples.getT2().getName(), tuples.getT1());
-    return flashcardFolderService
+    return flashcardFolderStorage
         .get(tuples.getT1(), tuples.getT2().getName())
         .map(existingFolder -> Tuples.of(tuples.getT1(), tuples.getT2(), existingFolder))
         .defaultIfEmpty(
@@ -122,6 +122,6 @@ public class CopyFolderCommandHandler implements CommandQueryHandler {
   }
 
   private Mono<FlashcardFolder> saveCopiedFolder(Tuple2<String, FlashcardFolder> tuples) {
-    return flashcardFolderService.save(tuples.getT1(), tuples.getT2());
+    return flashcardFolderStorage.save(tuples.getT1(), tuples.getT2());
   }
 }

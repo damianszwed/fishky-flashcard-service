@@ -29,7 +29,7 @@ import com.github.damianszwed.fishky.flashcard.service.port.CommandQueryHandler;
 import com.github.damianszwed.fishky.flashcard.service.port.IdEncoderDecoder;
 import com.github.damianszwed.fishky.flashcard.service.port.OwnerProvider;
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.EventSource;
-import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderService;
+import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderStorage;
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardSearchService;
 import jakarta.validation.Validator;
 import org.springframework.context.annotation.Bean;
@@ -62,7 +62,7 @@ public class CommandQueryWebConfiguration {
 
   @Bean
   public CommandQueryHandler flashcardFolderGetAllQueryHandler(
-      FlashcardFolderService flashcardFolderEmittingStorage, OwnerProvider ownerProvider) {
+      FlashcardFolderStorage flashcardFolderEmittingStorage, OwnerProvider ownerProvider) {
     return new FlashcardFolderGetAllQueryHandler(flashcardFolderEmittingStorage, ownerProvider);
   }
 
@@ -81,7 +81,7 @@ public class CommandQueryWebConfiguration {
   @Bean
   public CommandQueryHandler ownersFoldersGetAllQueryHandler(
       SecurityProperties securityProperties,
-      FlashcardFolderService flashcardFolderEmittingStorage,
+      FlashcardFolderStorage flashcardFolderEmittingStorage,
       OwnerProvider ownerProvider) {
     return new OwnersFoldersGetAllQueryHandler(securityProperties, flashcardFolderEmittingStorage,
         ownerProvider);
@@ -90,7 +90,7 @@ public class CommandQueryWebConfiguration {
   @Bean
   public CommandQueryHandler copyFolderCommandHandler(
       SecurityProperties securityProperties,
-      FlashcardFolderService flashcardFolderEmittingStorage,
+      FlashcardFolderStorage flashcardFolderEmittingStorage,
       IdEncoderDecoder idEncoderDecoder,
       OwnerProvider ownerProvider) {
     return new CopyFolderCommandHandler(
@@ -102,7 +102,7 @@ public class CommandQueryWebConfiguration {
 
   @Bean
   public CommandQueryHandler flashcardFolderSaveCommandHandler(
-      FlashcardFolderService flashcardFolderEmittingStorage,
+      FlashcardFolderStorage flashcardFolderEmittingStorage,
       IdEncoderDecoder idEncoderDecoder,
       OwnerProvider ownerProvider,
       ValidatorRequestHandler validatorRequestHandler) {
@@ -112,14 +112,14 @@ public class CommandQueryWebConfiguration {
 
   @Bean
   public CommandQueryHandler flashcardFolderDeleteCommandHandler(
-      FlashcardFolderService flashcardFolderEmittingStorage,
+      FlashcardFolderStorage flashcardFolderEmittingStorage,
       OwnerProvider ownerProvider) {
     return new FlashcardFolderDeleteCommandHandler(flashcardFolderEmittingStorage, ownerProvider);
   }
 
   @Bean
   public CommandQueryHandler flashcardFolderGetAllFlashcardsQueryHandler(
-      FlashcardFolderService flashcardFolderEmittingStorage,
+      FlashcardFolderStorage flashcardFolderEmittingStorage,
       OwnerProvider ownerProvider) {
     return new FlashcardFolderGetAllFlashcardsQueryHandler(
         flashcardFolderEmittingStorage,
@@ -128,7 +128,7 @@ public class CommandQueryWebConfiguration {
 
   @Bean
   public CommandQueryHandler flashcardFolderSaveFlashcardCommandHandler(
-      FlashcardFolderService flashcardFolderEmittingStorage,
+      FlashcardFolderStorage flashcardFolderEmittingStorage,
       IdEncoderDecoder idEncoderDecoder,
       OwnerProvider ownerProvider) {
     return new FlashcardFolderSaveFlashcardCommandHandler(
@@ -139,7 +139,7 @@ public class CommandQueryWebConfiguration {
 
   @Bean
   public CommandQueryHandler flashcardFolderModifyFlashcardCommandHandler(
-      FlashcardFolderService flashcardFolderEmittingStorage,
+      FlashcardFolderStorage flashcardFolderEmittingStorage,
       IdEncoderDecoder idEncoderDecoder,
       OwnerProvider ownerProvider) {
     return new FlashcardFolderModifyFlashcardCommandHandler(
@@ -150,7 +150,7 @@ public class CommandQueryWebConfiguration {
 
   @Bean
   public CommandQueryHandler flashcardFolderDeleteFlashcardCommandHandler(
-      FlashcardFolderService flashcardFolderEmittingStorage,
+      FlashcardFolderStorage flashcardFolderEmittingStorage,
       OwnerProvider ownerProvider) {
     return new FlashcardFolderDeleteFlashcardCommandHandler(
         flashcardFolderEmittingStorage,

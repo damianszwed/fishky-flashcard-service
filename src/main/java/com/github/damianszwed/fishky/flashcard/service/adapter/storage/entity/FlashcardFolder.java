@@ -32,5 +32,6 @@ public class FlashcardFolder {
 
   @Transient
   @Builder.Default
+  @Deprecated(forRemoval = true, since = "1.2.3")
   Boolean isOwner = false;
 }

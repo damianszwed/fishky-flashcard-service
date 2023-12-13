@@ -1,4 +1,4 @@
-package com.github.damianszwed.fishky.flashcard.service.adapter.security;
+package com.github.damianszwed.fishky.flashcard.service.adapter.web;
 
 import com.github.damianszwed.fishky.flashcard.service.port.OwnerProvider;
 import java.util.Optional;

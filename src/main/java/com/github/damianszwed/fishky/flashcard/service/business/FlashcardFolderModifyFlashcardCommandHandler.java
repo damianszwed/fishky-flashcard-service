@@ -7,7 +7,7 @@ import com.github.damianszwed.fishky.flashcard.service.adapter.storage.entity.Fl
 import com.github.damianszwed.fishky.flashcard.service.port.CommandQueryHandler;
 import com.github.damianszwed.fishky.flashcard.service.port.IdEncoderDecoder;
 import com.github.damianszwed.fishky.flashcard.service.port.OwnerProvider;
-import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderService;
+import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderStorage;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
@@ -18,15 +18,15 @@ import reactor.core.publisher.Mono;
 @Slf4j
 public class FlashcardFolderModifyFlashcardCommandHandler implements CommandQueryHandler {
 
-  private final FlashcardFolderService flashcardFolderService;
+  private final FlashcardFolderStorage flashcardFolderStorage;
   private final IdEncoderDecoder idEncoderDecoder;
   private final OwnerProvider ownerProvider;
 
   public FlashcardFolderModifyFlashcardCommandHandler(
-      FlashcardFolderService flashcardFolderService,
+      FlashcardFolderStorage flashcardFolderStorage,
       IdEncoderDecoder idEncoderDecoder,
       OwnerProvider ownerProvider) {
-    this.flashcardFolderService = flashcardFolderService;
+    this.flashcardFolderStorage = flashcardFolderStorage;
     this.idEncoderDecoder = idEncoderDecoder;
     this.ownerProvider = ownerProvider;
   }
@@ -44,7 +44,7 @@ public class FlashcardFolderModifyFlashcardCommandHandler implements CommandQuer
 
   private void modifyFlashcard(ServerRequest serverRequest, String ownerId,
       Flashcard flashcardToModify) {
-    flashcardFolderService
+    flashcardFolderStorage
         .getById(ownerId,
             serverRequest.pathVariable("id"))
         .subscribe(flashcardFolder -> {
@@ -58,7 +58,7 @@ public class FlashcardFolderModifyFlashcardCommandHandler implements CommandQuer
               .id(existingFlashcardId)
               .build());
 
-          flashcardFolderService.save(
+          flashcardFolderStorage.save(
               ownerId, flashcardFolder.toBuilder()
                   .flashcards(flashcardsWithOneRemoved)
                   .build())

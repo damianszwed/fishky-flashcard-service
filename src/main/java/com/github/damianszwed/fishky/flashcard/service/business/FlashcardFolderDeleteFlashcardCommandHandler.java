@@ -7,7 +7,7 @@ import com.github.damianszwed.fishky.flashcard.service.adapter.storage.entity.Fl
 import com.github.damianszwed.fishky.flashcard.service.adapter.storage.entity.FlashcardFolder;
 import com.github.damianszwed.fishky.flashcard.service.port.CommandQueryHandler;
 import com.github.damianszwed.fishky.flashcard.service.port.OwnerProvider;
-import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderService;
+import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderStorage;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
@@ -18,13 +18,13 @@ import reactor.core.publisher.Mono;
 @Slf4j
 public class FlashcardFolderDeleteFlashcardCommandHandler implements CommandQueryHandler {
 
-  private final FlashcardFolderService flashcardFolderService;
+  private final FlashcardFolderStorage flashcardFolderStorage;
   private final OwnerProvider ownerProvider;
 
   public FlashcardFolderDeleteFlashcardCommandHandler(
-      FlashcardFolderService flashcardFolderService,
+      FlashcardFolderStorage flashcardFolderStorage,
       OwnerProvider ownerProvider) {
-    this.flashcardFolderService = flashcardFolderService;
+    this.flashcardFolderStorage = flashcardFolderStorage;
     this.ownerProvider = ownerProvider;
   }
 
@@ -44,10 +44,10 @@ public class FlashcardFolderDeleteFlashcardCommandHandler implements CommandQuer
       String owner,
       String flashcardFolderId,
       String flashcardId) {
-    flashcardFolderService
+    flashcardFolderStorage
         .getById(owner, flashcardFolderId)
         .subscribe(flashcardFolder ->
-            flashcardFolderService.save(
+            flashcardFolderStorage.save(
                 owner,
                 flashcardFolder.toBuilder()
                     .flashcards(withRemovedParticularFlashcard(flashcardId, flashcardFolder)

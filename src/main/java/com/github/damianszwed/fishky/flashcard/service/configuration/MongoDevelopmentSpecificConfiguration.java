@@ -1,6 +1,6 @@
 package com.github.damianszwed.fishky.flashcard.service.configuration;
 
-import com.github.damianszwed.fishky.flashcard.service.adapter.security.DevelopmentOwnerProvider;
+import com.github.damianszwed.fishky.flashcard.service.adapter.web.DevelopmentOwnerProvider;
 import com.github.damianszwed.fishky.flashcard.service.port.OwnerProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

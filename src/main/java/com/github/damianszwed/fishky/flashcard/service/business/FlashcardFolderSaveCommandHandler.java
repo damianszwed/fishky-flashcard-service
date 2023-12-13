@@ -7,7 +7,7 @@ import com.github.damianszwed.fishky.flashcard.service.adapter.storage.entity.Fl
 import com.github.damianszwed.fishky.flashcard.service.port.CommandQueryHandler;
 import com.github.damianszwed.fishky.flashcard.service.port.IdEncoderDecoder;
 import com.github.damianszwed.fishky.flashcard.service.port.OwnerProvider;
-import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderService;
+import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderStorage;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -21,17 +21,17 @@ import reactor.util.function.Tuples;
 @Slf4j
 public class FlashcardFolderSaveCommandHandler implements CommandQueryHandler {
 
-  private final FlashcardFolderService flashcardFolderService;
+  private final FlashcardFolderStorage flashcardFolderStorage;
   private final IdEncoderDecoder idEncoderDecoder;
   private final OwnerProvider ownerProvider;
   private final ValidatorRequestHandler validatorRequestHandler;
 
   public FlashcardFolderSaveCommandHandler(
-      FlashcardFolderService flashcardFolderService,
+      FlashcardFolderStorage flashcardFolderStorage,
       IdEncoderDecoder idEncoderDecoder,
       OwnerProvider ownerProvider,
       ValidatorRequestHandler validatorRequestHandler) {
-    this.flashcardFolderService = flashcardFolderService;
+    this.flashcardFolderStorage = flashcardFolderStorage;
     this.idEncoderDecoder = idEncoderDecoder;
     this.ownerProvider = ownerProvider;
     this.validatorRequestHandler = validatorRequestHandler;
@@ -45,9 +45,9 @@ public class FlashcardFolderSaveCommandHandler implements CommandQueryHandler {
                 mono ->
                     mono
                         .map(flashcardFolder -> Tuples.of(flashcardFolder,
-                            flashcardFolderService.get(ownerId, flashcardFolder.getName())))
+                            flashcardFolderStorage.get(ownerId, flashcardFolder.getName())))
                         .flatMap(this::promoteFolderWithFlashcards)
-                        .flatMap(flashcardFolder -> flashcardFolderService
+                        .flatMap(flashcardFolder -> flashcardFolderStorage
                             .save(ownerId, withIdAndOwner(flashcardFolder, ownerId)))
                         .doOnNext(flashcardFolder -> log.info("FlashcardFolder {} has been saved.",
                             flashcardFolder.getId()))

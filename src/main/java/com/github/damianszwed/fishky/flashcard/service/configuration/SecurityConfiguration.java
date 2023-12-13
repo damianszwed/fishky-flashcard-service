@@ -1,6 +1,6 @@
 package com.github.damianszwed.fishky.flashcard.service.configuration;
 
-import com.github.damianszwed.fishky.flashcard.service.adapter.security.ProductionOwnerProvider;
+import com.github.damianszwed.fishky.flashcard.service.adapter.web.ProductionOwnerProvider;
 import com.github.damianszwed.fishky.flashcard.service.port.OwnerProvider;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.context.annotation.Bean;

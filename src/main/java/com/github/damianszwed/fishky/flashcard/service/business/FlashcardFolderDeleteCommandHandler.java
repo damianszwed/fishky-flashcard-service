@@ -6,7 +6,7 @@ import static org.springframework.web.reactive.function.server.ServerResponse.ba
 import com.github.damianszwed.fishky.flashcard.service.adapter.storage.entity.FlashcardFolder;
 import com.github.damianszwed.fishky.flashcard.service.port.CommandQueryHandler;
 import com.github.damianszwed.fishky.flashcard.service.port.OwnerProvider;
-import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderService;
+import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderStorage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -17,12 +17,12 @@ import reactor.util.function.Tuples;
 @Slf4j
 public class FlashcardFolderDeleteCommandHandler implements CommandQueryHandler {
 
-  private final FlashcardFolderService flashcardFolderService;
+  private final FlashcardFolderStorage flashcardFolderStorage;
   private final OwnerProvider ownerProvider;
 
-  public FlashcardFolderDeleteCommandHandler(FlashcardFolderService flashcardFolderService,
+  public FlashcardFolderDeleteCommandHandler(FlashcardFolderStorage flashcardFolderStorage,
       OwnerProvider ownerProvider) {
-    this.flashcardFolderService = flashcardFolderService;
+    this.flashcardFolderStorage = flashcardFolderStorage;
     this.ownerProvider = ownerProvider;
   }
 
@@ -45,7 +45,7 @@ public class FlashcardFolderDeleteCommandHandler implements CommandQueryHandler 
   private Mono<Tuple2<String, FlashcardFolder>> retrieveFolderToBeRemoved(
       Tuple2<String, String> tuples) {
     log.info("Retrieving {}'s folder {} before security check.", tuples.getT1(), tuples.getT2());
-    return flashcardFolderService.getById(tuples.getT1(), tuples.getT2())
+    return flashcardFolderStorage.getById(tuples.getT1(), tuples.getT2())
         .map(flashcardFolderToBeRemoved -> Tuples.of(tuples.getT1(), flashcardFolderToBeRemoved));
   }
 
@@ -58,7 +58,7 @@ public class FlashcardFolderDeleteCommandHandler implements CommandQueryHandler 
 
   private Mono<ServerResponse> removeFolder(Tuple2<String, FlashcardFolder> tuples) {
     log.info("Removing folder with id {}.", tuples.getT2().getId());
-    return flashcardFolderService.remove(tuples.getT1(), tuples.getT2().getId())
+    return flashcardFolderStorage.remove(tuples.getT1(), tuples.getT2().getId())
         .then(accepted().build());
   }
 }

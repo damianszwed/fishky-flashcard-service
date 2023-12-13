@@ -2,7 +2,7 @@ package com.github.damianszwed.fishky.flashcard.service.configuration;
 
 import com.github.damianszwed.fishky.flashcard.service.adapter.search.elastic.ElasticSearchFlashcardRestHighLevelClient;
 import com.github.damianszwed.fishky.flashcard.service.adapter.search.elastic.ElasticSearchFlashcardSearchService;
-import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderService;
+import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderStorage;
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardSearchService;
 import java.net.URI;
 import org.apache.http.auth.AuthScope;
@@ -32,7 +32,7 @@ public class ElasticSearchConfiguration {
 
   @Bean
   FlashcardSearchService flashcardSearchService(
-      FlashcardFolderService flashcardFolderStorage,
+      FlashcardFolderStorage flashcardFolderStorage,
       ElasticSearchFlashcardRestHighLevelClient elasticSearchFlashcardRestHighLevelClient) {
     return new ElasticSearchFlashcardSearchService(flashcardFolderStorage,
         elasticSearchFlashcardRestHighLevelClient);

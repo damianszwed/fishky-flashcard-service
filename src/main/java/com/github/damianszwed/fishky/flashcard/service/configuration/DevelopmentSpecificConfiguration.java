@@ -1,7 +1,7 @@
 package com.github.damianszwed.fishky.flashcard.service.configuration;
 
 import com.github.damianszwed.fishky.flashcard.service.adapter.storage.development.FlashcardFolderDevelopmentStorage;
-import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderService;
+import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderStorage;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Profile;
 public class DevelopmentSpecificConfiguration {
 
   @Bean
-  FlashcardFolderService flashcardFolderStorage() {
+  FlashcardFolderStorage flashcardFolderStorage() {
     return new FlashcardFolderDevelopmentStorage();
   }
 }

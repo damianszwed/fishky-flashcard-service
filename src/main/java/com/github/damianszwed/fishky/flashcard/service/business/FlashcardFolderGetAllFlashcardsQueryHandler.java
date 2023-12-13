@@ -7,20 +7,20 @@ import com.github.damianszwed.fishky.flashcard.service.adapter.storage.entity.Fl
 import com.github.damianszwed.fishky.flashcard.service.adapter.storage.entity.FlashcardFolder;
 import com.github.damianszwed.fishky.flashcard.service.port.CommandQueryHandler;
 import com.github.damianszwed.fishky.flashcard.service.port.OwnerProvider;
-import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderService;
+import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderStorage;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
 public class FlashcardFolderGetAllFlashcardsQueryHandler implements CommandQueryHandler {
 
-  private final FlashcardFolderService flashcardFolderService;
+  private final FlashcardFolderStorage flashcardFolderStorage;
   private final OwnerProvider ownerProvider;
 
   public FlashcardFolderGetAllFlashcardsQueryHandler(
-      FlashcardFolderService flashcardFolderService,
+      FlashcardFolderStorage flashcardFolderStorage,
       OwnerProvider ownerProvider) {
-    this.flashcardFolderService = flashcardFolderService;
+    this.flashcardFolderStorage = flashcardFolderStorage;
     this.ownerProvider = ownerProvider;
   }
 
@@ -29,7 +29,7 @@ public class FlashcardFolderGetAllFlashcardsQueryHandler implements CommandQuery
     //TODO(Damian.Szwed) make sure that requester is an owner.
     return Mono.justOrEmpty(ownerProvider.provide(serverRequest))
         .flatMap(ownerId -> ok().body(
-            flashcardFolderService
+            flashcardFolderStorage
                 .getById(ownerId, serverRequest.pathVariable("id"))
                 .map(FlashcardFolder::getFlashcards),
             Flashcard.class))

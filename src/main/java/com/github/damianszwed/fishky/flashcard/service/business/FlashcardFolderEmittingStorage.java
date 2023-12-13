@@ -2,18 +2,18 @@ package com.github.damianszwed.fishky.flashcard.service.business;
 
 import com.github.damianszwed.fishky.flashcard.service.adapter.storage.entity.FlashcardFolder;
 import com.github.damianszwed.fishky.flashcard.service.port.EventTrigger;
-import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderService;
+import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderStorage;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Slf4j
-public class FlashcardFolderEmittingStorage implements FlashcardFolderService {
+public class FlashcardFolderEmittingStorage implements FlashcardFolderStorage {
 
-  private final FlashcardFolderService flashcardFolderStorage;
+  private final FlashcardFolderStorage flashcardFolderStorage;
   private final EventTrigger getAllFoldersEventTrigger;
 
-  public FlashcardFolderEmittingStorage(FlashcardFolderService flashcardFolderStorage,
+  public FlashcardFolderEmittingStorage(FlashcardFolderStorage flashcardFolderStorage,
       EventTrigger getAllFoldersEventTrigger) {
     this.flashcardFolderStorage = flashcardFolderStorage;
     this.getAllFoldersEventTrigger = getAllFoldersEventTrigger;
