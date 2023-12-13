@@ -8,6 +8,7 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 
 import com.github.damianszwed.fishky.flashcard.service.adapter.storage.entity.FlashcardFolder;
+import com.github.damianszwed.fishky.flashcard.service.adapter.web.resource.FlashcardFolderResource;
 import com.github.damianszwed.fishky.flashcard.service.business.CopyFolderCommandHandler;
 import com.github.damianszwed.fishky.flashcard.service.business.FlashcardFolderDeleteCommandHandler;
 import com.github.damianszwed.fishky.flashcard.service.business.FlashcardFolderDeleteFlashcardCommandHandler;
@@ -55,7 +56,7 @@ public class CommandQueryWebConfiguration {
 
   @Bean
   public CommandQueryHandler flashcardFolderServerSentEventHandler(
-      EventSource<FlashcardFolder> flashcardFoldersEventSource,
+      EventSource<FlashcardFolderResource> flashcardFoldersEventSource,
       OwnerProvider ownerProvider) {
     return new FlashcardFolderServerSentEventHandler(flashcardFoldersEventSource, ownerProvider);
   }

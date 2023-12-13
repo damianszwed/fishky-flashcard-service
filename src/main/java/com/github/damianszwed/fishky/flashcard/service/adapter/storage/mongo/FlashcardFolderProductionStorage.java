@@ -1,4 +1,4 @@
-package com.github.damianszwed.fishky.flashcard.service.adapter.storage.production;
+package com.github.damianszwed.fishky.flashcard.service.adapter.storage.mongo;
 
 import com.github.damianszwed.fishky.flashcard.service.adapter.storage.entity.FlashcardFolder;
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderStorage;

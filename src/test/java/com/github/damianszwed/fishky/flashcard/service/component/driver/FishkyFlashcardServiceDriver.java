@@ -2,7 +2,7 @@ package com.github.damianszwed.fishky.flashcard.service.component.driver;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
-import com.github.damianszwed.fishky.flashcard.service.adapter.storage.entity.FlashcardFolder;
+import com.github.damianszwed.fishky.flashcard.service.adapter.web.resource.FlashcardFolderResource;
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.EventSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,11 +14,11 @@ import reactor.test.StepVerifier.Step;
 public class FishkyFlashcardServiceDriver {
 
   private final WebTestClient webTestClient;
-  private final EventSource<FlashcardFolder> flashcardFoldersEventSource;
+  private final EventSource<FlashcardFolderResource> flashcardFoldersEventSource;
   private final Student student;
 
   FishkyFlashcardServiceDriver(WebTestClient webTestClient,
-      EventSource<FlashcardFolder> flashcardFoldersEventSource) {
+      EventSource<FlashcardFolderResource> flashcardFoldersEventSource) {
     this.webTestClient = webTestClient;
     this.flashcardFoldersEventSource = flashcardFoldersEventSource;
     this.student = createStudent();

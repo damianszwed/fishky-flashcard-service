@@ -2,6 +2,7 @@ package com.github.damianszwed.fishky.flashcard.service.configuration;
 
 import com.github.damianszwed.fishky.flashcard.service.adapter.Base64IdEncoderDecoder;
 import com.github.damianszwed.fishky.flashcard.service.adapter.storage.entity.FlashcardFolder;
+import com.github.damianszwed.fishky.flashcard.service.adapter.web.resource.FlashcardFolderResource;
 import com.github.damianszwed.fishky.flashcard.service.business.FlashcardFolderEmittingStorage;
 import com.github.damianszwed.fishky.flashcard.service.business.FlashcardFolderProviderFlow;
 import com.github.damianszwed.fishky.flashcard.service.port.EventTrigger;
@@ -31,7 +32,7 @@ public class BusinessConfiguration {
   }
 
   @Bean
-  EventSource<FlashcardFolder> flashcardFoldersEventSource(
+  EventSource<FlashcardFolderResource> flashcardFoldersEventSource(
       FlashcardFolderProviderFlow flashcardFolderProviderFlow) {
     return flashcardFolderProviderFlow;
   }

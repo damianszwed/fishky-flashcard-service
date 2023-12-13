@@ -1,7 +1,7 @@
 package com.github.damianszwed.fishky.flashcard.service.configuration;
 
-import com.github.damianszwed.fishky.flashcard.service.adapter.search.elastic.ElasticSearchFlashcardRestHighLevelClient;
-import com.github.damianszwed.fishky.flashcard.service.adapter.search.elastic.ElasticSearchFlashcardSearchService;
+import com.github.damianszwed.fishky.flashcard.service.adapter.storage.elastic.ElasticSearchFlashcardRestHighLevelClient;
+import com.github.damianszwed.fishky.flashcard.service.adapter.storage.elastic.ElasticSearchFlashcardSearchService;
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderStorage;
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardSearchService;
 import java.net.URI;
