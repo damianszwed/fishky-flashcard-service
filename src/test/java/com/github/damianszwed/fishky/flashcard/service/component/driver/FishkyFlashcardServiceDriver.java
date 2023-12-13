@@ -2,8 +2,8 @@ package com.github.damianszwed.fishky.flashcard.service.component.driver;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
+import com.github.damianszwed.fishky.flashcard.service.adapter.storage.entity.FlashcardFolder;
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.EventSource;
-import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;

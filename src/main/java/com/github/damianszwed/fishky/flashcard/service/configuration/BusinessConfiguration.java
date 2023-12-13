@@ -1,12 +1,12 @@
 package com.github.damianszwed.fishky.flashcard.service.configuration;
 
 import com.github.damianszwed.fishky.flashcard.service.adapter.Base64IdEncoderDecoder;
+import com.github.damianszwed.fishky.flashcard.service.adapter.storage.entity.FlashcardFolder;
 import com.github.damianszwed.fishky.flashcard.service.business.FlashcardFolderEmittingStorage;
 import com.github.damianszwed.fishky.flashcard.service.business.FlashcardFolderProviderFlow;
 import com.github.damianszwed.fishky.flashcard.service.port.EventTrigger;
 import com.github.damianszwed.fishky.flashcard.service.port.IdEncoderDecoder;
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.EventSource;
-import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolder;
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

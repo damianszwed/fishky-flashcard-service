@@ -1,4 +1,4 @@
-package com.github.damianszwed.fishky.flashcard.service.port.flashcard;
+package com.github.damianszwed.fishky.flashcard.service.adapter.storage.entity;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

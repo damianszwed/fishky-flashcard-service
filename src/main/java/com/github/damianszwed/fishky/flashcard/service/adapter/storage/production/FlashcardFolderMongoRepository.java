@@ -1,6 +1,6 @@
 package com.github.damianszwed.fishky.flashcard.service.adapter.storage.production;
 
-import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolder;
+import com.github.damianszwed.fishky.flashcard.service.adapter.storage.entity.FlashcardFolder;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import reactor.core.publisher.Flux;

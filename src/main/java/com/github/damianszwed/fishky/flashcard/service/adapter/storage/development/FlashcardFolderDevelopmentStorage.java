@@ -4,8 +4,8 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 
-import com.github.damianszwed.fishky.flashcard.service.port.flashcard.Flashcard;
-import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolder;
+import com.github.damianszwed.fishky.flashcard.service.adapter.storage.entity.Flashcard;
+import com.github.damianszwed.fishky.flashcard.service.adapter.storage.entity.FlashcardFolder;
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderService;
 import java.util.ArrayList;
 import java.util.List;

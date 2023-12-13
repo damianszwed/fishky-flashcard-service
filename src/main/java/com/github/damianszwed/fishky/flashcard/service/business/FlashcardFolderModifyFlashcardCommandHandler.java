@@ -3,10 +3,10 @@ package com.github.damianszwed.fishky.flashcard.service.business;
 import static org.springframework.web.reactive.function.server.ServerResponse.accepted;
 import static org.springframework.web.reactive.function.server.ServerResponse.badRequest;
 
+import com.github.damianszwed.fishky.flashcard.service.adapter.storage.entity.Flashcard;
 import com.github.damianszwed.fishky.flashcard.service.port.CommandQueryHandler;
 import com.github.damianszwed.fishky.flashcard.service.port.IdEncoderDecoder;
 import com.github.damianszwed.fishky.flashcard.service.port.OwnerProvider;
-import com.github.damianszwed.fishky.flashcard.service.port.flashcard.Flashcard;
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderService;
 import java.util.List;
 import java.util.stream.Collectors;
