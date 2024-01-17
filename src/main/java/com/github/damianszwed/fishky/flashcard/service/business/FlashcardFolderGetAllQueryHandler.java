@@ -4,6 +4,7 @@ import static org.springframework.web.reactive.function.server.ServerResponse.ba
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 
 import com.github.damianszwed.fishky.flashcard.service.adapter.storage.entity.FlashcardFolder;
+import com.github.damianszwed.fishky.flashcard.service.adapter.web.resource.FlashcardFolderResource;
 import com.github.damianszwed.fishky.flashcard.service.port.CommandQueryHandler;
 import com.github.damianszwed.fishky.flashcard.service.port.OwnerProvider;
 import com.github.damianszwed.fishky.flashcard.service.port.flashcard.FlashcardFolderStorage;
@@ -26,13 +27,15 @@ public class FlashcardFolderGetAllQueryHandler implements CommandQueryHandler {
   @Override
   public Mono<ServerResponse> handle(ServerRequest serverRequest) {
     return ownerProvider.provide(serverRequest)
-        .map(owner -> flashcardFolderStorage.get(owner)
-            .map(FlashcardFolderGetAllQueryHandler::asOwner))
-        .map(flashcardFolderFlux -> ok().body(flashcardFolderFlux, FlashcardFolder.class))
+        .map(flashcardFolderStorage::get)
+        .map(flashcardFolderFlux -> flashcardFolderFlux.map(FlashcardFolder::toResource))
+        .map(flashcardFolderFlux -> flashcardFolderFlux.map(
+            FlashcardFolderGetAllQueryHandler::asOwner))
+        .map(flashcardFolderFlux -> ok().body(flashcardFolderFlux, FlashcardFolderResource.class))
         .orElse(badRequest().build());
   }
 
-  private static FlashcardFolder asOwner(FlashcardFolder flashcardFolder) {
+  private static FlashcardFolderResource asOwner(FlashcardFolderResource flashcardFolder) {
     return flashcardFolder.toBuilder().isOwner(true).build();
   }
 }
