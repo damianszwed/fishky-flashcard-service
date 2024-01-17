@@ -31,11 +31,6 @@ public class FlashcardFolder {
   @Builder.Default
   List<Share> shares = new ArrayList<>();
 
-  @Transient
-  @Builder.Default
-  @Deprecated(forRemoval = true, since = "1.2.3")
-  Boolean isOwner = false;
-
   public FlashcardFolderResource toResource() {
     return FlashcardFolderResource
         .builder()

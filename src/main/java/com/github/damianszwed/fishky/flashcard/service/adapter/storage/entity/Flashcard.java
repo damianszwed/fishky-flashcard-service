@@ -18,6 +18,10 @@ public class Flashcard {
   List<String> answers = new ArrayList<>();
 
   public FlashcardResource toResource() {
-    return null;
+    return FlashcardResource.builder()
+        .id(id)
+        .question(question)
+        .answers(answers)
+        .build();
   }
 }
