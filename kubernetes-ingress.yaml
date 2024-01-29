@@ -1,17 +1,23 @@
-apiVersion: networking.k8s.io/v1
 kind: Ingress
+apiVersion: networking.k8s.io/v1
 metadata:
   name: fishky-flashcard-service-ingress
   annotations:
-    dev.okteto.com/generate-host: fishky
+    kubernetes.azure.com/tls-cert-keyvault-uri: https://fishkyvault.vault.azure.net/certificates/fishky-cert
 spec:
+  ingressClassName: webapprouting.kubernetes.azure.com
+  tls:
+    - hosts:
+        - api.fishky.pl
+      secretName: keyvault-fishky-flashcard-service-ingress
   rules:
-    - http:
+    - host: api.fishky.pl
+      http:
         paths:
-          - backend:
+          - path: /
+            pathType: Prefix
+            backend:
               service:
                 name: fishky-flashcard-service
                 port:
                   number: 30508
-            path: /
-            pathType: ImplementationSpecific
