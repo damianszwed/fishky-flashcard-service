@@ -4,7 +4,9 @@ import com.github.damianszwed.fishky.flashcard.service.adapter.web.resource.Flas
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import javax.persistence.Transient;
 import lombok.Builder;
 import lombok.Value;
@@ -38,7 +40,11 @@ public class FlashcardFolder {
         .name(name)
         .owner(owner)
         .flashcards(flashcards.stream().map(Flashcard::toResource).toList())
-        .shares(shares.stream().map(Share::toResource).toList())
+        .shares(
+            Optional.ofNullable(shares)
+                .map(theShares -> theShares.stream().map(Share::toResource).toList())
+                .orElse(Collections.emptyList())
+        )
         .build();
   }
 }
