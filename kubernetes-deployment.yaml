@@ -39,7 +39,6 @@ spec:
             path: /healthCheck
             port: 8080
           initialDelaySeconds: 60
-          timeoutSeconds: 10
           periodSeconds: 3
           failureThreshold: 2
         livenessProbe:
@@ -47,15 +46,14 @@ spec:
             path: /healthCheck
             port: 8080
           initialDelaySeconds: 90
-          timeoutSeconds: 10
           periodSeconds: 15
           failureThreshold: 4
         resources:
           requests:
-            memory: "512Mi"
+            memory: "448Mi"
             cpu: "50m"
           limits:
-            memory: "999Mi"
+            memory: "896Mi"
             cpu: "600m"
       volumes:
         - name: fishky-flashcard-service-secret
