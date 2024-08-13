@@ -2,15 +2,18 @@ apiVersion: v1
 kind: Service
 metadata:
   name: fishky-flashcard-service
+#  annotations:
+#    cloud.google.com/backend-config: '{"ports": {"30508":"fishky-flashcard-service-backend-config"}}'
   labels:
     app: fishky-flashcard-service
     tier: backend
 spec:
-  type: ClusterIP
+  type: LoadBalancer
+  #sessionAffinity: ClientIP # It will not work, because Ingress is used. See kubernetes-backend-config.yaml
   ports:
-  - port: 30508
-    protocol: TCP
-    targetPort: 8080
+    - port: 30508
+      protocol: TCP
+      targetPort: 8080
   selector:
     app: fishky-flashcard-service
     tier: backend

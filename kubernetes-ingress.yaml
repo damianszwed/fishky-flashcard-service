@@ -1,23 +1,17 @@
-kind: Ingress
 apiVersion: networking.k8s.io/v1
+kind: Ingress
 metadata:
   name: fishky-flashcard-service-ingress
   annotations:
-    kubernetes.azure.com/tls-cert-keyvault-uri: https://fishkyvault.vault.azure.net/certificates/fishky-cert
+    #gcloud compute addresses create api-fishky-pl --global
+    #gcloud compute addresses describe api-fishky-pl --global
+    kubernetes.io/ingress.global-static-ip-name: api-fishky-pl
+    networking.gke.io/managed-certificates: fishky-managed-certificate
+    kubernetes.io/ingress.class: "gce"
 spec:
-  ingressClassName: webapprouting.kubernetes.azure.com
-  tls:
-    - hosts:
-        - api.fishky.pl
-      secretName: keyvault-fishky-flashcard-service-ingress
-  rules:
-    - host: api.fishky.pl
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: fishky-flashcard-service
-                port:
-                  number: 30508
+#  ingressClassName: "gce" # TODO this will replace kubernetes.io/ingress.class: "gce"
+  defaultBackend:
+    service:
+      name: fishky-flashcard-service
+      port:
+        number: 30508
