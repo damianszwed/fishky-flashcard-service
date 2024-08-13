@@ -2,8 +2,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: fishky-flashcard-service
-#  annotations:
-#    cloud.google.com/backend-config: '{"ports": {"30508":"fishky-flashcard-service-backend-config"}}'
+  annotations:
+    cloud.google.com/backend-config: '{"ports": {"30508":"fishky-flashcard-service-backend-config"}}'
   labels:
     app: fishky-flashcard-service
     tier: backend
