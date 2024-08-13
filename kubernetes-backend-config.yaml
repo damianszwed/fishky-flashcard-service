@@ -4,6 +4,8 @@ metadata:
   name: fishky-flashcard-service-backend-config
 spec:
   #This config has to be applied so GCP will not interrupt SSE connections.
-  timeoutSec: 215999
+  timeoutSec: 1800
+  connectionDraining:
+    drainingTimeoutSec: 1800
   sessionAffinity:
     affinityType: "CLIENT_IP"
