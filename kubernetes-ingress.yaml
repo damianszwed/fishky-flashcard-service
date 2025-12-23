@@ -8,6 +8,7 @@ metadata:
     kubernetes.io/ingress.global-static-ip-name: api-fishky-pl
     networking.gke.io/managed-certificates: fishky-managed-certificate
     kubernetes.io/ingress.class: "gce"
+    kubernetes.io/spec.ingressClassName: "gce"
 spec:
 #  ingressClassName: "gce" # TODO this will replace kubernetes.io/ingress.class: "gce"
   defaultBackend:
